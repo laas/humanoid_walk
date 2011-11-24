@@ -1,0 +1,9 @@
+<stack>
+  <description brief="humanoid_walk">humanoid_walk</description>
+  <author>Maintained by Thomas Moulard</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/humanoid_walk</url>
+  <depend stack="ros" />
+
+</stack>

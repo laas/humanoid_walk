@@ -1,0 +1,17 @@
+<package>
+  <description brief="halfsteps_pattern_generator">
+
+     halfsteps_pattern_generator
+
+  </description>
+  <author>Thomas Moulard</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/halfsteps_pattern_generator</url>
+
+  <depend package="bullet"/>
+
+  <depend package="walk_interfaces"/>
+  <depend package="walk_msgs"/>
+
+</package>

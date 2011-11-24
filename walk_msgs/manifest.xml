@@ -1,0 +1,15 @@
+<package>
+  <description brief="walk_msgs">
+
+     walk_msgs
+
+  </description>
+  <author>Thomas Moulard</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/walk_msgs</url>
+
+  <depend package="geometry_msgs"/>
+  <depend package="nav_msgs"/>
+
+</package>

@@ -1,0 +1,19 @@
+<package>
+  <description brief="walk_interfaces">
+
+     walk_interfaces
+
+  </description>
+  <author>Thomas Moulard</author>
+  <license>BSD</license>
+  <review status="experimental" notes=""/>
+  <url>http://ros.org/wiki/walk_interfaces</url>
+
+  <export>
+    <cpp cflags="-I${prefix}/include" lflags="" />
+  </export>
+
+
+  <depend package="eigen"/>
+
+</package>
