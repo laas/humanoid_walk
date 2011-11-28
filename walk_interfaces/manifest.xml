@@ -10,7 +10,7 @@
   <url>http://ros.org/wiki/walk_interfaces</url>
 
   <export>
-    <cpp cflags="-I${prefix}/include" lflags="" />
+    <cpp cflags="-I${prefix}/include" lflags="-lboost_filesystem" />
   </export>
 
 

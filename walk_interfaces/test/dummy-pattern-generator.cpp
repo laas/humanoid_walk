@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 
 #include "walk_interfaces/pattern-generator.hh"
+#include "walk_interfaces/yaml.hh"
 
 class MyPatternGenerator : public walk::PatternGenerator2d
 {
@@ -19,7 +20,7 @@ public:
     walk::Trajectory3d& lf = getLeftFootTrajectory();
     walk::Trajectory3d& rf = getRightFootTrajectory();
     walk::Trajectory3d& com = getCenterOfMassTrajectory();
-    walk::Trajectory3d& zmp = getZmpTrajectory();
+    walk::TrajectoryV2d& zmp = getZmpTrajectory();
 
     lf.data().resize(1);
     rf.data().resize(1);
@@ -34,7 +35,10 @@ public:
     lf.data()[0].position = initialLeftFootPosition();
     rf.data()[0].position = initialRightFootPosition();
     com.data()[0].position = initialCenterOfMassPosition();
-    zmp.data()[0].position = initialCenterOfMassPosition();
+
+    walk::Vector2d initialZmp;
+    initialZmp[0] = initialZmp[1] = 0.;
+    zmp.data()[0].position = initialZmp;
   }
 };
 
@@ -50,6 +54,9 @@ TEST(TestStampedPosition, empty)
   walk::TimeDuration lengthLf = lf.computeLength();
 
   EXPECT_EQ(zero, lengthLf);
+
+  walk::YamlWriter<MyPatternGenerator> writer (pg);
+  writer.write("/tmp/test.yaml");
 }
 
 int main(int argc, char **argv)

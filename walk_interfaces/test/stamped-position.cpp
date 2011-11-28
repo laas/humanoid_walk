@@ -6,10 +6,10 @@
 
 TEST(TestStampedPosition, empty)
 {
-  walk::StampedPosition stampedPosition;
+  walk::StampedPosition3d stampedPosition;
   stampedPosition.position.setIdentity();
 
-  walk::HomogeneousMatrix I;
+  walk::HomogeneousMatrix3d I;
   I.setIdentity();
 
   walk::TimeDuration zero;

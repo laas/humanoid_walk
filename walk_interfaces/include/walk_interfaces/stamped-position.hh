@@ -9,16 +9,23 @@
 
 namespace walk
 {
+  template <typename T>
   struct StampedPosition
   {
     TimeDuration duration;
-    HomogeneousMatrix position;
+    T position;
   public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
   };
 
+  typedef StampedPosition<HomogeneousMatrix3d> StampedPosition3d;
+  typedef StampedPosition<HomogeneousMatrix2d> StampedPosition2d;
+  typedef StampedPosition<Eigen::Vector2d> StampedVector2d;
+  typedef StampedPosition<Eigen::VectorXd> StampedVectorNd;
+
+  template <typename T>
   std::ostream&
-  operator<<(std::ostream& os, const StampedPosition& sp)
+  operator<<(std::ostream& os, const StampedPosition<T>& sp)
   {
     os << sp.duration << " " << sp.position;
     return os;

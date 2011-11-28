@@ -12,6 +12,7 @@ namespace walk
   class Trajectory
   {
   public:
+    typedef T element_t;
     typedef WALK_INTERFACES_EIGEN_STL_VECTOR(T) data_t;
 
     explicit Trajectory();
@@ -30,7 +31,10 @@ namespace walk
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
   };
 
-  typedef Trajectory<StampedPosition> Trajectory3d;
+  typedef Trajectory<StampedPosition3d> Trajectory3d;
+  typedef Trajectory<StampedPosition2d> Trajectory2d;
+  typedef Trajectory<StampedVector2d> TrajectoryV2d;
+  typedef Trajectory<StampedVectorNd> TrajectoryNd;
 
   template <typename T>
   std::ostream& operator<<(std::ostream&, const Trajectory<T>&);

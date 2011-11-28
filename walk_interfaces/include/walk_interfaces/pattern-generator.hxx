@@ -65,9 +65,9 @@ namespace walk
   template <typename T>
   void
   PatternGenerator<T>::setInitialRobotPosition
-  (const HomogeneousMatrix& leftFoot,
-   const HomogeneousMatrix& rightFoot,
-   const HomogeneousMatrix& centerOfMass,
+  (const HomogeneousMatrix3d& leftFoot,
+   const HomogeneousMatrix3d& rightFoot,
+   const HomogeneousMatrix3d& centerOfMass,
    const Posture& posture)
   {
     initialLeftFootPosition_ = leftFoot;
@@ -79,9 +79,9 @@ namespace walk
   template <typename T>
   void
   PatternGenerator<T>::setFinalRobotPosition
-  (const HomogeneousMatrix& leftFoot,
-   const HomogeneousMatrix& rightFoot,
-   const HomogeneousMatrix& centerOfMass,
+  (const HomogeneousMatrix3d& leftFoot,
+   const HomogeneousMatrix3d& rightFoot,
+   const HomogeneousMatrix3d& centerOfMass,
    const Posture& posture)
   {
     finalLeftFootPosition_ = leftFoot;
@@ -133,7 +133,7 @@ namespace walk
   }
 
   template <typename T>
-  const Trajectory3d&
+  const TrajectoryV2d&
   PatternGenerator<T>::zmpTrajectory() const
   {
     return zmpTrajectory_;
@@ -147,7 +147,7 @@ namespace walk
   }
 
   template <typename T>
-  const Trajectory3d&
+  const TrajectoryNd&
   PatternGenerator<T>::postureTrajectory() const
   {
     return postureTrajectory_;
@@ -168,7 +168,7 @@ namespace walk
   }
 
   template <typename T>
-  Trajectory3d&
+  TrajectoryV2d&
   PatternGenerator<T>::getZmpTrajectory()
   {
     return zmpTrajectory_;
@@ -182,28 +182,28 @@ namespace walk
   }
 
   template <typename T>
-  Trajectory3d&
+  TrajectoryNd&
   PatternGenerator<T>::getPostureTrajectory()
   {
     return postureTrajectory_;
   }
 
   template <typename T>
-  const HomogeneousMatrix&
+  const HomogeneousMatrix3d&
   PatternGenerator<T>::initialLeftFootPosition() const
   {
     return initialLeftFootPosition_;
   }
 
   template <typename T>
-  const HomogeneousMatrix&
+  const HomogeneousMatrix3d&
   PatternGenerator<T>::initialRightFootPosition() const
   {
     return initialRightFootPosition_;
   }
 
   template <typename T>
-  const HomogeneousMatrix&
+  const HomogeneousMatrix3d&
   PatternGenerator<T>::initialCenterOfMassPosition() const
   {
     return initialCenterOfMassPosition_;
@@ -217,21 +217,21 @@ namespace walk
   }
 
   template <typename T>
-  const HomogeneousMatrix&
+  const HomogeneousMatrix3d&
   PatternGenerator<T>::finalLeftFootPosition() const
   {
     return finalLeftFootPosition_;
   }
 
   template <typename T>
-  const HomogeneousMatrix&
+  const HomogeneousMatrix3d&
   PatternGenerator<T>::finalRightFootPosition() const
   {
     return finalRightFootPosition_;
   }
 
   template <typename T>
-  const HomogeneousMatrix&
+  const HomogeneousMatrix3d&
   PatternGenerator<T>::finalCenterOfMassPosition() const
   {
     return finalCenterOfMassPosition_;

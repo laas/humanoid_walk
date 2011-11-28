@@ -11,8 +11,8 @@ namespace walk
     os
       << "duration:\n"
       << sf.duration
-      << "footstep:\n"
-      << sf.footstep;
+      << "position:\n"
+      << sf.position;
     return os;
   }
 
