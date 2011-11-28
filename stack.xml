@@ -1,9 +1,18 @@
 <stack>
-  <description brief="humanoid_walk">humanoid_walk</description>
+  <description brief="Tools for humanoids walking movement generation.">
+
+    This stack gathers tools to generate walking movements for humanoids robots.
+
+    It provides both C++ interfaces through walk_interfaces, ROS
+    interfaces through walk_msgs and pattern generators algorithms.
+  </description>
   <author>Maintained by Thomas Moulard</author>
   <license>BSD</license>  
-  <review status="unreviewed" notes=""/>
+  <review status="experimental" notes=""/>
   <url>http://ros.org/wiki/humanoid_walk</url>
+  <depend stack="bullet" /> <!-- bullet -->
+  <depend stack="common_msgs" /> <!-- nav_msgs, geometry_msgs, visualization_msgs -->
+  <depend stack="eigen" /> <!-- eigen -->
   <depend stack="ros" />
-
+  <depend stack="ros_comm" />
 </stack>
