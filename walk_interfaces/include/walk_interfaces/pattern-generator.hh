@@ -28,12 +28,12 @@ namespace walk
 
     void setInitialRobotPosition(const HomogeneousMatrix3d& leftFoot,
 				 const HomogeneousMatrix3d& rightFoot,
-				 const HomogeneousMatrix3d& centerOfMass,
+				 const Vector3d& centerOfMass,
 				 const Posture& posture);
 
     void setFinalRobotPosition(const HomogeneousMatrix3d& leftFoot,
 			       const HomogeneousMatrix3d& rightFoot,
-			       const HomogeneousMatrix3d& centerOfMass,
+			       const Vector3d& centerOfMass,
 			       const Posture& posture);
 
     void setSteps(const footsteps_t&, bool startWithLeftFoot);
@@ -43,24 +43,24 @@ namespace walk
     const Trajectory3d& leftFootTrajectory() const;
     const Trajectory3d& rightFootTrajectory() const;
     const TrajectoryV2d& zmpTrajectory() const;
-    const Trajectory3d& centerOfMassTrajectory() const;
+    const TrajectoryV3d& centerOfMassTrajectory() const;
     const TrajectoryNd& postureTrajectory() const;
 
     const HomogeneousMatrix3d& initialLeftFootPosition() const;
     const HomogeneousMatrix3d& initialRightFootPosition() const;
-    const HomogeneousMatrix3d& initialCenterOfMassPosition() const;
+    const Vector3d& initialCenterOfMassPosition() const;
     const Posture& initialPosture() const;
 
     const HomogeneousMatrix3d& finalLeftFootPosition() const;
     const HomogeneousMatrix3d& finalRightFootPosition() const;
-    const HomogeneousMatrix3d& finalCenterOfMassPosition() const;
+    const Vector3d& finalCenterOfMassPosition() const;
     const Posture& finalPosture() const;
 
   protected:
     Trajectory3d& getLeftFootTrajectory();
     Trajectory3d& getRightFootTrajectory();
     TrajectoryV2d& getZmpTrajectory();
-    Trajectory3d& getCenterOfMassTrajectory();
+    TrajectoryV3d& getCenterOfMassTrajectory();
     TrajectoryNd& getPostureTrajectory();
 
     virtual void computeTrajectories() = 0;
@@ -70,18 +70,18 @@ namespace walk
     bool startWithLeftFoot_;
     Trajectory3d leftFootTrajectory_;
     Trajectory3d rightFootTrajectory_;
-    Trajectory3d centerOfMassTrajectory_;
+    TrajectoryV3d centerOfMassTrajectory_;
     TrajectoryV2d zmpTrajectory_;
     TrajectoryNd postureTrajectory_;
 
     HomogeneousMatrix3d initialLeftFootPosition_;
     HomogeneousMatrix3d initialRightFootPosition_;
-    HomogeneousMatrix3d initialCenterOfMassPosition_;
+    Vector3d initialCenterOfMassPosition_;
     Posture initialPosture_;
 
     HomogeneousMatrix3d finalLeftFootPosition_;
     HomogeneousMatrix3d finalRightFootPosition_;
-    HomogeneousMatrix3d finalCenterOfMassPosition_;
+    Vector3d finalCenterOfMassPosition_;
     Posture finalPosture_;
   public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;

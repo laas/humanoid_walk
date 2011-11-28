@@ -34,6 +34,7 @@ namespace walk
   typedef Trajectory<StampedPosition3d> Trajectory3d;
   typedef Trajectory<StampedPosition2d> Trajectory2d;
   typedef Trajectory<StampedVector2d> TrajectoryV2d;
+  typedef Trajectory<StampedVector3d> TrajectoryV3d;
   typedef Trajectory<StampedVectorNd> TrajectoryNd;
 
   template <typename T>

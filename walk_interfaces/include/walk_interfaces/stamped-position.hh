@@ -21,6 +21,7 @@ namespace walk
   typedef StampedPosition<HomogeneousMatrix3d> StampedPosition3d;
   typedef StampedPosition<HomogeneousMatrix2d> StampedPosition2d;
   typedef StampedPosition<Eigen::Vector2d> StampedVector2d;
+  typedef StampedPosition<Eigen::Vector3d> StampedVector3d;
   typedef StampedPosition<Eigen::VectorXd> StampedVectorNd;
 
   template <typename T>

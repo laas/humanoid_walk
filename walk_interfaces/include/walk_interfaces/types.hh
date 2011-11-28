@@ -13,6 +13,7 @@ namespace walk
   typedef Eigen::Matrix<double, 4, 4> HomogeneousMatrix3d;
   typedef Eigen::Matrix<double, 3, 3> HomogeneousMatrix2d;
   typedef Eigen::Vector2d Vector2d;
+  typedef Eigen::Vector3d Vector3d;
 
   typedef Eigen::Matrix<double, 3, 1> Footstep2d;
   typedef Eigen::VectorXd Posture;
