@@ -10,3 +10,4 @@ walk_interfaces/src/walk_interfaces/
 walk_msgs/src/walk_msgs/
 */srv/lisp/
 */srv_gen/
+stack.xmk.bak
