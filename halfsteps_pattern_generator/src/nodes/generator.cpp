@@ -294,6 +294,7 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
   std::stringstream ss;
   walk::YamlWriter<HalfStepsPatternGenerator> writer (patternGenerator_);
   writer.write (ss);
+  nodeHandle_.setParam ("walk_movement", ss.str ());
   return true;
 }
 
