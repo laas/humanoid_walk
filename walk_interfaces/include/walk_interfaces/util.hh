@@ -95,14 +95,64 @@ namespace walk
       }
   }
 
+  /// \brief Convert a structure of size 3 to a Homogeneous 3d matrix.
+  /// \param src input structure.
+  /// \param dst output matrix of type Homogeneous3d.
+  template <class T>
+  void convertVector3dToTrans3d (HomogeneousMatrix3d& dst, const T& src)
+  {
+    assert (dst.cols () == 4
+	    && "Incorrect columns number for dest matrix, should be 4.");
+    assert (dst.rows () == 4
+	    && "Incorrect rows number for dest matrix, should be 4.");
+
+    dst.setIdentity ();
+
+    // Fill translation.
+    if (HomogeneousMatrix3d::IsRowMajor)
+      {
+	dst(0, 3) = src[0];
+	dst(1, 3) = src[1];
+	dst(2, 3) = src[2];
+      }
+    else
+      {
+	dst(3, 0) = src[0];
+	dst(3, 1) = src[1];
+	dst(3, 2) = src[2];
+      }
+  }
+
+  /// \brief Convert a row-major homogeneous 3d matrix to a
+  /// HomogeneousMatrix3d type.
+  ///
+  /// \param src input homogeneous 3d matrix.
+  /// \param dst output matrix of type Homogeneous3d.
+  template <class T>
+  void convertToTrans3d (HomogeneousMatrix3d& dst, const T& src)
+  {
+    assert (dst.cols () == 4
+	    && "Incorrect columns number for dest matrix, should be 4.");
+    assert (dst.rows () == 4
+	    && "Incorrect rows number for dest matrix, should be 4.");
+
+    dst.setIdentity ();
+
+    // Fill matrix.
+    for (unsigned rowId = 0; rowId < 4; ++rowId)
+      for (unsigned colId = 0; colId < 3; ++colId)
+	if (HomogeneousMatrix3d::IsRowMajor)
+	  dst(rowId, colId) = src(rowId, colId);
+	else
+	  dst(colId, rowId) = src(rowId, colId);
+  }
+
   /// \brief Convert a structure of size 2 to a Vector2d object.
   /// \param src input structure.
   /// \param dst output vector of type Vector2d.
   template <class T>
   void convertToVector2d (Vector2d& dst, const T& src)
   {
-    assert (src.size () == 2
-	    && "Incorrect source vector size mismatch, should be 2.");
     assert (dst.size () == 2
 	    && "Incorrect dest vector size mismatch, should be 2.");
 
