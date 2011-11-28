@@ -1,3 +1,4 @@
+#include <sstream>
 #include <stdexcept>
 #include <boost/bind.hpp>
 #include <boost/date_time.hpp>
@@ -6,6 +7,9 @@
 #include <LinearMath/btQuaternion.h>
 
 #include <ros/ros.h>
+
+#include <walk_interfaces/yaml.hh>
+
 #include "halfsteps_pattern_generator.hh"
 
 #include "geometry_msgs/Pose.h"
@@ -286,6 +290,10 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
   convertTrajectoryV2dToPath(res.path.zmp,
 			     patternGenerator_.zmpTrajectory(),
 			     frameName_);
+
+  std::stringstream ss;
+  walk::YamlWriter<HalfStepsPatternGenerator> writer (patternGenerator_);
+  writer.write (ss);
   return true;
 }
 

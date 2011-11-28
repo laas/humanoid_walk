@@ -156,8 +156,8 @@ HalfStepsPatternGenerator::computeTrajectories()
       // ZMP
       getZmpTrajectory().data()[i].duration = seconds(STEP);
       getZmpTrajectory().data()[i].position.setIdentity();
-      getZmpTrajectory().data()[i].position (0,3) = stepFeatures.zmpTrajX[i];
-      getZmpTrajectory().data()[i].position (1,3) = stepFeatures.zmpTrajY[i];
+      getZmpTrajectory().data()[i].position[0] = stepFeatures.zmpTrajX[i];
+      getZmpTrajectory().data()[i].position[1] = stepFeatures.zmpTrajY[i];
 
       //Posture
       //FIXME:
