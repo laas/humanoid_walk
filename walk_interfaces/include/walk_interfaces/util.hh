@@ -94,6 +94,52 @@ namespace walk
 	dst(3, 1) = srcY;
       }
   }
+
+  /// \brief Convert a structure of size 2 to a Vector2d object.
+  /// \param src input structure.
+  /// \param dst output vector of type Vector2d.
+  template <class T>
+  void convertToVector2d (Vector2d& dst, const T& src)
+  {
+    assert (src.size () == 2
+	    && "Incorrect source vector size mismatch, should be 2.");
+    assert (dst.size () == 2
+	    && "Incorrect dest vector size mismatch, should be 2.");
+
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+  }
+
+  /// \brief Convert a structure of size 3 to a Vector3d object.
+  /// \param src input structure.
+  /// \param dst output vector of type Vector3d.
+  template <class T>
+  void convertToVector3d (Vector3d& dst, const T& src)
+  {
+    assert (dst.size () == 3
+	    && "Incorrect dest vector size mismatch, should be 3.");
+
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+  }
+
+  /// \brief Convert a structure of any size to a Posture object.
+  /// \param src input structure.
+  /// \param dst output vector of type Posture.
+  template <class T>
+  void convertToPosture (Posture& dst, const T& src)
+  {
+    assert (src.size () == dst.size ()
+	    && "Source and dest vectors size mismatch, should be equal.");
+    assert (src.size () != 0
+	    && "Source vector has a zero size.");
+
+    for (unsigned id; id < src.size (); ++id)
+      dst[id] = src [id];
+  }
+
 } // end of namespace walk.
 
 #endif //! WALK_INTERFACE_UTIL_HH
