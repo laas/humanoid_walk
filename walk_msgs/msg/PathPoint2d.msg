@@ -1,2 +1,2 @@
 Header header
-geometry_msgs/PointStamped points
+walk_msgs/Point2dStamped points
