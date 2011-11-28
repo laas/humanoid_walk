@@ -13,6 +13,7 @@
 #include "halfsteps_pattern_generator.hh"
 
 #include "geometry_msgs/Pose.h"
+#include "visualization_msgs/MarkerArray.h"
 #include "walk_msgs/Footprint2d.h"
 #include "walk_msgs/GetPath.h"
 
@@ -117,7 +118,7 @@ void convertTrajectoryToPath(nav_msgs::Path& dst,
       ++poseHeader.seq;
       poseHeader.stamp.sec =
 	duration.ticks() / walk::TimeDuration::rep_type::res_adjust ();
-      poseHeader.stamp.nsec = duration.fractional_seconds() * 1000000;
+      poseHeader.stamp.nsec = duration.fractional_seconds() * 1e3;
 
       // Fill header.
       poseStamped.header = poseHeader;
@@ -171,6 +172,49 @@ void convertTrajectoryV2dToPath(walk_msgs::PathPoint2d& dst,
     }
 }
 
+void convertTrajectoryV2dToPath(nav_msgs::Path& dst,
+				const walk::TrajectoryV2d& src,
+				const std::string& frameName)
+{
+  std::size_t size = src.data().size();
+
+  std_msgs::Header poseHeader;
+  poseHeader.seq = 0;
+  poseHeader.stamp.sec = 0.;
+  poseHeader.stamp.nsec = 0.;
+  poseHeader.frame_id = frameName;
+
+  geometry_msgs::PoseStamped poseStamped;
+
+  walk::TimeDuration duration;
+  for (std::size_t i = 0; i < size; ++i)
+    {
+      // Update header.
+      ++poseHeader.seq;
+      poseHeader.stamp.sec =
+	duration.ticks() / walk::TimeDuration::rep_type::res_adjust ();
+      poseHeader.stamp.nsec = duration.fractional_seconds() * 1000000;
+
+      // Fill header.
+      poseStamped.header = poseHeader;
+
+      // Fill point.
+      poseStamped.pose.position.x = src.data()[i].position[0];
+      poseStamped.pose.position.y = src.data()[i].position[1];
+      poseStamped.pose.position.z = 0.;
+
+      poseStamped.pose.orientation.x = 0.;
+      poseStamped.pose.orientation.y = 0.;
+      poseStamped.pose.orientation.z = 0.;
+      poseStamped.pose.orientation.z = 1.;
+
+      // Add to path.
+      dst.poses.push_back(poseStamped);
+
+      duration += src.data()[i].duration;
+    }
+}
+
 using walk::HomogeneousMatrix3d;
 using walk::Posture;
 
@@ -195,18 +239,48 @@ private:
   std::string frameName_;
 
   HalfStepsPatternGenerator patternGenerator_;
+
+
+  visualization_msgs::MarkerArray steps_;
+  nav_msgs::Path leftFootPath_;
+  nav_msgs::Path rightFootPath_;
+  nav_msgs::Path comPath_;
+  nav_msgs::Path zmpPath_;
+
+  ros::Publisher stepsPub_;
+  ros::Publisher leftFootPub_;
+  ros::Publisher rightFootPub_;
+  ros::Publisher comPub_;
+  ros::Publisher zmpPub_;
 };
 
 GeneratorNode::GeneratorNode()
   : nodeHandle_("halfsteps_pattern_generator"),
     getPathSrv_(),
-    frameName_("world"),
-    patternGenerator_()
+    frameName_("/world"),
+    patternGenerator_(),
+
+    steps_ (),
+    leftFootPath_ (),
+    rightFootPath_ (),
+    comPath_ (),
+    zmpPath_ (),
+
+    stepsPub_ (),
+    leftFootPub_ (),
+    rightFootPub_ (),
+    comPub_ ()
 {
   typedef boost::function<bool (walk_msgs::GetPath::Request&,
 				walk_msgs::GetPath::Response&)> callback_t;
   callback_t callback = boost::bind(&GeneratorNode::getPath, this, _1, _2);
   getPathSrv_ = nodeHandle_.advertiseService("getPath", callback);
+
+  stepsPub_ = nodeHandle_.advertise<visualization_msgs::MarkerArray> ("steps", 5);
+  leftFootPub_ = nodeHandle_.advertise<nav_msgs::Path> ("left_foot", 5);
+  rightFootPub_ = nodeHandle_.advertise<nav_msgs::Path> ("right_foot", 5);
+  comPub_ = nodeHandle_.advertise<nav_msgs::Path> ("com", 5);
+  zmpPub_ = nodeHandle_.advertise<nav_msgs::Path> ("zmp", 5);
 }
 
 GeneratorNode::~GeneratorNode()
@@ -215,7 +289,19 @@ GeneratorNode::~GeneratorNode()
 void
 GeneratorNode::spin()
 {
-  ros::spin();
+  ros::Rate rate(10);
+
+  while (ros::ok ())
+    {
+      stepsPub_.publish (steps_);
+      leftFootPub_.publish (leftFootPath_);
+      rightFootPub_.publish (rightFootPath_);
+      comPub_.publish (comPath_);
+      zmpPub_.publish (zmpPath_);
+
+      ros::spinOnce();
+      rate.sleep ();
+    }
 }
 
 bool
@@ -235,6 +321,9 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
 				 req.initial_right_foot_position);
   convertPoseToHomogeneousMatrix(initialCenterOfMassPosition,
 				 req.initial_center_of_mass_position);
+
+  std::cout << initialLeftFootPosition << std::endl;
+  std::cout << initialRightFootPosition << std::endl;
 
   patternGenerator_.setInitialRobotPosition(initialLeftFootPosition,
 					    initialRightFootPosition,
@@ -290,6 +379,87 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
   convertTrajectoryV2dToPath(res.path.zmp,
 			     patternGenerator_.zmpTrajectory(),
 			     frameName_);
+
+  // Prepare topics data.
+  leftFootPath_ = res.path.left_foot;
+  leftFootPath_.header.frame_id = "/world";
+  rightFootPath_ = res.path.right_foot;
+  rightFootPath_.header.frame_id = "/world";
+  comPath_ = res.path.center_of_mass;
+  comPath_.header.frame_id = "/world";
+  convertTrajectoryV2dToPath(zmpPath_,
+			     patternGenerator_.zmpTrajectory(),
+			     frameName_);
+  zmpPath_.header.frame_id = "/world";
+
+  uint32_t shape = visualization_msgs::Marker::CUBE;
+  uint32_t id = 0;
+  bool isLeft = startWithLeftFoot;
+  double x = 0.;
+  double y = 0.;
+  if (isLeft)
+    {
+      x = patternGenerator_.initialRightFootPosition () (0, 3);
+      y = patternGenerator_.initialRightFootPosition () (1, 3);
+    }
+  else
+    {
+      x = patternGenerator_.initialLeftFootPosition () (0, 3);
+      y = patternGenerator_.initialLeftFootPosition () (1, 3);
+    }
+  BOOST_FOREACH (const HalfStepsPatternGenerator::footstep_t& step,
+		 patternGenerator_.steps ())
+    {
+      visualization_msgs::Marker marker;
+      // Set the frame ID and timestamp.  See the TF tutorials for
+      // information on these.
+      marker.header.frame_id = frameName_;
+      marker.header.stamp = ros::Time::now();
+
+      // Set the namespace and id for this marker.  This serves to
+      // create a unique ID Any marker sent with the same namespace
+      // and id will overwrite the old one
+      marker.ns = "halfsteps_pattern_generator";
+      marker.id = id++;
+
+      // Set the marker type.
+      marker.type = shape;
+
+      // Set the marker action.
+      marker.action = visualization_msgs::Marker::ADD;
+
+      // Set the pose of the marker.  This is a full 6DOF pose
+      // relative to the frame/time specified in the header
+      x += step.position[0];
+      y += step.position[1];
+      marker.pose.position.x = x;
+      marker.pose.position.y = y;
+      marker.pose.position.z = 0.;
+
+      btQuaternion quaternion;
+      quaternion.setEuler (step.position[2], 0., 0.);
+      marker.pose.orientation.x = quaternion.x ();
+      marker.pose.orientation.y = quaternion.y ();
+      marker.pose.orientation.z = quaternion.z ();
+      marker.pose.orientation.w = quaternion.w ();
+
+      // Set the scale of the marker
+      marker.scale.x = 0.2172;
+      marker.scale.y = 0.138;
+      marker.scale.z = 0.001;
+
+      // Set the color
+      marker.color.r = isLeft ? 1.0f : 0.0f;
+      marker.color.g = isLeft ? 0.0f : 1.0f;
+      marker.color.b = 0.0f;
+      marker.color.a = 0.5f;
+
+      marker.lifetime = ros::Duration();
+
+      isLeft = !isLeft;
+
+      steps_.markers.push_back (marker);
+    }
 
   std::stringstream ss;
   walk::YamlWriter<HalfStepsPatternGenerator> writer (patternGenerator_);

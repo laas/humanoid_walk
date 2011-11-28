@@ -108,12 +108,12 @@ HalfStepsPatternGenerator::computeTrajectories()
   getZmpTrajectory().data().resize(stepFeatures.size);
   getPostureTrajectory().data().resize(stepFeatures.size);
 
-  using boost::posix_time::seconds;
+  using boost::posix_time::milliseconds;
 
   for (unsigned i = 0; i < stepFeatures.size; ++i)
     {
       // Left foot.
-      getLeftFootTrajectory().data()[i].duration = seconds(STEP);
+      getLeftFootTrajectory().data()[i].duration = milliseconds(STEP * 1e3);
       getLeftFootTrajectory().data()[i].position.setIdentity();
       getLeftFootTrajectory().data()[i].position (0,3) =
 	stepFeatures.leftfootXtraj[i];
@@ -129,7 +129,7 @@ HalfStepsPatternGenerator::computeTrajectories()
       getLeftFootTrajectory().data()[i].position (1,1) = std::cos(theta);
 
       // Right foot.
-      getRightFootTrajectory().data()[i].duration = seconds(STEP);
+      getRightFootTrajectory().data()[i].duration = milliseconds(STEP * 1e3);
       getRightFootTrajectory().data()[i].position.setIdentity();
       getRightFootTrajectory().data()[i].position (0,3) =
 	stepFeatures.rightfootXtraj[i];
@@ -145,7 +145,7 @@ HalfStepsPatternGenerator::computeTrajectories()
       getRightFootTrajectory().data()[i].position (1,1) = std::cos(theta);
 
       // Center of mass
-      getCenterOfMassTrajectory().data()[i].duration = seconds(STEP);
+      getCenterOfMassTrajectory().data()[i].duration = milliseconds(STEP * 1e3);
       getCenterOfMassTrajectory().data()[i].position.setIdentity();
       getCenterOfMassTrajectory().data()[i].position (0,3) =
 	stepFeatures.comTrajX[i];
@@ -154,7 +154,7 @@ HalfStepsPatternGenerator::computeTrajectories()
       getCenterOfMassTrajectory().data()[i].position (2,3) = comZ;
 
       // ZMP
-      getZmpTrajectory().data()[i].duration = seconds(STEP);
+      getZmpTrajectory().data()[i].duration = milliseconds(STEP * 1e3);
       getZmpTrajectory().data()[i].position.setIdentity();
       getZmpTrajectory().data()[i].position[0] = stepFeatures.zmpTrajX[i];
       getZmpTrajectory().data()[i].position[1] = stepFeatures.zmpTrajY[i];

@@ -15,25 +15,50 @@ def get_path_client():
             'halfsteps_pattern_generator/getPath', GetPath)
 
         initial_left_foot_position = Pose()
-        initial_left_foot_position.position.x = 0
-        initial_left_foot_position.position.y = +0.19
-        initial_left_foot_position.position.z = 0
+        initial_left_foot_position.position.x = 0.
+        initial_left_foot_position.position.y = -0.19
+        initial_left_foot_position.position.z = 0.
 
-        initial_left_foot_position.orientation.x = 0
-        initial_left_foot_position.orientation.y = 0
-        initial_left_foot_position.orientation.z = 0
-        initial_left_foot_position.orientation.w = 1
+        initial_left_foot_position.orientation.x = 0.
+        initial_left_foot_position.orientation.y = 0.
+        initial_left_foot_position.orientation.z = 0.
+        initial_left_foot_position.orientation.w = 1.
 
-        initial_right_foot_position = initial_left_foot_position
-        initial_right_foot_position.position.y *= -1
+        initial_right_foot_position = Pose()
+        initial_right_foot_position.position.x = 0.
+        initial_right_foot_position.position.y = +0.19
+        initial_right_foot_position.position.z = 0.
+
+        initial_right_foot_position.orientation.x = 0.
+        initial_right_foot_position.orientation.y = 0.
+        initial_right_foot_position.orientation.z = 0.
+        initial_right_foot_position.orientation.w = 1.
+
 
         initial_center_of_mass_position = Pose()
+        initial_center_of_mass_position.position.x = 0.
+        initial_center_of_mass_position.position.y = 0.
+        initial_center_of_mass_position.position.z = 0.8
+        initial_center_of_mass_position.orientation.x = 0.
+        initial_center_of_mass_position.orientation.y = 0.
+        initial_center_of_mass_position.orientation.z = 0.
+        initial_center_of_mass_position.orientation.w = 1.
 
-        final_left_foot_position = Pose()
-        final_right_foot_position = Pose()
-        final_center_of_mass_position = Pose()
+
+        final_left_foot_position = initial_center_of_mass_position
+        final_right_foot_position = initial_center_of_mass_position
+        final_center_of_mass_position = initial_center_of_mass_position
+
         start_with_left_foot = True
         footprints = []
+
+        step = Footprint2d()
+        step.duration.secs = 0.
+        step.duration.nsecs = 5000.
+        step.x = 0.
+        step.y = -0.19
+        step.theta = 0.
+        footprints.append(step)
 
         step = Footprint2d()
         step.duration.secs = 0.
@@ -46,10 +71,51 @@ def get_path_client():
         step = Footprint2d()
         step.duration.secs = 0.
         step.duration.nsecs = 5000.
-        step.x = 0.
+        step.x = 0.25
         step.y = -0.19
         step.theta = 0.
         footprints.append(step)
+
+        step = Footprint2d()
+        step.duration.secs = 0.
+        step.duration.nsecs = 5000.
+        step.x = 0.25
+        step.y = +0.19
+        step.theta = 0.
+        footprints.append(step)
+
+        step = Footprint2d()
+        step.duration.secs = 0.
+        step.duration.nsecs = 5000.
+        step.x = 0.25
+        step.y = -0.19
+        step.theta = 0.
+        footprints.append(step)
+
+        step = Footprint2d()
+        step.duration.secs = 0.
+        step.duration.nsecs = 5000.
+        step.x = 0.25
+        step.y = +0.19
+        step.theta = 0.
+        footprints.append(step)
+
+        step = Footprint2d()
+        step.duration.secs = 0.
+        step.duration.nsecs = 5000.
+        step.x = 0.25
+        step.y = -0.19
+        step.theta = 0.
+        footprints.append(step)
+
+        step = Footprint2d()
+        step.duration.secs = 0.
+        step.duration.nsecs = 5000.
+        step.x = 0.25
+        step.y = +0.19
+        step.theta = 0.
+        footprints.append(step)
+
 
         resp1 = get_path(initial_left_foot_position,
                          initial_right_foot_position,

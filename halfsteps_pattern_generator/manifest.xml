@@ -14,4 +14,6 @@
   <depend package="walk_interfaces"/>
   <depend package="walk_msgs"/>
 
+  <depend package="visualization_msgs"/>
+
 </package>
