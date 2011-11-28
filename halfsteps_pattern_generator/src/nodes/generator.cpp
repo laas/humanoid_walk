@@ -56,6 +56,14 @@ void convertPoseToHomogeneousMatrix(walk::HomogeneousMatrix3d& dst,
   dst(2, 3) = src.position.z;
 }
 
+void convertPoseToVector3d(walk::Vector3d& dst,
+			   const geometry_msgs::Point& src)
+{
+  dst[0] = src.x;
+  dst[1] = src.y;
+  dst[2] = src.z;
+}
+
 void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
 		      const std::vector<walk_msgs::Footprint2d>& src)
 {
@@ -172,6 +180,44 @@ void convertTrajectoryV2dToPath(walk_msgs::PathPoint2d& dst,
     }
 }
 
+void convertTrajectoryV3dToPath(walk_msgs::PathPoint3d& dst,
+				const walk::TrajectoryV3d& src,
+				const std::string& frameName)
+{
+  std::size_t size = src.data().size();
+
+  std_msgs::Header pointHeader;
+  pointHeader.seq = 0;
+  pointHeader.stamp.sec = 0.;
+  pointHeader.stamp.nsec = 0.;
+  pointHeader.frame_id = frameName;
+
+  geometry_msgs::PointStamped pointStamped;
+
+  walk::TimeDuration duration;
+  for (std::size_t i = 0; i < size; ++i)
+    {
+      // Update header.
+      ++pointHeader.seq;
+      pointHeader.stamp.sec =
+	duration.ticks() / walk::TimeDuration::rep_type::res_adjust ();
+      pointHeader.stamp.nsec = duration.fractional_seconds() * 1000000;
+
+      // Fill header.
+      pointStamped.header = pointHeader;
+
+      // Fill point.
+      pointStamped.point.x = src.data()[i].position[0];
+      pointStamped.point.y = src.data()[i].position[1];
+      pointStamped.point.z = src.data()[i].position[2];
+
+      // Add to path.
+      dst.points.push_back(pointStamped);
+
+      duration += src.data()[i].duration;
+    }
+}
+
 void convertTrajectoryV2dToPath(nav_msgs::Path& dst,
 				const walk::TrajectoryV2d& src,
 				const std::string& frameName)
@@ -202,6 +248,49 @@ void convertTrajectoryV2dToPath(nav_msgs::Path& dst,
       poseStamped.pose.position.x = src.data()[i].position[0];
       poseStamped.pose.position.y = src.data()[i].position[1];
       poseStamped.pose.position.z = 0.;
+
+      poseStamped.pose.orientation.x = 0.;
+      poseStamped.pose.orientation.y = 0.;
+      poseStamped.pose.orientation.z = 0.;
+      poseStamped.pose.orientation.z = 1.;
+
+      // Add to path.
+      dst.poses.push_back(poseStamped);
+
+      duration += src.data()[i].duration;
+    }
+}
+
+void convertTrajectoryV3dToPath(nav_msgs::Path& dst,
+				const walk::TrajectoryV3d& src,
+				const std::string& frameName)
+{
+  std::size_t size = src.data().size();
+
+  std_msgs::Header poseHeader;
+  poseHeader.seq = 0;
+  poseHeader.stamp.sec = 0.;
+  poseHeader.stamp.nsec = 0.;
+  poseHeader.frame_id = frameName;
+
+  geometry_msgs::PoseStamped poseStamped;
+
+  walk::TimeDuration duration;
+  for (std::size_t i = 0; i < size; ++i)
+    {
+      // Update header.
+      ++poseHeader.seq;
+      poseHeader.stamp.sec =
+	duration.ticks() / walk::TimeDuration::rep_type::res_adjust ();
+      poseHeader.stamp.nsec = duration.fractional_seconds() * 1000000;
+
+      // Fill header.
+      poseStamped.header = poseHeader;
+
+      // Fill point.
+      poseStamped.pose.position.x = src.data()[i].position[0];
+      poseStamped.pose.position.y = src.data()[i].position[1];
+      poseStamped.pose.position.z = src.data()[i].position[2];
 
       poseStamped.pose.orientation.x = 0.;
       poseStamped.pose.orientation.y = 0.;
@@ -313,14 +402,14 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
 
   HomogeneousMatrix3d initialLeftFootPosition;
   HomogeneousMatrix3d initialRightFootPosition;
-  HomogeneousMatrix3d initialCenterOfMassPosition;
+  walk::Vector3d initialCenterOfMassPosition;
 
   convertPoseToHomogeneousMatrix(initialLeftFootPosition,
 				 req.initial_left_foot_position);
   convertPoseToHomogeneousMatrix(initialRightFootPosition,
 				 req.initial_right_foot_position);
-  convertPoseToHomogeneousMatrix(initialCenterOfMassPosition,
-				 req.initial_center_of_mass_position);
+  convertPoseToVector3d(initialCenterOfMassPosition,
+			req.initial_center_of_mass_position);
 
   std::cout << initialLeftFootPosition << std::endl;
   std::cout << initialRightFootPosition << std::endl;
@@ -332,14 +421,14 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
 
   HomogeneousMatrix3d finalLeftFootPosition;
   HomogeneousMatrix3d finalRightFootPosition;
-  HomogeneousMatrix3d finalCenterOfMassPosition;
+  walk::Vector3d finalCenterOfMassPosition;
 
   convertPoseToHomogeneousMatrix(finalLeftFootPosition,
 				 req.final_left_foot_position);
   convertPoseToHomogeneousMatrix(finalRightFootPosition,
 				 req.final_right_foot_position);
-  convertPoseToHomogeneousMatrix(finalCenterOfMassPosition,
-				 req.final_center_of_mass_position);
+  convertPoseToVector3d(finalCenterOfMassPosition,
+			req.final_center_of_mass_position);
 
   patternGenerator_.setFinalRobotPosition(finalLeftFootPosition,
 					  finalRightFootPosition,
@@ -373,9 +462,9 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
   convertTrajectoryToPath(res.path.right_foot,
 			  patternGenerator_.rightFootTrajectory(),
 			  frameName_);
-  convertTrajectoryToPath(res.path.center_of_mass,
-			  patternGenerator_.centerOfMassTrajectory(),
-			  frameName_);
+  convertTrajectoryV3dToPath(res.path.center_of_mass,
+			     patternGenerator_.centerOfMassTrajectory(),
+			     frameName_);
   convertTrajectoryV2dToPath(res.path.zmp,
 			     patternGenerator_.zmpTrajectory(),
 			     frameName_);
@@ -385,7 +474,9 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
   leftFootPath_.header.frame_id = "/world";
   rightFootPath_ = res.path.right_foot;
   rightFootPath_.header.frame_id = "/world";
-  comPath_ = res.path.center_of_mass;
+  convertTrajectoryV3dToPath(comPath_,
+			     patternGenerator_.centerOfMassTrajectory(),
+			     frameName_);
   comPath_.header.frame_id = "/world";
   convertTrajectoryV2dToPath(zmpPath_,
 			     patternGenerator_.zmpTrajectory(),
