@@ -13,10 +13,10 @@
 #include "walk_msgs/GetPath.h"
 
 
-void convertPoseToHomogeneousMatrix(walk::HomogeneousMatrix& dst,
+void convertPoseToHomogeneousMatrix(walk::HomogeneousMatrix3d& dst,
 				    const geometry_msgs::Pose& src);
 void convertHomogeneousMatrixToPose(geometry_msgs::Pose&,
-				    const walk::HomogeneousMatrix&);
+				    const walk::HomogeneousMatrix3d&);
 
 void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
 		      const std::vector<walk_msgs::Footprint2d>& src);
@@ -26,8 +26,11 @@ void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
 void convertTrajectoryToPath(nav_msgs::Path&,
 			     const walk::Trajectory3d&,
 			     const std::string& frameName);
+void convertTrajectoryV2dToPath(walk_msgs::PathPoint2d&,
+				const walk::TrajectoryV2d&,
+				const std::string& frameName);
 
-void convertPoseToHomogeneousMatrix(walk::HomogeneousMatrix& dst,
+void convertPoseToHomogeneousMatrix(walk::HomogeneousMatrix3d& dst,
 				    const geometry_msgs::Pose& src)
 {
   btQuaternion quaternion
@@ -69,7 +72,7 @@ void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
 }
 
 void convertHomogeneousMatrixToPose(geometry_msgs::Pose& dst,
-				    const walk::HomogeneousMatrix& src)
+				    const walk::HomogeneousMatrix3d& src)
 {
   btMatrix3x3 rotation;
   btQuaternion quaternion;
@@ -127,7 +130,44 @@ void convertTrajectoryToPath(nav_msgs::Path& dst,
     }
 }
 
-using walk::HomogeneousMatrix;
+void convertTrajectoryV2dToPath(walk_msgs::PathPoint2d& dst,
+				const walk::TrajectoryV2d& src,
+				const std::string& frameName)
+{
+  std::size_t size = src.data().size();
+
+  std_msgs::Header pointHeader;
+  pointHeader.seq = 0;
+  pointHeader.stamp.sec = 0.;
+  pointHeader.stamp.nsec = 0.;
+  pointHeader.frame_id = frameName;
+
+  walk_msgs::Point2dStamped pointStamped;
+
+  walk::TimeDuration duration;
+  for (std::size_t i = 0; i < size; ++i)
+    {
+      // Update header.
+      ++pointHeader.seq;
+      pointHeader.stamp.sec =
+	duration.ticks() / walk::TimeDuration::rep_type::res_adjust ();
+      pointHeader.stamp.nsec = duration.fractional_seconds() * 1000000;
+
+      // Fill header.
+      pointStamped.header = pointHeader;
+
+      // Fill point.
+      pointStamped.point.x = src.data()[i].position[0];
+      pointStamped.point.y = src.data()[i].position[1];
+
+      // Add to path.
+      dst.points.push_back(pointStamped);
+
+      duration += src.data()[i].duration;
+    }
+}
+
+using walk::HomogeneousMatrix3d;
 using walk::Posture;
 
 class GeneratorNode
@@ -181,9 +221,9 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
   Posture initialPosture;
   Posture finalPosture;
 
-  HomogeneousMatrix initialLeftFootPosition;
-  HomogeneousMatrix initialRightFootPosition;
-  HomogeneousMatrix initialCenterOfMassPosition;
+  HomogeneousMatrix3d initialLeftFootPosition;
+  HomogeneousMatrix3d initialRightFootPosition;
+  HomogeneousMatrix3d initialCenterOfMassPosition;
 
   convertPoseToHomogeneousMatrix(initialLeftFootPosition,
 				 req.initial_left_foot_position);
@@ -197,9 +237,9 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
 					    initialCenterOfMassPosition,
 					    initialPosture);
 
-  HomogeneousMatrix finalLeftFootPosition;
-  HomogeneousMatrix finalRightFootPosition;
-  HomogeneousMatrix finalCenterOfMassPosition;
+  HomogeneousMatrix3d finalLeftFootPosition;
+  HomogeneousMatrix3d finalRightFootPosition;
+  HomogeneousMatrix3d finalCenterOfMassPosition;
 
   convertPoseToHomogeneousMatrix(finalLeftFootPosition,
 				 req.final_left_foot_position);
@@ -243,9 +283,9 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
   convertTrajectoryToPath(res.path.center_of_mass,
 			  patternGenerator_.centerOfMassTrajectory(),
 			  frameName_);
-  convertTrajectoryToPath(res.path.zmp,
-			  patternGenerator_.zmpTrajectory(),
-			  frameName_);
+  convertTrajectoryV2dToPath(res.path.zmp,
+			     patternGenerator_.zmpTrajectory(),
+			     frameName_);
   return true;
 }
 
