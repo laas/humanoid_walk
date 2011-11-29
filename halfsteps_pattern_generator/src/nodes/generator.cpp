@@ -36,11 +36,11 @@ void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
   dst.clear();
   std::vector<walk_msgs::Footprint2d>::const_iterator it = src.begin();
 
-  walk::HomogeneousMatrix3d position;
+  walk::HomogeneousMatrix3d previousPosition;
   if (leftFootFirst)
-    position = initialRightFoot;
+    previousPosition = initialRightFoot;
   else
-    position = initialLeftFoot;
+    previousPosition = initialLeftFoot;
 
   walk::HomogeneousMatrix3d newPosition;
   walk::HomogeneousMatrix3d relativePosition;
@@ -49,8 +49,7 @@ void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
     {
       walk_msgs::convertFootprint2dToHomogeneousMatrix3d (newPosition, *it);
 
-      relativePosition = newPosition * position.inverse ();
-
+      relativePosition = newPosition * previousPosition.inverse ();
       HalfStepsPatternGenerator::footstep_t step;
       step.duration =
 	seconds(it->duration.sec) + milliseconds(it->duration.nsec * 1000);
@@ -59,7 +58,7 @@ void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
       step.position(2) = 0.;
       dst.push_back(step);
 
-      position = newPosition;
+      previousPosition = newPosition;
     }
 }
 
