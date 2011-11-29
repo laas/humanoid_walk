@@ -23,4 +23,6 @@
 
   <depend package="visualization_msgs"/>
 
+  <depend package="angles"/>
+
 </package>

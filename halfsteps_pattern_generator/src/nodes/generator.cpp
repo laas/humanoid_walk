@@ -25,40 +25,22 @@ void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
 		      const std::vector<walk_msgs::Footprint2d>& src);
 
 void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
-		      const std::vector<walk_msgs::Footprint2d>& src,
-		      const walk::HomogeneousMatrix3d& initialLeftFoot,
-		      const walk::HomogeneousMatrix3d& initialRightFoot,
-		      bool leftFootFirst)
+		      const std::vector<walk_msgs::Footprint2d>& src)
 {
   using boost::posix_time::seconds;
   using boost::posix_time::milliseconds;
 
   dst.clear();
   std::vector<walk_msgs::Footprint2d>::const_iterator it = src.begin();
-
-  walk::HomogeneousMatrix3d previousPosition;
-  if (leftFootFirst)
-    previousPosition = initialRightFoot;
-  else
-    previousPosition = initialLeftFoot;
-
-  walk::HomogeneousMatrix3d newPosition;
-  walk::HomogeneousMatrix3d relativePosition;
-
   for (; it != src.end(); ++it)
     {
-      walk_msgs::convertFootprint2dToHomogeneousMatrix3d (newPosition, *it);
-
-      relativePosition = newPosition * previousPosition.inverse ();
       HalfStepsPatternGenerator::footstep_t step;
       step.duration =
 	seconds(it->duration.sec) + milliseconds(it->duration.nsec * 1000);
-      step.position(0) = relativePosition (0, 3);
-      step.position(1) = relativePosition (1, 3);
-      step.position(2) = 0.;
+      step.position(0) = it->x;
+      step.position(1) = it->y;
+      step.position(2) = it->theta;
       dst.push_back(step);
-
-      previousPosition = newPosition;
     }
 }
 
@@ -199,9 +181,7 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
 
   bool startWithLeftFoot = req.start_with_left_foot;
   HalfStepsPatternGenerator::footsteps_t steps;
-  convertFootprint(steps, req.footprints,
-		   initialLeftFootPosition, initialRightFootPosition,
-		   startWithLeftFoot);
+  convertFootprint(steps, req.footprints);
 
   patternGenerator_.setSteps(steps, startWithLeftFoot);
 
@@ -250,18 +230,6 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
   uint32_t shape = visualization_msgs::Marker::CUBE;
   uint32_t id = 0;
   bool isLeft = startWithLeftFoot;
-  double x = 0.;
-  double y = 0.;
-  if (isLeft)
-    {
-      x = patternGenerator_.initialRightFootPosition () (0, 3);
-      y = patternGenerator_.initialRightFootPosition () (1, 3);
-    }
-  else
-    {
-      x = patternGenerator_.initialLeftFootPosition () (0, 3);
-      y = patternGenerator_.initialLeftFootPosition () (1, 3);
-    }
   BOOST_FOREACH (const HalfStepsPatternGenerator::footstep_t& step,
 		 patternGenerator_.steps ())
     {
@@ -285,10 +253,8 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
 
       // Set the pose of the marker.  This is a full 6DOF pose
       // relative to the frame/time specified in the header
-      x += step.position[0];
-      y += step.position[1];
-      marker.pose.position.x = x;
-      marker.pose.position.y = y;
+      marker.pose.position.x = step.position[0];
+      marker.pose.position.y = step.position[1];
       marker.pose.position.z = 0.;
 
       btQuaternion quaternion;

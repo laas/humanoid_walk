@@ -2,8 +2,15 @@
 #include <boost/date_time.hpp>
 #include <boost/math/constants/constants.hpp>
 
+#include <Eigen/LU>
+
 #include "halfsteps_pattern_generator.hh"
 #include "newPGstepStudy.h"
+
+#include <angles/angles.h>
+#include <walk_interfaces/util.hh>
+#include <walk_msgs/conversion.hh>
+#include <walk_msgs/Footprint2d.h>
 
 static const double g = 9.81;
 static const double timeBeforeZmpShift = 0.95;
@@ -86,15 +93,39 @@ HalfStepsPatternGenerator::computeTrajectories()
   for (unsigned i = 0; i < 6; ++i)
     stepData.push_back(initialStep (i));
 
+  // Footprints
+  // Convert steps into relative positions.
+  walk::HomogeneousMatrix3d previousPosition;
+  if (startWithLeftFoot ())
+    previousPosition = initialRightFootPosition ();
+  else
+    previousPosition = initialLeftFootPosition ();
+
+  walk::HomogeneousMatrix3d newPosition;
+  walk::HomogeneousMatrix3d relativePosition;
+
   for (unsigned i = 0; i < this->steps().size (); ++i)
     {
+      walk::trans2dToTrans3d
+	(newPosition,
+	 this->steps()[i].position[0],
+	 this->steps()[i].position[1],
+	 this->steps()[i].position[2]);
+
+      relativePosition = newPosition * previousPosition.inverse ();
+
+      walk_msgs::Footprint2d step;
+      walk_msgs::convertHomogeneousMatrix3dToFootprint2d
+	(step, relativePosition);
       stepData.push_back(this->slides_[i].first);
       stepData.push_back(0.31); // hor_distance
       stepData.push_back(0.15); // max height
       stepData.push_back(this->slides_[i].second);
-      stepData.push_back(this->steps()[i].position(0));
-      stepData.push_back(this->steps()[i].position(1));
-      stepData.push_back(this->steps()[i].position(2) * 180. / M_PI);
+      stepData.push_back(step.x);
+      stepData.push_back(step.y);
+      stepData.push_back(angles::to_degrees (step.theta));
+
+      previousPosition = newPosition;
     }
 
   pg.produceSeqSlidedHalfStepFeatures
