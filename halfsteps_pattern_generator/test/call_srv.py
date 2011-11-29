@@ -35,19 +35,27 @@ def get_path_client():
         initial_right_foot_position.orientation.w = 1.
 
 
-        initial_center_of_mass_position = Pose()
-        initial_center_of_mass_position.position.x = 0.
-        initial_center_of_mass_position.position.y = 0.
-        initial_center_of_mass_position.position.z = 0.8
-        initial_center_of_mass_position.orientation.x = 0.
-        initial_center_of_mass_position.orientation.y = 0.
-        initial_center_of_mass_position.orientation.z = 0.
-        initial_center_of_mass_position.orientation.w = 1.
+        initial_center_of_mass_position = Point()
+        initial_center_of_mass_position.x = 0.
+        initial_center_of_mass_position.y = 0.
+        initial_center_of_mass_position.z = 0.8
+
+        final_center_of_mass_position = Point()
+        final_center_of_mass_position.x = 0.
+        final_center_of_mass_position.y = 0.
+        final_center_of_mass_position.z = 0.8
 
 
-        final_left_foot_position = initial_center_of_mass_position
-        final_right_foot_position = initial_center_of_mass_position
-        final_center_of_mass_position = initial_center_of_mass_position
+        final_left_foot_position = Pose()
+        final_left_foot_position.position.x = 0.
+        final_left_foot_position.position.y = -0.19
+        final_left_foot_position.position.z = 0.
+
+        final_right_foot_position = Pose()
+        final_right_foot_position.position.x = 0.
+        final_right_foot_position.position.y = 0.19
+        final_right_foot_position.position.z = 0.
+
 
         start_with_left_foot = True
         footprints = []

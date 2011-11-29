@@ -56,7 +56,7 @@ void convertPoseToHomogeneousMatrix(walk::HomogeneousMatrix3d& dst,
   dst(2, 3) = src.position.z;
 }
 
-void convertPoseToVector3d(walk::Vector3d& dst,
+void convertPointToVector3d(walk::Vector3d& dst,
 			   const geometry_msgs::Point& src)
 {
   dst[0] = src.x;
@@ -408,8 +408,8 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
 				 req.initial_left_foot_position);
   convertPoseToHomogeneousMatrix(initialRightFootPosition,
 				 req.initial_right_foot_position);
-  convertPoseToVector3d(initialCenterOfMassPosition,
-			req.initial_center_of_mass_position);
+  convertPointToVector3d(initialCenterOfMassPosition,
+			 req.initial_center_of_mass_position);
 
   std::cout << initialLeftFootPosition << std::endl;
   std::cout << initialRightFootPosition << std::endl;
@@ -427,7 +427,7 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
 				 req.final_left_foot_position);
   convertPoseToHomogeneousMatrix(finalRightFootPosition,
 				 req.final_right_foot_position);
-  convertPoseToVector3d(finalCenterOfMassPosition,
+  convertPointToVector3d(finalCenterOfMassPosition,
 			req.final_center_of_mass_position);
 
   patternGenerator_.setFinalRobotPosition(finalLeftFootPosition,

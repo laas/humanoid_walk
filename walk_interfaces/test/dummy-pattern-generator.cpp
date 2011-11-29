@@ -19,7 +19,7 @@ public:
 
     walk::Trajectory3d& lf = getLeftFootTrajectory();
     walk::Trajectory3d& rf = getRightFootTrajectory();
-    walk::Trajectory3d& com = getCenterOfMassTrajectory();
+    walk::TrajectoryV3d& com = getCenterOfMassTrajectory();
     walk::TrajectoryV2d& zmp = getZmpTrajectory();
 
     lf.data().resize(1);

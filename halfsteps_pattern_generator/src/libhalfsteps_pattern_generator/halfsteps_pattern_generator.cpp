@@ -66,7 +66,7 @@ HalfStepsPatternGenerator::computeTrajectories()
   CnewPGstepStudy pg;
   StepFeatures stepFeatures;
 
-  double comZ = initialCenterOfMassPosition() (2, 3);
+  double comZ = initialCenterOfMassPosition()[2];
 
   Eigen::Matrix<double, 6, 1> initialStep;
   initialStep(0) =
@@ -146,12 +146,11 @@ HalfStepsPatternGenerator::computeTrajectories()
 
       // Center of mass
       getCenterOfMassTrajectory().data()[i].duration = milliseconds(STEP * 1e3);
-      getCenterOfMassTrajectory().data()[i].position.setIdentity();
-      getCenterOfMassTrajectory().data()[i].position (0,3) =
+      getCenterOfMassTrajectory().data()[i].position[0] =
 	stepFeatures.comTrajX[i];
-      getCenterOfMassTrajectory().data()[i].position (1,3) =
+      getCenterOfMassTrajectory().data()[i].position[1] =
 	stepFeatures.comTrajY[i];
-      getCenterOfMassTrajectory().data()[i].position (2,3) = comZ;
+      getCenterOfMassTrajectory().data()[i].position[2] = comZ;
 
       // ZMP
       getZmpTrajectory().data()[i].duration = milliseconds(STEP * 1e3);
