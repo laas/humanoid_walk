@@ -1,7 +1,11 @@
 <package>
-  <description brief="halfsteps_pattern_generator">
+  <description brief="Half-steps based pattern generator">
 
-     halfsteps_pattern_generator
+    This packages provides a pattern generator based on half-steps for
+    dimensionality reduction.
+
+    It generates feet, center of mass and ZMP trajectories for
+    humanoids robots from a set of 2d footprints.
 
   </description>
   <author>Thomas Moulard</author>
