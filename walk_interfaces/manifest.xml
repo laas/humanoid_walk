@@ -1,7 +1,22 @@
 <package>
-  <description brief="walk_interfaces">
+  <description brief="Humanoids Walking C++ Interface">
 
-     walk_interfaces
+    C++ Interfaces used to generated humanoid robots walking
+    movements.
+
+    Provides the definition of the following structures:
+    <ul>
+      <li>footprints (2d, 3d),</li>
+      <li>trajectories (2d, 3d),</li>
+      <li>2d points, 3d points, 2d frames, 3d frames as homogeneous
+	matrices,</li>
+      <li>pattern generator (2d, 3d): an algorithm which produces
+      feet, ZMP and center of mass trajectories from a stack of time
+      parametrized footprints.</li>
+    </ul>
+
+    It also defines how of to store walking trajectories using the
+    YAML format.
 
   </description>
   <author>Thomas Moulard</author>

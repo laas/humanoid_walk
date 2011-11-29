@@ -1,7 +1,8 @@
 <package>
-  <description brief="walk_msgs">
+  <description brief="Humanoids Walking ROS Interface">
 
-     walk_msgs
+    ROS Interfaces used to generated humanoid robots walking
+    movements.
 
   </description>
   <author>Thomas Moulard</author>
