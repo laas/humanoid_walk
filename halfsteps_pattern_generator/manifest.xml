@@ -13,6 +13,9 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/halfsteps_pattern_generator</url>
 
+  <depend package="common_rosdeps" />
+  <rosdep name="eigen" />
+
   <depend package="bullet"/>
 
   <depend package="walk_interfaces"/>

@@ -28,7 +28,7 @@
     <cpp cflags="-I${prefix}/include" lflags="-lboost_filesystem" />
   </export>
 
-
-  <depend package="eigen"/>
+  <depend package="common_rosdeps" />
+  <rosdep name="eigen" />
 
 </package>

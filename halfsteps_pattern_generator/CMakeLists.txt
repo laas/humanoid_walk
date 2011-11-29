@@ -15,6 +15,9 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_genmsg()
 #rosbuild_gensrv()
 
+find_package(Eigen REQUIRED)
+include_directories(${Eigen_INCLUDE_DIRS})
+
 # Main library.
 rosbuild_add_library(${PROJECT_NAME}
   src/libhalfsteps_pattern_generator/newPGstepStudy.cpp

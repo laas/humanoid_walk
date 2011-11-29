@@ -3,6 +3,8 @@
 #include <boost/bind.hpp>
 #include <boost/date_time.hpp>
 
+#include <Eigen/LU>
+
 #include <LinearMath/btMatrix3x3.h>
 #include <LinearMath/btQuaternion.h>
 
@@ -17,295 +19,62 @@
 #include "walk_msgs/Footprint2d.h"
 #include "walk_msgs/GetPath.h"
 
-
-void convertPoseToHomogeneousMatrix(walk::HomogeneousMatrix3d& dst,
-				    const geometry_msgs::Pose& src);
-void convertHomogeneousMatrixToPose(geometry_msgs::Pose&,
-				    const walk::HomogeneousMatrix3d&);
+#include <walk_msgs/conversion.hh>
 
 void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
 		      const std::vector<walk_msgs::Footprint2d>& src);
 
-
-
-void convertTrajectoryToPath(nav_msgs::Path&,
-			     const walk::Trajectory3d&,
-			     const std::string& frameName);
-void convertTrajectoryV2dToPath(walk_msgs::PathPoint2d&,
-				const walk::TrajectoryV2d&,
-				const std::string& frameName);
-
-void convertPoseToHomogeneousMatrix(walk::HomogeneousMatrix3d& dst,
-				    const geometry_msgs::Pose& src)
-{
-  btQuaternion quaternion
-    (src.orientation.x, src.orientation.y, src.orientation.z,
-     src.orientation.w);
-  btMatrix3x3 rotation (quaternion);
-
-  dst.setIdentity();
-
-  // Copy the rotation component.
-  for(unsigned i = 0; i < 3; ++i)
-    for(unsigned j = 0; j < 3; ++j)
-      dst (i, j) = rotation[i][j];
-
-  // Copy the translation component.
-  dst(0, 3) = src.position.x;
-  dst(1, 3) = src.position.y;
-  dst(2, 3) = src.position.z;
-}
-
-void convertPointToVector3d(walk::Vector3d& dst,
-			   const geometry_msgs::Point& src)
-{
-  dst[0] = src.x;
-  dst[1] = src.y;
-  dst[2] = src.z;
-}
-
 void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
-		      const std::vector<walk_msgs::Footprint2d>& src)
+		      const std::vector<walk_msgs::Footprint2d>& src,
+		      const walk::HomogeneousMatrix3d& initialLeftFoot,
+		      const walk::HomogeneousMatrix3d& initialRightFoot,
+		      bool leftFootFirst)
 {
   using boost::posix_time::seconds;
   using boost::posix_time::milliseconds;
 
   dst.clear();
   std::vector<walk_msgs::Footprint2d>::const_iterator it = src.begin();
+
+  walk::HomogeneousMatrix3d position;
+  if (leftFootFirst)
+    position = initialRightFoot;
+  else
+    position = initialLeftFoot;
+
+  walk::HomogeneousMatrix3d newPosition;
+  walk::HomogeneousMatrix3d relativePosition;
+
   for (; it != src.end(); ++it)
     {
+      newPosition.setIdentity();
+      newPosition (0, 3) = it->x;
+      newPosition (1, 3) = it->y;
+      //it->theta
+
+      relativePosition = newPosition * position.inverse ();
+
       HalfStepsPatternGenerator::footstep_t step;
       step.duration =
 	seconds(it->duration.sec) + milliseconds(it->duration.nsec * 1000);
-      step.position(0) = it->x;
-      step.position(1) = it->y;
-      step.position(2) = it->theta;
+      step.position(0) = relativePosition (0, 3);
+      step.position(1) = relativePosition (1, 3);
+      step.position(2) = 0.;
       dst.push_back(step);
+
+      position = newPosition;
     }
 }
 
-void convertHomogeneousMatrixToPose(geometry_msgs::Pose& dst,
-				    const walk::HomogeneousMatrix3d& src)
-{
-  btMatrix3x3 rotation;
-  btQuaternion quaternion;
-  for(unsigned i = 0; i < 3; ++i)
-    for(unsigned j = 0; j < 3; ++j)
-      rotation[i][j] = src (i, j);
-  rotation.getRotation (quaternion);
-
-  dst.position.x = src (0, 3);
-  dst.position.y = src (1, 3);
-  dst.position.z = src (2, 3);
-
-  dst.orientation.x = quaternion.x ();
-  dst.orientation.y = quaternion.y ();
-  dst.orientation.z = quaternion.z ();
-  dst.orientation.w = quaternion.w ();
-
-}
-
-void convertTrajectoryToPath(nav_msgs::Path& dst,
-			     const walk::Trajectory3d& src,
-			     const std::string& frameName)
-{
-  std::size_t size = src.data().size();
-
-  std_msgs::Header poseHeader;
-  poseHeader.seq = 0;
-  poseHeader.stamp.sec = 0.;
-  poseHeader.stamp.nsec = 0.;
-  poseHeader.frame_id = frameName;
-
-  geometry_msgs::PoseStamped poseStamped;
-
-  walk::TimeDuration duration;
-  for (std::size_t i = 0; i < size; ++i)
-    {
-      // Update header.
-      ++poseHeader.seq;
-      poseHeader.stamp.sec =
-	duration.ticks() / walk::TimeDuration::rep_type::res_adjust ();
-      poseHeader.stamp.nsec = duration.fractional_seconds() * 1e3;
-
-      // Fill header.
-      poseStamped.header = poseHeader;
-
-      // Fill pose.
-      convertHomogeneousMatrixToPose
-	(poseStamped.pose,
-	 src.data()[i].position);
-
-      // Add to path.
-      dst.poses.push_back(poseStamped);
-
-      duration += src.data()[i].duration;
-    }
-}
-
-void convertTrajectoryV2dToPath(walk_msgs::PathPoint2d& dst,
-				const walk::TrajectoryV2d& src,
-				const std::string& frameName)
-{
-  std::size_t size = src.data().size();
-
-  std_msgs::Header pointHeader;
-  pointHeader.seq = 0;
-  pointHeader.stamp.sec = 0.;
-  pointHeader.stamp.nsec = 0.;
-  pointHeader.frame_id = frameName;
-
-  walk_msgs::Point2dStamped pointStamped;
-
-  walk::TimeDuration duration;
-  for (std::size_t i = 0; i < size; ++i)
-    {
-      // Update header.
-      ++pointHeader.seq;
-      pointHeader.stamp.sec =
-	duration.ticks() / walk::TimeDuration::rep_type::res_adjust ();
-      pointHeader.stamp.nsec = duration.fractional_seconds() * 1000000;
-
-      // Fill header.
-      pointStamped.header = pointHeader;
-
-      // Fill point.
-      pointStamped.point.x = src.data()[i].position[0];
-      pointStamped.point.y = src.data()[i].position[1];
-
-      // Add to path.
-      dst.points.push_back(pointStamped);
-
-      duration += src.data()[i].duration;
-    }
-}
-
-void convertTrajectoryV3dToPath(walk_msgs::PathPoint3d& dst,
-				const walk::TrajectoryV3d& src,
-				const std::string& frameName)
-{
-  std::size_t size = src.data().size();
-
-  std_msgs::Header pointHeader;
-  pointHeader.seq = 0;
-  pointHeader.stamp.sec = 0.;
-  pointHeader.stamp.nsec = 0.;
-  pointHeader.frame_id = frameName;
-
-  geometry_msgs::PointStamped pointStamped;
-
-  walk::TimeDuration duration;
-  for (std::size_t i = 0; i < size; ++i)
-    {
-      // Update header.
-      ++pointHeader.seq;
-      pointHeader.stamp.sec =
-	duration.ticks() / walk::TimeDuration::rep_type::res_adjust ();
-      pointHeader.stamp.nsec = duration.fractional_seconds() * 1000000;
-
-      // Fill header.
-      pointStamped.header = pointHeader;
-
-      // Fill point.
-      pointStamped.point.x = src.data()[i].position[0];
-      pointStamped.point.y = src.data()[i].position[1];
-      pointStamped.point.z = src.data()[i].position[2];
-
-      // Add to path.
-      dst.points.push_back(pointStamped);
-
-      duration += src.data()[i].duration;
-    }
-}
-
-void convertTrajectoryV2dToPath(nav_msgs::Path& dst,
-				const walk::TrajectoryV2d& src,
-				const std::string& frameName)
-{
-  std::size_t size = src.data().size();
-
-  std_msgs::Header poseHeader;
-  poseHeader.seq = 0;
-  poseHeader.stamp.sec = 0.;
-  poseHeader.stamp.nsec = 0.;
-  poseHeader.frame_id = frameName;
-
-  geometry_msgs::PoseStamped poseStamped;
-
-  walk::TimeDuration duration;
-  for (std::size_t i = 0; i < size; ++i)
-    {
-      // Update header.
-      ++poseHeader.seq;
-      poseHeader.stamp.sec =
-	duration.ticks() / walk::TimeDuration::rep_type::res_adjust ();
-      poseHeader.stamp.nsec = duration.fractional_seconds() * 1000000;
-
-      // Fill header.
-      poseStamped.header = poseHeader;
-
-      // Fill point.
-      poseStamped.pose.position.x = src.data()[i].position[0];
-      poseStamped.pose.position.y = src.data()[i].position[1];
-      poseStamped.pose.position.z = 0.;
-
-      poseStamped.pose.orientation.x = 0.;
-      poseStamped.pose.orientation.y = 0.;
-      poseStamped.pose.orientation.z = 0.;
-      poseStamped.pose.orientation.z = 1.;
-
-      // Add to path.
-      dst.poses.push_back(poseStamped);
-
-      duration += src.data()[i].duration;
-    }
-}
-
-void convertTrajectoryV3dToPath(nav_msgs::Path& dst,
-				const walk::TrajectoryV3d& src,
-				const std::string& frameName)
-{
-  std::size_t size = src.data().size();
-
-  std_msgs::Header poseHeader;
-  poseHeader.seq = 0;
-  poseHeader.stamp.sec = 0.;
-  poseHeader.stamp.nsec = 0.;
-  poseHeader.frame_id = frameName;
-
-  geometry_msgs::PoseStamped poseStamped;
-
-  walk::TimeDuration duration;
-  for (std::size_t i = 0; i < size; ++i)
-    {
-      // Update header.
-      ++poseHeader.seq;
-      poseHeader.stamp.sec =
-	duration.ticks() / walk::TimeDuration::rep_type::res_adjust ();
-      poseHeader.stamp.nsec = duration.fractional_seconds() * 1000000;
-
-      // Fill header.
-      poseStamped.header = poseHeader;
-
-      // Fill point.
-      poseStamped.pose.position.x = src.data()[i].position[0];
-      poseStamped.pose.position.y = src.data()[i].position[1];
-      poseStamped.pose.position.z = src.data()[i].position[2];
-
-      poseStamped.pose.orientation.x = 0.;
-      poseStamped.pose.orientation.y = 0.;
-      poseStamped.pose.orientation.z = 0.;
-      poseStamped.pose.orientation.z = 1.;
-
-      // Add to path.
-      dst.poses.push_back(poseStamped);
-
-      duration += src.data()[i].duration;
-    }
-}
 
 using walk::HomogeneousMatrix3d;
 using walk::Posture;
+
+using walk_msgs::convertPoseToHomogeneousMatrix;
+using walk_msgs::convertPointToVector3d;
+using walk_msgs::convertTrajectoryToPath;
+using walk_msgs::convertTrajectoryV3dToPath;
+using walk_msgs::convertTrajectoryV2dToPath;
 
 class GeneratorNode
 {
@@ -411,9 +180,6 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
   convertPointToVector3d(initialCenterOfMassPosition,
 			 req.initial_center_of_mass_position);
 
-  std::cout << initialLeftFootPosition << std::endl;
-  std::cout << initialRightFootPosition << std::endl;
-
   patternGenerator_.setInitialRobotPosition(initialLeftFootPosition,
 					    initialRightFootPosition,
 					    initialCenterOfMassPosition,
@@ -435,10 +201,12 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
 					  finalCenterOfMassPosition,
 					  finalPosture);
 
-  HalfStepsPatternGenerator::footsteps_t steps;
-  convertFootprint(steps, req.footprints);
-
   bool startWithLeftFoot = req.start_with_left_foot;
+  HalfStepsPatternGenerator::footsteps_t steps;
+  convertFootprint(steps, req.footprints,
+		   initialLeftFootPosition, initialRightFootPosition,
+		   startWithLeftFoot);
+
   patternGenerator_.setSteps(steps, startWithLeftFoot);
 
   //FIXME: no sliding for now.

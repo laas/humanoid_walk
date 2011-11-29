@@ -68,18 +68,18 @@ namespace walk
     dst.setIdentity ();
 
     // Fill rotation.
-    dst(0, 0) = cos (srcTh);
-    dst(1, 1) = cos (srcTh);
+    dst(0, 0) = std::cos (srcTh);
+    dst(1, 1) = std::cos (srcTh);
 
     if (U::IsRowMajor)
       {
-	dst(0, 1) = -sin (srcTh);
-	dst(1, 0) = sin (srcTh);
+	dst(0, 1) = -std::sin (srcTh);
+	dst(1, 0) = std::sin (srcTh);
       }
     else
       {
-	dst(1, 0) = -sin (srcTh);
-	dst(0, 1) = sin (srcTh);
+	dst(1, 0) = -std::sin (srcTh);
+	dst(0, 1) = std::sin (srcTh);
       }
 
     // Fill translation.

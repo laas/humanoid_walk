@@ -47,13 +47,13 @@ def get_path_client():
 
 
         final_left_foot_position = Pose()
-        final_left_foot_position.position.x = 0.
+        final_left_foot_position.position.x = 3*0.25
         final_left_foot_position.position.y = -0.19
         final_left_foot_position.position.z = 0.
 
         final_right_foot_position = Pose()
-        final_right_foot_position.position.x = 0.
-        final_right_foot_position.position.y = 0.19
+        final_right_foot_position.position.x = 3*0.25
+        final_right_foot_position.position.y = +0.19
         final_right_foot_position.position.z = 0.
 
 
@@ -63,7 +63,7 @@ def get_path_client():
         step = Footprint2d()
         step.duration.secs = 0.
         step.duration.nsecs = 5000.
-        step.x = 0.
+        step.x = 0.*0.25
         step.y = -0.19
         step.theta = 0.
         footprints.append(step)
@@ -71,7 +71,7 @@ def get_path_client():
         step = Footprint2d()
         step.duration.secs = 0.
         step.duration.nsecs = 5000.
-        step.x = 0.
+        step.x = 0.*0.25
         step.y = +0.19
         step.theta = 0.
         footprints.append(step)
@@ -79,7 +79,7 @@ def get_path_client():
         step = Footprint2d()
         step.duration.secs = 0.
         step.duration.nsecs = 5000.
-        step.x = 0.25
+        step.x = 1*0.25
         step.y = -0.19
         step.theta = 0.
         footprints.append(step)
@@ -87,7 +87,7 @@ def get_path_client():
         step = Footprint2d()
         step.duration.secs = 0.
         step.duration.nsecs = 5000.
-        step.x = 0.25
+        step.x = 1*0.25
         step.y = +0.19
         step.theta = 0.
         footprints.append(step)
@@ -95,7 +95,7 @@ def get_path_client():
         step = Footprint2d()
         step.duration.secs = 0.
         step.duration.nsecs = 5000.
-        step.x = 0.25
+        step.x = 2*0.25
         step.y = -0.19
         step.theta = 0.
         footprints.append(step)
@@ -103,7 +103,7 @@ def get_path_client():
         step = Footprint2d()
         step.duration.secs = 0.
         step.duration.nsecs = 5000.
-        step.x = 0.25
+        step.x = 2*0.25
         step.y = +0.19
         step.theta = 0.
         footprints.append(step)
@@ -111,7 +111,7 @@ def get_path_client():
         step = Footprint2d()
         step.duration.secs = 0.
         step.duration.nsecs = 5000.
-        step.x = 0.25
+        step.x = 3*0.25
         step.y = -0.19
         step.theta = 0.
         footprints.append(step)
@@ -119,7 +119,7 @@ def get_path_client():
         step = Footprint2d()
         step.duration.secs = 0.
         step.duration.nsecs = 5000.
-        step.x = 0.25
+        step.x = 3*0.25
         step.y = +0.19
         step.theta = 0.
         footprints.append(step)
@@ -133,7 +133,7 @@ def get_path_client():
                          final_center_of_mass_position,
                          start_with_left_foot,
                          footprints)
-        return resp1.path
+        return not not resp1.path
     except rospy.ServiceException, e:
         print "Service call failed: %s"%e
 

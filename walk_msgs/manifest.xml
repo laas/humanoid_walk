@@ -10,7 +10,18 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/walk_msgs</url>
 
+  <export>
+    <cpp cflags="-I${prefix}/include"
+	 lflags="-L${prefix}/lib -lwalk_msgs" />
+  </export>
+
+  <depend package="common_rosdeps" />
+  <depend package="bullet"/>
+
   <depend package="geometry_msgs"/>
   <depend package="nav_msgs"/>
 
+  <depend package="walk_interfaces"/>
+
+  <rosdep name="eigen" />
 </package>
