@@ -23,9 +23,6 @@ namespace walk
 	    && "Wrong columns number for source matrix, should be 3.");
     assert (src.rows () == 3
 	    && "Wrong rows number for source matrix, should be 3.");
-    assert (!(U::IsRowMajor ^ V::IsRowMajor)
-	    && "Source and dest major type mismatch.");
-
     dst.setIdentity ();
 
     // Fill rotation.
@@ -35,16 +32,8 @@ namespace walk
     dst(1, 1) = src(1, 1);
 
     // Fill translation.
-    if (U::IsRowMajor)
-      {
-	dst(0, 3) = src(0, 3);
-	dst(1, 3) = src(1, 3);
-      }
-    else
-      {
-	dst(3, 0) = src(3, 0);
-	dst(3, 1) = src(3, 1);
-      }
+    dst(0, 3) = src(0, 3);
+    dst(1, 3) = src(1, 3);
   }
 
   // \brief Convert a 2D \f$SO(2)\f$ matrix transform to a 3D
@@ -71,28 +60,12 @@ namespace walk
     dst(0, 0) = std::cos (srcTh);
     dst(1, 1) = std::cos (srcTh);
 
-    if (U::IsRowMajor)
-      {
-	dst(0, 1) = -std::sin (srcTh);
-	dst(1, 0) = std::sin (srcTh);
-      }
-    else
-      {
-	dst(1, 0) = -std::sin (srcTh);
-	dst(0, 1) = std::sin (srcTh);
-      }
+    dst(0, 1) = -std::sin (srcTh);
+    dst(1, 0) = std::sin (srcTh);
 
     // Fill translation.
-    if (U::IsRowMajor)
-      {
-	dst(0, 3) = srcX;
-	dst(1, 3) = srcY;
-      }
-    else
-      {
-	dst(3, 0) = srcX;
-	dst(3, 1) = srcY;
-      }
+    dst(0, 3) = srcX;
+    dst(1, 3) = srcY;
   }
 
   /// \brief Convert a structure of size 3 to a Homogeneous 3d matrix.
@@ -109,18 +82,9 @@ namespace walk
     dst.setIdentity ();
 
     // Fill translation.
-    if (HomogeneousMatrix3d::IsRowMajor)
-      {
-	dst(0, 3) = src[0];
-	dst(1, 3) = src[1];
-	dst(2, 3) = src[2];
-      }
-    else
-      {
-	dst(3, 0) = src[0];
-	dst(3, 1) = src[1];
-	dst(3, 2) = src[2];
-      }
+    dst(0, 3) = src[0];
+    dst(1, 3) = src[1];
+    dst(2, 3) = src[2];
   }
 
   /// \brief Convert a row-major homogeneous 3d matrix to a
@@ -141,10 +105,7 @@ namespace walk
     // Fill matrix.
     for (unsigned rowId = 0; rowId < 4; ++rowId)
       for (unsigned colId = 0; colId < 3; ++colId)
-	if (HomogeneousMatrix3d::IsRowMajor)
-	  dst(rowId, colId) = src(rowId, colId);
-	else
-	  dst(colId, rowId) = src(rowId, colId);
+	dst(rowId, colId) = src(rowId, colId);
   }
 
   /// \brief Convert a structure of size 2 to a Vector2d object.
