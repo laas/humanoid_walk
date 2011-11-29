@@ -4,6 +4,7 @@
 #include <LinearMath/btQuaternion.h>
 
 #include "walk_msgs/conversion.hh"
+#include "walk_interfaces/util.hh"
 
 namespace walk_msgs
 {
@@ -255,6 +256,23 @@ namespace walk_msgs
 
 	duration += src.data()[i].duration;
       }
+  }
+
+  void
+  convertFootprint2dToHomogeneousMatrix3d
+  (walk::HomogeneousMatrix3d& dst, const walk_msgs::Footprint2d& src)
+  {
+    dst.setIdentity();
+    walk::trans2dToTrans3d (dst, src.x, src.y, src.theta);
+  }
+
+  void
+  convertHomogeneousMatrix3dToFootprint2d
+  (walk_msgs::Footprint2d& dst, const walk::HomogeneousMatrix3d& src)
+  {
+    dst.x = src (0, 3);
+    dst.y = src (1, 3);
+    dst.theta = std::atan2 (src (1, 0), src (0, 0));
   }
 
 } // end of namespace walk_msgs.

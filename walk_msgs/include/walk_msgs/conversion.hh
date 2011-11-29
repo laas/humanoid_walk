@@ -42,6 +42,12 @@ namespace walk_msgs
   void convertPointToVector3d(walk::Vector3d& dst,
 			      const geometry_msgs::Point& src);
 
+  void convertFootprint2dToHomogeneousMatrix3d
+  (walk::HomogeneousMatrix3d& dst, const walk_msgs::Footprint2d& src);
+
+  void convertHomogeneousMatrix3dToFootprint2d
+  (walk_msgs::Footprint2d& dst, const walk::HomogeneousMatrix3d& src);
+
 } // end of namespace walk_msgs.
 
 #endif //! WALK_MSGS_CONVERSION_HH

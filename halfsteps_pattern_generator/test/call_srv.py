@@ -63,22 +63,6 @@ def get_path_client():
         step = Footprint2d()
         step.duration.secs = 0.
         step.duration.nsecs = 5000.
-        step.x = 0.*0.25
-        step.y = -0.19
-        step.theta = 0.
-        footprints.append(step)
-
-        step = Footprint2d()
-        step.duration.secs = 0.
-        step.duration.nsecs = 5000.
-        step.x = 0.*0.25
-        step.y = +0.19
-        step.theta = 0.
-        footprints.append(step)
-
-        step = Footprint2d()
-        step.duration.secs = 0.
-        step.duration.nsecs = 5000.
         step.x = 1*0.25
         step.y = -0.19
         step.theta = 0.

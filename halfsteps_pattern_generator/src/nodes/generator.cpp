@@ -47,10 +47,7 @@ void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
 
   for (; it != src.end(); ++it)
     {
-      newPosition.setIdentity();
-      newPosition (0, 3) = it->x;
-      newPosition (1, 3) = it->y;
-      //it->theta
+      walk_msgs::convertFootprint2dToHomogeneousMatrix3d (newPosition, *it);
 
       relativePosition = newPosition * position.inverse ();
 
