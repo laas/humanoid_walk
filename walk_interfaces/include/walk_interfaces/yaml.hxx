@@ -116,7 +116,8 @@ namespace walk
 			    const StampedFootprint<S>& footprint) const
   {
     stream
-      << "     - duration: "
+      << "     - begin time: " << footprint.beginTime
+      << "       duration: "
       << (0. + footprint.duration.total_nanoseconds () / 1e9) << "\n"
       << "       position: ";
     writeMatrix (stream, footprint.position);
