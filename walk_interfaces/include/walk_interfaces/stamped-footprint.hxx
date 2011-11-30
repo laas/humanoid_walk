@@ -9,6 +9,8 @@ namespace walk
   operator<<(std::ostream& os, const StampedFootprint<T>& sf)
   {
     os
+      << "begin time:\n"
+      << sf.beginTime
       << "duration:\n"
       << sf.duration
       << "position:\n"

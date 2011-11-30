@@ -11,6 +11,7 @@ namespace walk
   {
     typedef T footprint_t;
 
+    Time beginTime;
     TimeDuration duration;
     footprint_t position;
   public:
