@@ -115,7 +115,7 @@ namespace walk
   YamlWriter<T>::writeFootprint (std::ostream& stream,
 			    const StampedFootprint<S>& footprint) const
   {
-    stream << "     - duration: " << footprint.duration
+    stream << "     - period: " << footprint.period
 	   << "       position: ";
     writeMatrix (stream, footprint.position);
     stream << "\n";

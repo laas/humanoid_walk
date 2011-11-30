@@ -9,8 +9,8 @@ namespace walk
   operator<<(std::ostream& os, const StampedFootprint<T>& sf)
   {
     os
-      << "duration:\n"
-      << sf.duration
+      << "period:\n"
+      << sf.period
       << "position:\n"
       << sf.position;
     return os;
@@ -25,9 +25,15 @@ namespace walk
     typedef typename sequence_t::const_iterator const_iterator_t;
 
     TimeDuration length;
-    const_iterator_t iter = sequence.begin();
-    for (; iter != sequence.end(); ++iter)
-      length += iter->duration;
+
+    // If sequence is empty return zero duration.
+    if (sequence.size () != 0)
+      {
+	const_iterator_t beginIter = sequence.begin();
+	const_iterator_t endIter = sequence.end(); --endIter;
+	length = (beginIter->period.span (endIter->period)).length ();
+      }
+
     return length;
   }
 } // end of namespace walk.

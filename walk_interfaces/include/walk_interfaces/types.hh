@@ -3,6 +3,7 @@
 # include <vector>
 # include <Eigen/Core>
 
+# include <boost/date_time/posix_time/posix_time.hpp>
 # include <boost/date_time/posix_time/posix_time_duration.hpp>
 
 # define WALK_INTERFACES_EIGEN_STL_VECTOR(T)				\
@@ -18,7 +19,9 @@ namespace walk
   typedef Eigen::Matrix<double, 3, 1> Footprint2d;
   typedef Eigen::VectorXd Posture;
 
+  typedef boost::posix_time::ptime Time;
   typedef boost::posix_time::time_duration TimeDuration;
+  typedef boost::posix_time::time_period TimePeriod;
 
   typedef WALK_INTERFACES_EIGEN_STL_VECTOR(Footprint2d) Footprint2dSequence;
 

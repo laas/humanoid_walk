@@ -11,7 +11,7 @@ namespace walk
   {
     typedef T footprint_t;
 
-    TimeDuration duration;
+    TimePeriod period (Time t1, Time t2);
     footprint_t position;
   public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
