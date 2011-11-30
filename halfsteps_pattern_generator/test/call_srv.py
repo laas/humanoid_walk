@@ -60,59 +60,59 @@ def get_path_client():
         start_with_left_foot = True
         footprints = []
 
-        step = Footprint2d()
+        footprint = Footprint2d()
         # FIXME: add beginTime
-        step.duration.secs = 0.
-        step.duration.nsecs = 5000.
-        step.x = 1*0.25
-        step.y = -0.19
-        step.theta = 0.
-        footprints.append(step)
+        footprint.duration.secs = 0.
+        footprint.duration.nsecs = 5000.
+        footprint.x = 1*0.25
+        footprint.y = -0.19
+        footprint.theta = 0.
+        footprints.append(footprint)
 
-        step = Footprint2d()
+        footprint = Footprint2d()
         # FIXME: add beginTime
-        step.duration.secs = 0.
-        step.duration.nsecs = 5000.
-        step.x = 1*0.25
-        step.y = +0.19
-        step.theta = 0.
-        footprints.append(step)
+        footprint.duration.secs = 0.
+        footprint.duration.nsecs = 5000.
+        footprint.x = 1*0.25
+        footprint.y = +0.19
+        footprint.theta = 0.
+        footprints.append(footprint)
 
-        step = Footprint2d()
+        footprint = Footprint2d()
         # FIXME: add beginTime
-        step.duration.secs = 0.
-        step.duration.nsecs = 5000.
-        step.x = 2*0.25
-        step.y = -0.19
-        step.theta = 0.
-        footprints.append(step)
+        footprint.duration.secs = 0.
+        footprint.duration.nsecs = 5000.
+        footprint.x = 2*0.25
+        footprint.y = -0.19
+        footprint.theta = 0.
+        footprints.append(footprint)
 
-        step = Footprint2d()
+        footprint = Footprint2d()
         # FIXME: add beginTime
-        step.duration.secs = 0.
-        step.duration.nsecs = 5000.
-        step.x = 2*0.25
-        step.y = +0.19
-        step.theta = 0.
-        footprints.append(step)
+        footprint.duration.secs = 0.
+        footprint.duration.nsecs = 5000.
+        footprint.x = 2*0.25
+        footprint.y = +0.19
+        footprint.theta = 0.
+        footprints.append(footprint)
 
-        step = Footprint2d()
+        footprint = Footprint2d()
         # FIXME: add beginTime
-        step.duration.secs = 0.
-        step.duration.nsecs = 5000.
-        step.x = 3*0.25
-        step.y = -0.19
-        step.theta = 0.
-        footprints.append(step)
+        footprint.duration.secs = 0.
+        footprint.duration.nsecs = 5000.
+        footprint.x = 3*0.25
+        footprint.y = -0.19
+        footprint.theta = 0.
+        footprints.append(footprint)
 
-        step = Footprint2d()
+        footprint = Footprint2d()
         # FIXME: add beginTime
-        step.duration.secs = 0.
-        step.duration.nsecs = 5000.
-        step.x = 3*0.25
-        step.y = +0.19
-        step.theta = 0.
-        footprints.append(step)
+        footprint.duration.secs = 0.
+        footprint.duration.nsecs = 5000.
+        footprint.x = 3*0.25
+        footprint.y = +0.19
+        footprint.theta = 0.
+        footprints.append(footprint)
 
 
         resp1 = get_path(initial_left_foot_position,
