@@ -4,21 +4,21 @@
 
 # include <walk_interfaces/types.hh>
 # include <walk_interfaces/trajectory.hh>
-# include <walk_interfaces/stamped-footstep.hh>
+# include <walk_interfaces/stamped-footprint.hh>
 
 namespace walk
 {
   template <typename T>
   class PatternGenerator;
 
-  typedef PatternGenerator<StampedFootstep2d> PatternGenerator2d;
+  typedef PatternGenerator<StampedFootprint2d> PatternGenerator2d;
 
   template <typename T>
   class PatternGenerator
   {
   public:
-    typedef T footstep_t;
-    typedef WALK_INTERFACES_EIGEN_STL_VECTOR(footstep_t) footsteps_t;
+    typedef T footprint_t;
+    typedef WALK_INTERFACES_EIGEN_STL_VECTOR(footprint_t) footprints_t;
 
     explicit PatternGenerator();
     explicit PatternGenerator(const PatternGenerator<T>&);
@@ -36,8 +36,8 @@ namespace walk
 			       const Vector3d& centerOfMass,
 			       const Posture& posture);
 
-    void setSteps(const footsteps_t&, bool startWithLeftFoot);
-    const footsteps_t& steps() const;
+    void setFootprints(const footprints_t&, bool startWithLeftFoot);
+    const footprints_t& footprints() const;
     bool startWithLeftFoot() const;
 
     const Trajectory3d& leftFootTrajectory() const;
@@ -66,7 +66,7 @@ namespace walk
     virtual void computeTrajectories() = 0;
 
   private:
-    footsteps_t steps_;
+    footprints_t footprints_;
     bool startWithLeftFoot_;
     Trajectory3d leftFootTrajectory_;
     Trajectory3d rightFootTrajectory_;

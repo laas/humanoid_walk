@@ -73,7 +73,7 @@ namespace walk
     writeMatrix (stream, patternGenerator_.finalPosture ());
     stream << "\n";
 
-    writeSteps (stream);
+    writeFootprints (stream);
 
     stream << "trajectories:\n"
 	   << "    left-foot:\n";
@@ -112,27 +112,27 @@ namespace walk
   template <typename T>
   template <typename S>
   void
-  YamlWriter<T>::writeStep (std::ostream& stream,
-			    const StampedFootstep<S>& step) const
+  YamlWriter<T>::writeFootprint (std::ostream& stream,
+			    const StampedFootprint<S>& footprint) const
   {
-    stream << "     - duration: " << step.duration
+    stream << "     - duration: " << footprint.duration
 	   << "       position: ";
-    writeMatrix (stream, step.position);
+    writeMatrix (stream, footprint.position);
     stream << "\n";
   }
 
   template <typename T>
   void
-  YamlWriter<T>::writeSteps (std::ostream& stream) const
+  YamlWriter<T>::writeFootprints (std::ostream& stream) const
   {
-    const typename patternGenerator_t::footsteps_t& steps =
-      patternGenerator_.steps();
+    const typename patternGenerator_t::footprints_t& footprints =
+      patternGenerator_.footprints();
 
-    stream << "steps: \n";
-    BOOST_FOREACH(const typename patternGenerator_t::footstep_t& step, steps)
+    stream << "footprints: \n";
+    BOOST_FOREACH(const typename patternGenerator_t::footprint_t& footprint, footprints)
       {
 	stream << "    - ";
-	writeStep(stream, step);
+	writeFootprint(stream, footprint);
 	stream << "\n";
       }
   }

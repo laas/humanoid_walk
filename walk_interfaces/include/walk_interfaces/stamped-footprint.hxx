@@ -1,12 +1,12 @@
-#ifndef WALK_INTERFACE_STAMPED_FOOTSTEP_HXX
-# define WALK_INTERFACE_STAMPED_FOOTSTEP_HXX
+#ifndef WALK_INTERFACE_STAMPED_FOOTPRINT_HXX
+# define WALK_INTERFACE_STAMPED_FOOTPRINT_HXX
 # include <iostream>
 
 namespace walk
 {
   template <typename T>
   std::ostream&
-  operator<<(std::ostream& os, const StampedFootstep<T>& sf)
+  operator<<(std::ostream& os, const StampedFootprint<T>& sf)
   {
     os
       << "duration:\n"
@@ -18,10 +18,10 @@ namespace walk
 
   template <typename T>
   TimeDuration
-  computeFootstepSequenceLength
-  (const WALK_INTERFACES_EIGEN_STL_VECTOR(StampedFootstep<T>)& sequence)
+  computeFootprintSequenceLength
+  (const WALK_INTERFACES_EIGEN_STL_VECTOR(StampedFootprint<T>)& sequence)
   {
-    typedef WALK_INTERFACES_EIGEN_STL_VECTOR(StampedFootstep<T>) sequence_t;
+    typedef WALK_INTERFACES_EIGEN_STL_VECTOR(StampedFootprint<T>) sequence_t;
     typedef typename sequence_t::const_iterator const_iterator_t;
 
     TimeDuration length;
@@ -32,4 +32,4 @@ namespace walk
   }
 } // end of namespace walk.
 
-#endif //! WALK_INTERFACE_STAMPED_FOOTSTEP_HXX
+#endif //! WALK_INTERFACE_STAMPED_FOOTPRINT_HXX

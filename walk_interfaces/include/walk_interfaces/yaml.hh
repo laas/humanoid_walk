@@ -19,11 +19,11 @@ namespace walk
     void write (std::ostream& stream) const;
 
   protected:
-    void writeSteps (std::ostream& stream) const;
+    void writeFootprints (std::ostream& stream) const;
 
     template <typename S>
-    void writeStep (std::ostream& stream,
-		    const StampedFootstep<S>& step) const;
+    void writeFootprint (std::ostream& stream,
+			 const StampedFootprint<S>& footprint) const;
 
     template <typename U>
     void writeTrajectory (std::ostream& stream, const U& gamma) const;

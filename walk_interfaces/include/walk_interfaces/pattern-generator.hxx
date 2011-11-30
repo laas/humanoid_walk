@@ -6,7 +6,7 @@ namespace walk
 {
   template <typename T>
   PatternGenerator<T>::PatternGenerator()
-    : steps_ (),
+    : footprints_ (),
       startWithLeftFoot_ (true),
       leftFootTrajectory_(),
       rightFootTrajectory_(),
@@ -37,7 +37,7 @@ namespace walk
 
   template <typename T>
   PatternGenerator<T>::PatternGenerator(const PatternGenerator<T>& pg)
-    : steps_ (pg.steps_),
+    : footprints_ (pg.footprints_),
       startWithLeftFoot_ (pg.startWithLeftFoot_),
       leftFootTrajectory_(pg.leftFootTrajectory_),
       rightFootTrajectory_(pg.rightFootTrajectory_),
@@ -52,7 +52,7 @@ namespace walk
   {
     if (&pg == this)
       return *this;
-    this->steps_ = pg.steps_;
+    this->footprints_ = pg.footprints_;
     this->startWithLeftFoot_ = pg.startWithLeftFoot_;
     this->leftFootTrajectory_ = pg.leftFootTrajectory_;
     this->rightFootTrajectory_ = pg.rightFootTrajectory_;
@@ -92,17 +92,17 @@ namespace walk
 
 
   template <typename T>
-  const typename PatternGenerator<T>::footsteps_t&
-  PatternGenerator<T>::steps() const
+  const typename PatternGenerator<T>::footprints_t&
+  PatternGenerator<T>::footprints() const
   {
-    return steps_;
+    return footprints_;
   }
 
   template <typename T>
   void
-  PatternGenerator<T>::setSteps(const footsteps_t& steps, bool startWithLeftFoot)
+  PatternGenerator<T>::setFootprints(const footprints_t& footprints, bool startWithLeftFoot)
   {
-    steps_ = steps;
+    footprints_ = footprints;
     startWithLeftFoot_ = startWithLeftFoot;
     this->computeTrajectories();
   }

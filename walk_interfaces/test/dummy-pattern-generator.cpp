@@ -15,7 +15,7 @@ public:
   void computeTrajectories()
   {
     walk::TimeDuration l =
-      walk::computeFootstepSequenceLength(steps());
+      walk::computeFootprintSequenceLength(footprints());
 
     walk::Trajectory3d& lf = getLeftFootTrajectory();
     walk::Trajectory3d& rf = getRightFootTrajectory();
@@ -45,8 +45,8 @@ public:
 TEST(TestStampedPosition, empty)
 {
   MyPatternGenerator pg;
-  walk::StampedFootstep2dSequence steps;
-  pg.setSteps(steps, true);
+  walk::StampedFootprint2dSequence footprints;
+  pg.setFootprints(footprints, true);
 
   const walk::Trajectory3d& lf = pg.leftFootTrajectory();
 

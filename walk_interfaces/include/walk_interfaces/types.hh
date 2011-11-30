@@ -15,12 +15,12 @@ namespace walk
   typedef Eigen::Vector2d Vector2d;
   typedef Eigen::Vector3d Vector3d;
 
-  typedef Eigen::Matrix<double, 3, 1> Footstep2d;
+  typedef Eigen::Matrix<double, 3, 1> Footprint2d;
   typedef Eigen::VectorXd Posture;
 
   typedef boost::posix_time::time_duration TimeDuration;
 
-  typedef WALK_INTERFACES_EIGEN_STL_VECTOR(Footstep2d) Footstep2dSequence;
+  typedef WALK_INTERFACES_EIGEN_STL_VECTOR(Footprint2d) Footprint2dSequence;
 
 
 } // end of namespace walk.
