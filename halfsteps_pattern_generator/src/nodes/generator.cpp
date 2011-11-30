@@ -21,10 +21,10 @@
 
 #include <walk_msgs/conversion.hh>
 
-void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
+void convertFootprint(HalfStepsPatternGenerator::footprints_t& dst,
 		      const std::vector<walk_msgs::Footprint2d>& src);
 
-void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
+void convertFootprint(HalfStepsPatternGenerator::footprints_t& dst,
 		      const std::vector<walk_msgs::Footprint2d>& src)
 {
   using boost::posix_time::seconds;
@@ -34,13 +34,13 @@ void convertFootprint(HalfStepsPatternGenerator::footsteps_t& dst,
   std::vector<walk_msgs::Footprint2d>::const_iterator it = src.begin();
   for (; it != src.end(); ++it)
     {
-      HalfStepsPatternGenerator::footstep_t step;
-      step.duration =
+      HalfStepsPatternGenerator::footprint_t footprint;
+      footprint.duration =
 	seconds(it->duration.sec) + milliseconds(it->duration.nsec * 1000);
-      step.position(0) = it->x;
-      step.position(1) = it->y;
-      step.position(2) = it->theta;
-      dst.push_back(step);
+      footprint.position(0) = it->x;
+      footprint.position(1) = it->y;
+      footprint.position(2) = it->theta;
+      dst.push_back(footprint);
     }
 }
 
@@ -77,13 +77,13 @@ private:
   HalfStepsPatternGenerator patternGenerator_;
 
 
-  visualization_msgs::MarkerArray steps_;
+  visualization_msgs::MarkerArray footprints_;
   nav_msgs::Path leftFootPath_;
   nav_msgs::Path rightFootPath_;
   nav_msgs::Path comPath_;
   nav_msgs::Path zmpPath_;
 
-  ros::Publisher stepsPub_;
+  ros::Publisher footprintsPub_;
   ros::Publisher leftFootPub_;
   ros::Publisher rightFootPub_;
   ros::Publisher comPub_;
@@ -96,13 +96,13 @@ GeneratorNode::GeneratorNode()
     frameName_("/world"),
     patternGenerator_(),
 
-    steps_ (),
+    footprints_ (),
     leftFootPath_ (),
     rightFootPath_ (),
     comPath_ (),
     zmpPath_ (),
 
-    stepsPub_ (),
+    footprintsPub_ (),
     leftFootPub_ (),
     rightFootPub_ (),
     comPub_ ()
@@ -112,7 +112,7 @@ GeneratorNode::GeneratorNode()
   callback_t callback = boost::bind(&GeneratorNode::getPath, this, _1, _2);
   getPathSrv_ = nodeHandle_.advertiseService("getPath", callback);
 
-  stepsPub_ = nodeHandle_.advertise<visualization_msgs::MarkerArray> ("steps", 5);
+  footprintsPub_ = nodeHandle_.advertise<visualization_msgs::MarkerArray> ("footprints", 5);
   leftFootPub_ = nodeHandle_.advertise<nav_msgs::Path> ("left_foot", 5);
   rightFootPub_ = nodeHandle_.advertise<nav_msgs::Path> ("right_foot", 5);
   comPub_ = nodeHandle_.advertise<nav_msgs::Path> ("com", 5);
@@ -129,7 +129,7 @@ GeneratorNode::spin()
 
   while (ros::ok ())
     {
-      stepsPub_.publish (steps_);
+      footprintsPub_.publish (footprints_);
       leftFootPub_.publish (leftFootPath_);
       rightFootPub_.publish (rightFootPath_);
       comPub_.publish (comPath_);
@@ -180,14 +180,14 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
 					  finalPosture);
 
   bool startWithLeftFoot = req.start_with_left_foot;
-  HalfStepsPatternGenerator::footsteps_t steps;
-  convertFootprint(steps, req.footprints);
+  HalfStepsPatternGenerator::footprints_t footprints;
+  convertFootprint(footprints, req.footprints);
 
-  patternGenerator_.setSteps(steps, startWithLeftFoot);
+  patternGenerator_.setFootprints(footprints, startWithLeftFoot);
 
   //FIXME: no sliding for now.
   HalfStepsPatternGenerator::slides_t slides;
-  for (unsigned i = 0; i < steps.size (); ++i)
+  for (unsigned i = 0; i < footprints.size (); ++i)
     slides.push_back (std::make_pair (-0.1, -0.1));
   patternGenerator_.setSlides(slides);
 
@@ -230,8 +230,8 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
   uint32_t shape = visualization_msgs::Marker::CUBE;
   uint32_t id = 0;
   bool isLeft = startWithLeftFoot;
-  BOOST_FOREACH (const HalfStepsPatternGenerator::footstep_t& step,
-		 patternGenerator_.steps ())
+  BOOST_FOREACH (const HalfStepsPatternGenerator::footprint_t& footprint,
+		 patternGenerator_.footprints ())
     {
       visualization_msgs::Marker marker;
       // Set the frame ID and timestamp.  See the TF tutorials for
@@ -253,12 +253,12 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
 
       // Set the pose of the marker.  This is a full 6DOF pose
       // relative to the frame/time specified in the header
-      marker.pose.position.x = step.position[0];
-      marker.pose.position.y = step.position[1];
+      marker.pose.position.x = footprint.position[0];
+      marker.pose.position.y = footprint.position[1];
       marker.pose.position.z = 0.;
 
       btQuaternion quaternion;
-      quaternion.setEuler (step.position[2], 0., 0.);
+      quaternion.setEuler (footprint.position[2], 0., 0.);
       marker.pose.orientation.x = quaternion.x ();
       marker.pose.orientation.y = quaternion.y ();
       marker.pose.orientation.z = quaternion.z ();
@@ -279,7 +279,7 @@ GeneratorNode::getPath(walk_msgs::GetPath::Request& req,
 
       isLeft = !isLeft;
 
-      steps_.markers.push_back (marker);
+      footprints_.markers.push_back (marker);
     }
 
   std::stringstream ss;

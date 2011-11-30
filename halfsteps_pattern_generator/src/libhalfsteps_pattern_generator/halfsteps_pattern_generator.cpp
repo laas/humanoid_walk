@@ -67,8 +67,8 @@ HalfStepsPatternGenerator::computeTrajectories()
   if (slides_.empty())
     return;
 
-  if (slides_.size () != steps().size())
-    throw std::runtime_error("slides and steps size does not match");
+  if (slides_.size () != footprints().size())
+    throw std::runtime_error("slides and footprints size does not match");
 
   CnewPGstepStudy pg;
   StepFeatures stepFeatures;
@@ -94,7 +94,7 @@ HalfStepsPatternGenerator::computeTrajectories()
     stepData.push_back(initialStep (i));
 
   // Footprints
-  // Convert steps into relative positions.
+  // Convert footprints into relative positions.
   walk::HomogeneousMatrix3d previousPosition;
   if (startWithLeftFoot ())
     previousPosition = initialRightFootPosition ();
@@ -104,26 +104,26 @@ HalfStepsPatternGenerator::computeTrajectories()
   walk::HomogeneousMatrix3d newPosition;
   walk::HomogeneousMatrix3d relativePosition;
 
-  for (unsigned i = 0; i < this->steps().size (); ++i)
+  for (unsigned i = 0; i < this->footprints().size (); ++i)
     {
       walk::trans2dToTrans3d
 	(newPosition,
-	 this->steps()[i].position[0],
-	 this->steps()[i].position[1],
-	 this->steps()[i].position[2]);
+	 this->footprints()[i].position[0],
+	 this->footprints()[i].position[1],
+	 this->footprints()[i].position[2]);
 
       relativePosition = newPosition * previousPosition.inverse ();
 
-      walk_msgs::Footprint2d step;
+      walk_msgs::Footprint2d footprint;
       walk_msgs::convertHomogeneousMatrix3dToFootprint2d
-	(step, relativePosition);
+	(footprint, relativePosition);
       stepData.push_back(this->slides_[i].first);
       stepData.push_back(0.31); // hor_distance
       stepData.push_back(0.15); // max height
       stepData.push_back(this->slides_[i].second);
-      stepData.push_back(step.x);
-      stepData.push_back(step.y);
-      stepData.push_back(angles::to_degrees (step.theta));
+      stepData.push_back(footprint.x);
+      stepData.push_back(footprint.y);
+      stepData.push_back(angles::to_degrees (footprint.theta));
 
       previousPosition = newPosition;
     }
