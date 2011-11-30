@@ -35,6 +35,7 @@ void convertFootprint(HalfStepsPatternGenerator::footprints_t& dst,
   for (; it != src.end(); ++it)
     {
       HalfStepsPatternGenerator::footprint_t footprint;
+      footprint.beginTime = (it->beginTime).toBoost();
       footprint.duration =
 	seconds(it->duration.sec) + milliseconds(it->duration.nsec * 1000);
       footprint.position(0) = it->x;

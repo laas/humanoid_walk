@@ -61,6 +61,7 @@ def get_path_client():
         footprints = []
 
         step = Footprint2d()
+        # FIXME: add beginTime
         step.duration.secs = 0.
         step.duration.nsecs = 1. * 1e9
         step.x = 1*0.25
@@ -69,6 +70,7 @@ def get_path_client():
         footprints.append(step)
 
         step = Footprint2d()
+        # FIXME: add beginTime
         step.duration.secs = 0.
         step.duration.nsecs = 1. * 1e9
         step.x = 1*0.25
@@ -77,6 +79,7 @@ def get_path_client():
         footprints.append(step)
 
         step = Footprint2d()
+        # FIXME: add beginTime
         step.duration.secs = 0.
         step.duration.nsecs = 1. * 1e9
         step.x = 2*0.25
@@ -85,6 +88,7 @@ def get_path_client():
         footprints.append(step)
 
         step = Footprint2d()
+        # FIXME: add beginTime
         step.duration.secs = 0.
         step.duration.nsecs = 1. * 1e9
         step.x = 2*0.25
@@ -93,6 +97,7 @@ def get_path_client():
         footprints.append(step)
 
         step = Footprint2d()
+        # FIXME: add beginTime
         step.duration.secs = 0.
         step.duration.nsecs = 1. * 1e9
         step.x = 3*0.25
@@ -101,6 +106,7 @@ def get_path_client():
         footprints.append(step)
 
         step = Footprint2d()
+        # FIXME: add beginTime
         step.duration.secs = 0.
         step.duration.nsecs = 1. * 1e9
         step.x = 3*0.25
