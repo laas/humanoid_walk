@@ -20,11 +20,14 @@ include_directories(${Eigen_INCLUDE_DIRS})
 
 # Tests.
 rosbuild_add_gtest(test/stamped-position test/stamped-position.cpp)
+target_link_libraries(test/stamped-position yaml-cpp)
 rosbuild_link_boost(test/stamped-position filesystem)
 
 rosbuild_add_gtest(test/trajectory-3d test/trajectory-3d.cpp)
+target_link_libraries(test/trajectory-3d yaml-cpp)
 rosbuild_link_boost(test/trajectory-3d filesystem)
 
 rosbuild_add_gtest(test/dummy-pattern-generator
   test/dummy-pattern-generator.cpp)
+target_link_libraries(test/dummy-pattern-generator yaml-cpp)
 rosbuild_link_boost(test/dummy-pattern-generator filesystem)

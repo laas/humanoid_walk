@@ -189,6 +189,64 @@ namespace walk
   }
 
   template <typename T>
+  HomogeneousMatrix3d&
+  PatternGenerator<T>::getInitialLeftFootPosition()
+  {
+    return initialLeftFootPosition_;
+  }
+
+  template <typename T>
+  HomogeneousMatrix3d&
+  PatternGenerator<T>::getInitialRightFootPosition()
+  {
+    return initialRightFootPosition_;
+  }
+
+  template <typename T>
+  Vector3d&
+  PatternGenerator<T>::getInitialCenterOfMassPosition()
+  {
+    return initialCenterOfMassPosition_;
+  }
+
+  template <typename T>
+  Posture&
+  PatternGenerator<T>::getInitialPosture()
+  {
+    return initialPosture_;
+  }
+
+  template <typename T>
+  HomogeneousMatrix3d&
+  PatternGenerator<T>::getFinalLeftFootPosition()
+  {
+    return finalLeftFootPosition_;
+  }
+
+  template <typename T>
+  HomogeneousMatrix3d&
+  PatternGenerator<T>::getFinalRightFootPosition()
+  {
+    return finalRightFootPosition_;
+  }
+  
+  template <typename T>
+  Vector3d&
+  PatternGenerator<T>::getFinalCenterOfMassPosition()
+  {
+    return finalCenterOfMassPosition_;
+  }
+
+  template <typename T>
+  Posture&
+  PatternGenerator<T>::getFinalPosture()
+  {
+    return finalPosture_;
+  }
+
+
+
+  template <typename T>
   const HomogeneousMatrix3d&
   PatternGenerator<T>::initialLeftFootPosition() const
   {

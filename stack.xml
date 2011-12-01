@@ -10,6 +10,7 @@
   <license>BSD</license>  
   <review status="experimental" notes=""/>
   <url>http://ros.org/wiki/humanoid_walk</url>
+  <depend stack="common_rosdeps" />
   <depend stack="bullet" /> <!-- bullet -->
   <depend stack="common_msgs" /> <!-- nav_msgs, geometry_msgs, visualization_msgs -->
   <depend stack="eigen" /> <!-- eigen -->

@@ -63,6 +63,17 @@ namespace walk
     TrajectoryV3d& getCenterOfMassTrajectory();
     TrajectoryNd& getPostureTrajectory();
 
+    HomogeneousMatrix3d& getInitialLeftFootPosition();
+    HomogeneousMatrix3d& getInitialRightFootPosition();
+    Vector3d& getInitialCenterOfMassPosition();
+    Posture& getInitialPosture();
+
+    HomogeneousMatrix3d& getFinalLeftFootPosition();
+    HomogeneousMatrix3d& getFinalRightFootPosition();
+    Vector3d& getFinalCenterOfMassPosition();
+    Posture& getFinalPosture();
+
+
     virtual void computeTrajectories() = 0;
 
   private:

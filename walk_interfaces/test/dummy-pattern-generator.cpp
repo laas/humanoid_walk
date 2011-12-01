@@ -57,6 +57,13 @@ TEST(TestStampedPosition, empty)
 
   walk::YamlWriter<MyPatternGenerator> writer (pg);
   writer.write("/tmp/test.yaml");
+
+  walk::YamlReader<MyPatternGenerator> reader ("/tmp/test.yaml");
+
+  walk::YamlWriter<walk::YamlReader<MyPatternGenerator> > writer2 (reader);
+  writer2.write("/tmp/test2.yaml");
+
+  walk::YamlReader<MyPatternGenerator> reader2 ("/tmp/test.yaml");
 }
 
 int main(int argc, char **argv)
