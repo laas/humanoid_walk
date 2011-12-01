@@ -54,6 +54,9 @@ namespace walk
       throw std::runtime_error("bad type");
 
     using namespace boost::posix_time;
+    long t;
+    node["beginTime"] >> t;
+    //FIXME:
     long d;
     node["duration"] >> d;
     footprint.duration = milliseconds (d);
@@ -68,6 +71,9 @@ namespace walk
       throw std::runtime_error("bad type");
 
     using namespace boost::posix_time;
+    long t;
+    node["beginTime"] >> t;
+    //FIXME:
     long d;
     node["duration"] >> d;
     stampedPosition.duration = milliseconds (d);
@@ -230,8 +236,10 @@ namespace walk
     operator<< (YAML::Emitter& out,
 		const StampedFootprint<T>& footprint)
     {
-      std::cout << footprint.duration;
       out << YAML::BeginMap
+	  << YAML::Key << "beginTime"
+	  << YAML::Value
+	  << 0. //FIXME:
 	  << YAML::Key << "duration"
 	  << YAML::Value
 	  << (0. + footprint.duration.total_nanoseconds () / 1e9)
@@ -258,6 +266,9 @@ namespace walk
     operator<< (YAML::Emitter& out, const StampedPosition<T>& stampedPosition)
     {
       out << YAML::BeginMap
+	  << YAML::Key << "beginTime"
+	  << YAML::Value
+	  << 0. //FIXME:
 	  << YAML::Key << "duration"
 	  << YAML::Value
 	  << (0. + stampedPosition.duration.total_nanoseconds () / 1e9)
