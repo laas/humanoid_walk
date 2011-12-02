@@ -34,16 +34,18 @@ namespace walk
       throw std::runtime_error("bad type");
     unsigned cols = node.size ();
     if (!cols)
-      {
-	return;
-      }
+      return;
     unsigned rows = node[0].size ();
 
     matrix.resize (rows, cols);
 
-    for (unsigned i = 0; i < cols; ++i)
-      for (unsigned j = 0; j < rows; ++j)
-	node[i][j] >> matrix (j, i);
+    if (rows)
+      for (unsigned i = 0; i < cols; ++i)
+	for (unsigned j = 0; j < rows; ++j)
+	  node[i][j] >> matrix (j, i);
+    else
+      for (unsigned i = 0; i < cols; ++i)
+	node[i] >> matrix (i, 0);
   }
 
   template <typename T>
@@ -344,7 +346,7 @@ namespace walk
 	  << YAML::Key << "center-of-mass"
 	  << YAML::Value << pg.centerOfMassTrajectory ()
 	  << YAML::Key << "zmp"
-	  << YAML::Value << pg.centerOfMassTrajectory ()
+	  << YAML::Value << pg.zmpTrajectory ()
 	  << YAML::Key << "posture"
 	  << YAML::Value << pg.postureTrajectory ()
 	  << YAML::EndMap
