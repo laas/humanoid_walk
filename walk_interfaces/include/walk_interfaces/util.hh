@@ -119,7 +119,6 @@ namespace walk
 
     dst[0] = src[0];
     dst[1] = src[1];
-    dst[2] = src[2];
   }
 
   /// \brief Convert a structure of size 3 to a Vector3d object.
