@@ -11,8 +11,10 @@ namespace walk
     os
       << "begin time:\n"
       << sf.beginTime
+      << "\n"
       << "duration:\n"
       << sf.duration
+      << "\n"
       << "position:\n"
       << sf.position;
     return os;
