@@ -237,6 +237,8 @@ namespace walk
 	  return out;
 	}
 
+      if (matrix.cols () == 1)
+	out << YAML::Flow;
       out << YAML::BeginSeq;
       for (int i = 0; i < matrix.rows (); ++i)
 	{
