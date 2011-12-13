@@ -104,7 +104,7 @@ namespace walk
 
     // Fill matrix.
     for (unsigned rowId = 0; rowId < 4; ++rowId)
-      for (unsigned colId = 0; colId < 3; ++colId)
+      for (unsigned colId = 0; colId < 4; ++colId)
 	dst(rowId, colId) = src(rowId, colId);
   }
 
