@@ -239,19 +239,27 @@ namespace walk
     YAML::Emitter&
     operator<< (YAML::Emitter& out, const Eigen::MatrixBase<T>& matrix)
     {
-      if (matrix.cols () > 1)
-	out << YAML::BeginSeq;
-      for (int i = 0; i < matrix.cols (); ++i)
+      out << YAML::BeginSeq;
+      if (matrix.cols () == 1)
 	{
 	  out << YAML::Flow;
 	  out << YAML::BeginSeq;
-	  for (int j = 0; j < matrix.rows (); ++j)
-	    out << matrix (j, i);
-	  out << YAML::EndSeq;
 	}
-      if (matrix.cols () > 1)
+      for (int i = 0; i < matrix.rows (); ++i)
+	{
+	  if (matrix.cols () > 1)
+	    {
+	      out << YAML::Flow;
+	      out << YAML::BeginSeq;
+	    }
+	  for (int j = 0; j < matrix.cols (); ++j)
+	    out << matrix (i, j);
+	  if (matrix.cols () > 1)
+	    out << YAML::EndSeq;
+	}
+      if (matrix.cols () == 1)
 	out << YAML::EndSeq;
-
+      out << YAML::EndSeq;
       return out;
     }
 
