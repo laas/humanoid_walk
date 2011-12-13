@@ -5,12 +5,44 @@
 # include <stdexcept>
 
 # include <boost/foreach.hpp>
+# include <boost/format.hpp>
 # include <boost/filesystem/fstream.hpp>
 
 # include "yaml-cpp/yaml.h"
 
 namespace walk
 {
+  std::string nodeTypeToString (YAML::NodeType::value nodeType)
+  {
+    switch (nodeType)
+      {
+      case YAML::NodeType::Null:
+	return "null";
+      case YAML::NodeType::Scalar:
+	return "scalar";
+      case YAML::NodeType::Sequence:
+	return "sequence";
+      case YAML::NodeType::Map:
+	return "map";
+      default:
+	return "unknown type";
+      }
+  }
+
+  void checkYamlType (const YAML::Node& node,
+		      YAML::NodeType::value nodeType,
+		      const std::string& nodeName)
+  {
+    if (node.Type () != nodeType)
+      {
+	boost::format fmt ("bad type for %1% node (expected type: %2%, parsed type: %3%)");
+	fmt % nodeName;
+	fmt % nodeTypeToString (nodeType);
+	fmt % nodeTypeToString (node.Type ());
+	throw std::runtime_error (fmt.str ().c_str ());
+      }
+  }
+
   template <typename T>
   YamlReader<T>::YamlReader (const boost::filesystem::path& path)
     : T ()
@@ -30,8 +62,8 @@ namespace walk
   void
   operator>> (const YAML::Node& node, Eigen::Matrix<T, I, J>& matrix)
   {
-    if (node.Type() != YAML::NodeType::Sequence)
-      throw std::runtime_error("bad type");
+    checkYamlType (node, YAML::NodeType::Sequence, "matrix");
+
     unsigned cols = node.size ();
     if (!cols)
       return;
@@ -52,8 +84,7 @@ namespace walk
   void
   operator>> (const YAML::Node& node, StampedFootprint<T>& footprint)
   {
-    if (node.Type() != YAML::NodeType::Map)
-      throw std::runtime_error("bad type");
+    checkYamlType (node, YAML::NodeType::Map, "footprint");
 
     using namespace boost::posix_time;
     long t;
@@ -69,8 +100,7 @@ namespace walk
   void
   operator>> (const YAML::Node& node, StampedPosition<T>& stampedPosition)
   {
-    if (node.Type() != YAML::NodeType::Map)
-      throw std::runtime_error("bad type");
+    checkYamlType (node, YAML::NodeType::Map, "stamped position");
 
     using namespace boost::posix_time;
     long t;
@@ -88,15 +118,12 @@ namespace walk
   operator>> (const YAML::Node& node,
 	      WALK_INTERFACES_EIGEN_STL_VECTOR(StampedFootprint<T>)& footprints)
   {
-    if (node.Type() != YAML::NodeType::Sequence)
-      throw std::runtime_error("bad type");
+    checkYamlType (node, YAML::NodeType::Sequence, "footprints");
 
     footprints.clear ();
     for (unsigned i = 0; i < node.size (); ++i)
       {
-	if (node[i].Type() != YAML::NodeType::Map)
-	  throw std::runtime_error("bad type");
-
+	checkYamlType (node[i], YAML::NodeType::Map, "footprint element");
 	StampedFootprint<T> footprint;
 	node[i] >> footprint;
 	footprints.push_back (footprint);
@@ -108,15 +135,12 @@ namespace walk
   operator>> (const YAML::Node& node,
 	      Trajectory<T>& trajectory)
   {
-    if (node.Type() != YAML::NodeType::Sequence)
-      throw std::runtime_error("bad type");
+    checkYamlType (node, YAML::NodeType::Sequence, "trajectory");
 
     trajectory.data ().clear ();
     for (unsigned i = 0; i < node.size (); ++i)
       {
-	if (node[i].Type() != YAML::NodeType::Map)
-	  throw std::runtime_error("bad type");
-
+	checkYamlType (node[i], YAML::NodeType::Map, "trajectory element");
 	typename Trajectory<T>::element_t stampedPosition;
 	node[i] >> stampedPosition;
 	trajectory.data ().push_back (stampedPosition);
@@ -127,9 +151,7 @@ namespace walk
   void
   operator>> (const YAML::Node& node, YamlReader<T>& pg)
   {
-    if (node.Type() != YAML::NodeType::Map)
-      throw std::runtime_error("bad type");
-
+    checkYamlType (node, YAML::NodeType::Map, "pattern generator");
     bool startWithLeftFoot = false;
     typename YamlReader<T>::footprints_t footprints;
 

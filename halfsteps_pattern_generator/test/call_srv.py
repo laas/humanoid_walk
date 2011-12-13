@@ -50,11 +50,19 @@ def get_path_client():
         final_left_foot_position.position.x = 3*0.25
         final_left_foot_position.position.y = -0.19
         final_left_foot_position.position.z = 0.
+        final_left_foot_position.orientation.x = 0.
+        final_left_foot_position.orientation.y = 0.
+        final_left_foot_position.orientation.z = 0.
+        final_left_foot_position.orientation.w = 1.
 
         final_right_foot_position = Pose()
         final_right_foot_position.position.x = 3*0.25
         final_right_foot_position.position.y = +0.19
         final_right_foot_position.position.z = 0.
+        final_right_foot_position.orientation.x = 0.
+        final_right_foot_position.orientation.y = 0.
+        final_right_foot_position.orientation.z = 0.
+        final_right_foot_position.orientation.w = 1.
 
 
         start_with_left_foot = True
