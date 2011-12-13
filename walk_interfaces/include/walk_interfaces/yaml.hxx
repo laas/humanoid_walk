@@ -298,9 +298,6 @@ namespace walk
     operator<< (YAML::Emitter& out, const StampedPosition<T>& stampedPosition)
     {
       out << YAML::BeginMap
-	  << YAML::Key << "beginTime"
-	  << YAML::Value
-	  << 0. //FIXME:
 	  << YAML::Key << "duration"
 	  << YAML::Value
 	  << (0. + stampedPosition.duration.total_nanoseconds () / 1e9)
