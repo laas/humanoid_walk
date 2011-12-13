@@ -384,6 +384,9 @@ namespace walk
   void
   YamlWriter<T>::write (std::ostream& stream) const
   {
+    if (!stream.good ())
+      throw std::runtime_error ("bad stream");
+
     YAML::Emitter out;
     out << patternGenerator_;
     if (!out.good ())
