@@ -70,9 +70,12 @@ namespace walk
       cols = node[0].size ();
     matrix.resize (rows, cols);
 
-    for (unsigned j = 0; j < rows; ++j)
-      for (unsigned i = 0; i < cols; ++i)
-	node[j][i] >> matrix (j, i);
+    if (rows && cols)
+      {
+	for (unsigned j = 0; j < rows; ++j)
+	  for (unsigned i = 0; i < cols; ++i)
+	    node[j][i] >> matrix (i, j);
+      }
   }
 
   template <typename T>
