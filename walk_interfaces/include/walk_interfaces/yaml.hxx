@@ -64,20 +64,15 @@ namespace walk
   {
     checkYamlType (node, YAML::NodeType::Sequence, "matrix");
 
-    unsigned cols = node.size ();
-    if (!cols)
-      return;
-    unsigned rows = node[0].size ();
-
+    unsigned rows = node.size ();
+    unsigned cols = 0;
+    if (rows)
+      cols = node[0].size ();
     matrix.resize (rows, cols);
 
-    if (rows)
+    for (unsigned j = 0; j < rows; ++j)
       for (unsigned i = 0; i < cols; ++i)
-	for (unsigned j = 0; j < rows; ++j)
-	  node[i][j] >> matrix (j, i);
-    else
-      for (unsigned i = 0; i < cols; ++i)
-	node[i] >> matrix (i, 0);
+	node[j][i] >> matrix (j, i);
   }
 
   template <typename T>
@@ -87,10 +82,10 @@ namespace walk
     checkYamlType (node, YAML::NodeType::Map, "footprint");
 
     using namespace boost::posix_time;
-    long t;
+    long t = 0;
     node["beginTime"] >> t;
     //FIXME:
-    long d;
+    long d = 0;
     node["duration"] >> d;
     footprint.duration = milliseconds (d);
     node["position"] >> footprint.position;
@@ -103,10 +98,7 @@ namespace walk
     checkYamlType (node, YAML::NodeType::Map, "stamped position");
 
     using namespace boost::posix_time;
-    long t;
-    node["beginTime"] >> t;
-    //FIXME:
-    long d;
+    long d = 0;
     node["duration"] >> d;
     stampedPosition.duration = milliseconds (d);
 
@@ -239,6 +231,12 @@ namespace walk
     YAML::Emitter&
     operator<< (YAML::Emitter& out, const Eigen::MatrixBase<T>& matrix)
     {
+      if (matrix.cols () == 0 || matrix.rows () == 0)
+	{
+	  out << YAML::BeginSeq << YAML::EndSeq;
+	  return out;
+	}
+
       out << YAML::BeginSeq;
       if (matrix.cols () == 1)
 	{
