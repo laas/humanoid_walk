@@ -70,12 +70,9 @@ namespace walk
       cols = node[0].size ();
     matrix.resize (rows, cols);
 
-    if (rows && cols)
-      {
-	for (unsigned j = 0; j < rows; ++j)
-	  for (unsigned i = 0; i < cols; ++i)
-	    node[j][i] >> matrix (i, j);
-      }
+    for (unsigned i = 0; i < rows; ++i)
+      for (unsigned j = 0; j < cols; ++j)
+	node[i][j] >> matrix (i, j);
   }
 
   template <typename T>
@@ -241,25 +238,14 @@ namespace walk
 	}
 
       out << YAML::BeginSeq;
-      if (matrix.cols () == 1)
+      for (int i = 0; i < matrix.rows (); ++i)
 	{
 	  out << YAML::Flow;
 	  out << YAML::BeginSeq;
-	}
-      for (int i = 0; i < matrix.rows (); ++i)
-	{
-	  if (matrix.cols () > 1)
-	    {
-	      out << YAML::Flow;
-	      out << YAML::BeginSeq;
-	    }
 	  for (int j = 0; j < matrix.cols (); ++j)
 	    out << matrix (i, j);
-	  if (matrix.cols () > 1)
-	    out << YAML::EndSeq;
+	  out << YAML::EndSeq;
 	}
-      if (matrix.cols () == 1)
-	out << YAML::EndSeq;
       out << YAML::EndSeq;
       return out;
     }
