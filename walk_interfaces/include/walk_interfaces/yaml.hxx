@@ -85,9 +85,9 @@ namespace walk
     long t = 0;
     node["beginTime"] >> t;
     //FIXME:
-    long d = 0;
+    double d = 0;
     node["duration"] >> d;
-    footprint.duration = milliseconds (d);
+    footprint.duration = milliseconds (d * 1e3);
     node["position"] >> footprint.position;
   }
 
@@ -98,9 +98,9 @@ namespace walk
     checkYamlType (node, YAML::NodeType::Map, "stamped position");
 
     using namespace boost::posix_time;
-    long d = 0;
+    double d = 0;
     node["duration"] >> d;
-    stampedPosition.duration = milliseconds (d);
+    stampedPosition.duration = milliseconds (d * 1e3);
 
     node["position"] >> stampedPosition.position;
   }

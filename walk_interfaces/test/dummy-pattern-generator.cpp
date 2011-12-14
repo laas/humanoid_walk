@@ -46,14 +46,21 @@ TEST(TestStampedPosition, empty)
 {
   MyPatternGenerator pg;
   walk::StampedFootprint2dSequence footprints;
+
+  walk::StampedFootprint2d footprint;
+
+  using namespace boost::posix_time;
+  walk::TimeDuration d (milliseconds (5));
+  footprint.duration = d;
+  footprints.push_back (footprint);
+
   pg.setFootprints(footprints, true);
 
   const walk::Trajectory3d& lf = pg.leftFootTrajectory();
 
-  walk::TimeDuration zero;
   walk::TimeDuration lengthLf = lf.computeLength();
 
-  EXPECT_EQ(zero, lengthLf);
+  EXPECT_EQ(d, lengthLf);
 
   walk::YamlWriter<MyPatternGenerator> writer (pg);
   writer.write("/tmp/test.yaml");
