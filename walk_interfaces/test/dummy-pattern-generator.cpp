@@ -50,8 +50,10 @@ TEST(TestStampedPosition, empty)
   walk::StampedFootprint2d footprint;
 
   using namespace boost::posix_time;
+  using namespace boost::gregorian;
   walk::TimeDuration d (milliseconds (5));
   footprint.duration = d;
+  footprint.beginTime = walk::Time (date(1970,1,1));
   footprints.push_back (footprint);
 
   pg.setFootprints(footprints, true);

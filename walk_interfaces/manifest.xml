@@ -25,7 +25,8 @@
   <url>http://ros.org/wiki/walk_interfaces</url>
 
   <export>
-    <cpp cflags="-I${prefix}/include" lflags="-lboost_filesystem -lyaml-cpp" />
+    <cpp cflags="-I${prefix}/include"
+	 lflags="-lboost_filesystem -lboost_date_time -lyaml-cpp" />
   </export>
 
   <depend package="common_rosdeps" />

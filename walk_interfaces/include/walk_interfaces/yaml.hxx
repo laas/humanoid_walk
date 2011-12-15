@@ -82,9 +82,11 @@ namespace walk
     checkYamlType (node, YAML::NodeType::Map, "footprint");
 
     using namespace boost::posix_time;
-    long t = 0;
-    node["beginTime"] >> t;
-    //FIXME:
+    using namespace boost::gregorian;
+
+    std::string beginTimeStr;
+    node["beginTime"] >> beginTimeStr;
+    footprint.beginTime = walk::Time (from_string (beginTimeStr));
     double d = 0;
     node["duration"] >> d;
     footprint.duration = milliseconds (d * 1e3);
@@ -257,10 +259,11 @@ namespace walk
     operator<< (YAML::Emitter& out,
 		const StampedFootprint<T>& footprint)
     {
+      using namespace boost::gregorian;
       out << YAML::BeginMap
 	  << YAML::Key << "beginTime"
 	  << YAML::Value
-	  << 0. //FIXME:
+	  << to_simple_string (footprint.beginTime)
 	  << YAML::Key << "duration"
 	  << YAML::Value
 	  << (0. + footprint.duration.total_nanoseconds () / 1e9)
