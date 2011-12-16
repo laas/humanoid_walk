@@ -86,7 +86,7 @@ namespace walk
 
     std::string beginTimeStr;
     node["beginTime"] >> beginTimeStr;
-    footprint.beginTime = walk::Time (from_string (beginTimeStr));
+    footprint.beginTime = walk::Time (from_iso_string (beginTimeStr));
     double d = 0;
     node["duration"] >> d;
     footprint.duration = milliseconds (d * 1e3);
@@ -263,7 +263,7 @@ namespace walk
       out << YAML::BeginMap
 	  << YAML::Key << "beginTime"
 	  << YAML::Value
-	  << to_simple_string (footprint.beginTime)
+	  << to_iso_string (footprint.beginTime)
 	  << YAML::Key << "duration"
 	  << YAML::Value
 	  << (0. + footprint.duration.total_nanoseconds () / 1e9)

@@ -53,7 +53,7 @@ TEST(TestStampedPosition, empty)
   using namespace boost::gregorian;
   walk::TimeDuration d (milliseconds (5));
   footprint.duration = d;
-  footprint.beginTime = walk::Time (date(1970,1,1));
+  footprint.beginTime = walk::Time (date(1970,1,1), seconds(1));
   footprints.push_back (footprint);
 
   pg.setFootprints(footprints, true);
