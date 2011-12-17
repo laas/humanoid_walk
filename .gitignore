@@ -11,3 +11,4 @@ walk_msgs/src/walk_msgs/
 */srv/lisp/
 */srv_gen/
 stack.xml.bak
+build/
