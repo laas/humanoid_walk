@@ -36,6 +36,11 @@ namespace walk
 			       const Vector3d& centerOfMass,
 			       const Posture& posture);
 
+    // \brief Set the footprint sequence for the pattern generator.
+    //
+    // \param startWithLeftFoot Boolean value that sets the starting
+    // foot (left or right) of the footprint sequence. It is then
+    // assumed that the footprints alternate between left and right.
     void setFootprints(const footprints_t&, bool startWithLeftFoot);
     const footprints_t& footprints() const;
     bool startWithLeftFoot() const;
