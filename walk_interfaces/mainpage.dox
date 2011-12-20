@@ -2,25 +2,21 @@
 \mainpage
 \htmlinclude manifest.html
 
-\b walk_interfaces is ... 
+\b walk_interfaces provides abstract interfaces to define a pattern
+generator.
 
-<!-- 
-Provide an overview of your package.
--->
+A pattern generator is a piece of software which generates walking
+reference trajectories.
 
 
 \section codeapi Code API
 
-<!--
-Provide links to specific auto-generated API documentation within your
-package that is of particular interest to a reader. Doxygen will
-document pretty much every part of your code, so do your best here to
-point the reader to the actual API.
+The core of this package is the walk::PatternGenerator class. This
+is an abstract class which cannot be directly instantiated. This
+package cannot generate walking trajectories, it only provides
+interfaces.
 
-If your codebase is fairly large or has different sets of APIs, you
-should use the doxygen 'group' tag to keep these APIs together. For
-example, the roscpp documentation has 'libros' group.
--->
-
+See the other package of the humanoid_walk stack to obtain more
+information about the different available pattern generators.
 
 */
