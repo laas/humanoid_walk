@@ -19,7 +19,7 @@
     YAML format.
 
   </description>
-  <author>Thomas Moulard</author>
+  <author>Thomas Moulard/thomas.moulard@gmail.com, Antonio El Khoury</author>
   <license>BSD</license>
   <review status="experimental" notes=""/>
   <url>http://ros.org/wiki/walk_interfaces</url>

@@ -8,7 +8,7 @@
     humanoids robots from a set of 2d footprints.
 
   </description>
-  <author>Thomas Moulard</author>
+  <author>Nicolas Perrin, Thomas Moulard/thomas.moulard@gmail.com</author>
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/halfsteps_pattern_generator</url>
