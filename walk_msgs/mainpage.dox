@@ -2,25 +2,36 @@
 \mainpage
 \htmlinclude manifest.html
 
-\b walk_msgs is ... 
+\b walk_msgs is a ROS wrapper around walk_interfaces.
 
-<!-- 
-Provide an overview of your package.
--->
+It mainly deals with the C++/ROS data conversions and ease the
+implementation of ROS trajectory generators node by providing a
+uniform ROS interface.
+
+
+A trajectory generator node is a ROS node which aims at computing
+walking trajectories given some input data. Common input data are a
+sequence of footprints, initial and final robot positions (for feet,
+center of mass and optionally posture). See walk_interfaces for more
+details.
+
+
+The package relies as heavily as possible on nav_msgs and in
+particular on the Path message to provide topics publishing well-known
+datatypes. Messages specifics to humanoid walking such as footprint
+are also defined in this package. See the ROS documentation for more
+details.
+
 
 
 \section codeapi Code API
 
-<!--
-Provide links to specific auto-generated API documentation within your
-package that is of particular interest to a reader. Doxygen will
-document pretty much every part of your code, so do your best here to
-point the reader to the actual API.
+The documentation is divided in two:
 
-If your codebase is fairly large or has different sets of APIs, you
-should use the doxygen 'group' tag to keep these APIs together. For
-example, the roscpp documentation has 'libros' group.
--->
+ - the conversion.hh header which provides the ROS/walk_interfaces
+   conversion.
 
+ - the walk_msgs::AbstractNode template class which should be derived
+   to implement a trajectory generator node.
 
 */
