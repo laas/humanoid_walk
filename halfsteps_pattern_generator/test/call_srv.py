@@ -9,10 +9,9 @@ from walk_msgs.msg import *
 from walk_msgs.srv import *
 
 def get_path_client():
-    rospy.wait_for_service('halfsteps_pattern_generator/getPath')
+    rospy.wait_for_service('getPath')
     try:
-        get_path = rospy.ServiceProxy(
-            'halfsteps_pattern_generator/getPath', GetPath)
+        get_path = rospy.ServiceProxy('getPath', GetPath)
 
         initial_left_foot_position = Pose()
         initial_left_foot_position.position.x = 0.

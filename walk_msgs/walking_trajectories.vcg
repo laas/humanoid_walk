@@ -1,0 +1,57 @@
+Background\ ColorR=0.0941176
+Background\ ColorG=0
+Background\ ColorB=0.466667
+Fixed\ Frame=/world
+Target\ Frame=<Fixed Frame>
+CoM.Alpha=1
+CoM.ColorR=1
+CoM.ColorG=0.8
+CoM.ColorB=0
+CoM.Enabled=1
+CoM.Topic=/com
+Footprints.Enabled=1
+Footprints.Marker\ Array\ Topic=/footprints
+Footprints.halfsteps_pattern_generator=1
+Left\ foot.Alpha=1
+Left\ foot.ColorR=0.1
+Left\ foot.ColorG=1
+Left\ foot.ColorB=0
+Left\ foot.Enabled=1
+Left\ foot.Topic=/left_foot
+Right\ foot.Alpha=1
+Right\ foot.ColorR=0.0980392
+Right\ foot.ColorG=1
+Right\ foot.ColorB=0
+Right\ foot.Enabled=1
+Right\ foot.Topic=/right_foot
+ZMP.Alpha=1
+ZMP.ColorR=1
+ZMP.ColorG=0.0509804
+ZMP.ColorB=0
+ZMP.Enabled=1
+ZMP.Topic=/zmp
+Tool\ 2D\ Nav\ GoalTopic=goal
+Tool\ 2D\ Pose\ EstimateTopic=initialpose
+Camera\ Type=rviz::OrbitViewController
+Camera\ Config=1.006 1.23269 3.00341 -0.144506 -0.00473094 -1.1539
+Property\ Grid\ State=selection=Fixed Frame;expanded=.Global Options,.Global StatusTopStatus;scrollpos=0,0;splitterpos=171,359;ispageselected=1
+[Display0]
+Name=Footprints
+Package=rviz
+ClassName=rviz::MarkerArrayDisplay
+[Display1]
+Name=CoM
+Package=rviz
+ClassName=rviz::PathDisplay
+[Display2]
+Name=ZMP
+Package=rviz
+ClassName=rviz::PathDisplay
+[Display3]
+Name=Left foot
+Package=rviz
+ClassName=rviz::PathDisplay
+[Display4]
+Name=Right foot
+Package=rviz
+ClassName=rviz::PathDisplay

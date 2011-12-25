@@ -226,7 +226,8 @@ namespace walk
   /// \param stream Output stream.
   /// \param pg Pattern generator.
   template <typename T>
-  std::ostream& operator<<(std::ostream& stream, const PatternGenerator<T>& pg);
+  std::ostream& operator<<(std::ostream& stream,
+			   const PatternGenerator<T>& pg);
 
 } // end of namespace walk.
 
