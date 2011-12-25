@@ -12,15 +12,17 @@ uniform ROS interface.
 A trajectory generator node is a ROS node which aims at computing
 walking trajectories given some input data. Common input data are a
 sequence of footprints, initial and final robot positions (for feet,
-center of mass and optionally posture). See walk_interfaces for more
-details.
+center of mass and optionally posture). See <a
+href="http://www.ros.org/wiki/walk_interfaces">walk_interfaces</a> for
+more details.
 
 
 The package relies as heavily as possible on nav_msgs and in
 particular on the Path message to provide topics publishing well-known
 datatypes. Messages specifics to humanoid walking such as footprint
-are also defined in this package. See the ROS documentation for more
-details.
+are also defined in this package. See the <a
+href="http://ros.org/doc/api/walk_msgs/html/index-msg.html">ROS
+documentation</a> for more details.
 
 
 
