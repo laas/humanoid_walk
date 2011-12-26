@@ -1,0 +1,24 @@
+uri: 'ftp://ftp.openrobots.org/pub/openrobots/jrl-walkgen/jrl-walkgen-3.1.5.tar.gz'
+md5sum: 7f642c39b95e00cc0fd97e4ef901c90b
+install-script: |
+  #!/bin/bash
+  set -o errexit
+  export LD_LIBRARY_PATH=/usr/local/lib/pkgconfig:/usr/lib/pkgconfig
+  mkdir -p build
+  cd build
+  cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..
+  make
+  echo "About to run checkinstall make install"
+  sudo checkinstall -y --nodoc --pkgname=jrl-walkgen-sourcedep --pkgversion=3.1.5 make install
+  cd ..
+  sudo rm -rf build
+check-presence-script: |
+  #!/bin/bash
+  if test "x`dpkg-query -W -f='${Package} ${Status} ${Version}\n' jrl-walkgen-sourcedep`" != 'xjrl-walkgen-sourcedep install ok installed 3.1.5-1'; then
+    echo "jrl-walkgen-sourcedep not installed"
+    exit 1
+  else
+    exit 0
+  fi
+exec-path: jrl-walkgen-3.1.5
+depends: [checkinstall, boost, cmake, doxygen, jrl-mal, abstract-robot-dynamics, jrl-dynamics]

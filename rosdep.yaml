@@ -1,0 +1,36 @@
+######################
+# Mathematical tools #
+######################
+jrl-mathtools:
+  ubuntu:
+    source:
+      uri: 'https://raw.github.com/laas/redundant_manipulator_control/master/jrl-mathtools.rdmanifest'
+
+jrl-mal:
+  ubuntu:
+    source:
+      uri: 'https://raw.github.com/laas/redundant_manipulator_control/master/jrl-mal.rdmanifest'
+
+
+########################
+# Dynamics computation #
+########################
+abstract-robot-dynamics:
+  ubuntu:
+    source:
+      uri: 'https://raw.github.com/laas/redundant_manipulator_control/master/abstract-robot-dynamics.rdmanifest'
+
+jrl-dynamics:
+  ubuntu:
+    source:
+      uri: 'https://raw.github.com/laas/redundant_manipulator_control/master/jrl-dynamics.rdmanifest'
+
+
+###############
+# jrl-walkgen #
+###############
+
+jrl-walkgen:
+  ubuntu:
+    source:
+      uri: 'https://raw.github.com/laas/humanoid_walk/master/jrl-walkgen.rdmanifest'
