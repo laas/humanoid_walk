@@ -6,7 +6,7 @@ install-script: |
   export LD_LIBRARY_PATH=/usr/local/lib/pkgconfig:/usr/lib/pkgconfig
   mkdir -p build
   cd build
-  cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_TESTING=0 ..
+  cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_TESTING=0 ..
   make
   echo "About to run checkinstall make install"
   sudo checkinstall -y --nodoc --pkgname=jrl-walkgen-sourcedep --pkgversion=3.1.5 make install
