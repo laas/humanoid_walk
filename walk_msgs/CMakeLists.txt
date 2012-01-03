@@ -20,3 +20,8 @@ include_directories(${Eigen_INCLUDE_DIRS})
 rosbuild_add_library(${PROJECT_NAME}
   src/conversion.cpp
   include/walk_msgs/conversion.hh)
+
+# Node.
+rosbuild_add_executable(generator
+  src/nodes/generator.cpp)
+target_link_libraries(generator ${PROJECT_NAME})

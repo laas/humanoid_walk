@@ -23,5 +23,8 @@
 
   <depend package="walk_interfaces"/>
 
+  <depend package="visualization_msgs"/>
+  <depend package="angles"/>
+
   <rosdep name="eigen" />
 </package>

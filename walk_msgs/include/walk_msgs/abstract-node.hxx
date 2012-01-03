@@ -10,8 +10,6 @@
 
 # include <walk_interfaces/yaml.hh>
 
-# include "halfsteps_pattern_generator.hh"
-
 # include "geometry_msgs/Pose.h"
 # include "visualization_msgs/MarkerArray.h"
 # include "walk_msgs/Footprint2d.h"
@@ -26,7 +24,8 @@ namespace walk_msgs
 
   template <typename T, typename U>
   AbstractNode<T, U>::AbstractNode (const std::string& rosNamespace,
-				    const std::string& frameWorldId)
+				    const std::string& frameWorldId,
+				    bool enableService)
     : nodeHandle_ (rosNamespace),
       rate_ (1),
       getPathSrv_ (),
@@ -48,9 +47,53 @@ namespace walk_msgs
     typedef boost::function<
     bool (walk_msgs::GetPath::Request&, walk_msgs::GetPath::Response&)>
       callback_t;
+    if (enableService)
+      {
+	callback_t callback = boost::bind(&AbstractNode::getPath, this, _1, _2);
+	getPathSrv_ = nodeHandle_.advertiseService("getPath", callback);
+      }
 
-    callback_t callback = boost::bind(&AbstractNode::getPath, this, _1, _2);
-    getPathSrv_ = nodeHandle_.advertiseService("getPath", callback);
+    footprintsPub_ =
+      nodeHandle_.advertise<visualization_msgs::MarkerArray>
+      ("footprints", 5);
+    leftFootPub_ = nodeHandle_.advertise<nav_msgs::Path> ("left_foot", 5);
+    rightFootPub_ = nodeHandle_.advertise<nav_msgs::Path> ("right_foot", 5);
+    comPub_ = nodeHandle_.advertise<nav_msgs::Path> ("com", 5);
+    zmpPub_ = nodeHandle_.advertise<nav_msgs::Path> ("zmp", 5);
+  }
+
+  template <typename T, typename U>
+  AbstractNode<T, U>::AbstractNode (const std::string& rosNamespace,
+				    const std::string& frameWorldId,
+				    const patternGenerator_t& pg,
+				    bool enableService)
+    : nodeHandle_ (rosNamespace),
+      rate_ (1),
+      getPathSrv_ (),
+      frameName_ (frameWorldId),
+      parameterName_ ("walk_movement"),
+      patternGenerator_ (pg),
+
+      footprints_ (),
+      leftFootPath_ (),
+      rightFootPath_ (),
+      comPath_ (),
+      zmpPath_ (),
+
+      footprintsPub_ (),
+      leftFootPub_ (),
+      rightFootPub_ (),
+      comPub_ ()
+  {
+    typedef boost::function<
+    bool (walk_msgs::GetPath::Request&, walk_msgs::GetPath::Response&)>
+      callback_t;
+
+    if (enableService)
+      {
+	callback_t callback = boost::bind(&AbstractNode::getPath, this, _1, _2);
+	getPathSrv_ = nodeHandle_.advertiseService("getPath", callback);
+      }
 
     footprintsPub_ =
       nodeHandle_.advertise<visualization_msgs::MarkerArray>
@@ -124,13 +167,23 @@ namespace walk_msgs
 					    finalPosture);
 
     bool startWithLeftFoot = req.start_with_left_foot;
-    HalfStepsPatternGenerator::footprints_t footprints;
+    typename patternGenerator_t::footprints_t footprints;
     convertFootprint(footprints, req.footprints);
 
     patternGenerator_.setFootprints(footprints, startWithLeftFoot);
 
     setupPatternGenerator (req);
 
+    prepareTopicsData (res, startWithLeftFoot);
+    writeMotionAsParameter ();
+    return true;
+  }
+
+  template <typename T, typename U>
+  void
+  AbstractNode<T, U>::prepareTopicsData (walk_msgs::GetPath::Response& res,
+					 bool startWithLeftFoot)
+  {
     res.path.left_foot.header.seq = 0;
     res.path.left_foot.header.stamp.sec = 0;
     res.path.left_foot.header.stamp.nsec = 0;
@@ -170,7 +223,7 @@ namespace walk_msgs
     uint32_t shape = visualization_msgs::Marker::CUBE;
     uint32_t id = 0;
     bool isLeft = startWithLeftFoot;
-    BOOST_FOREACH (const HalfStepsPatternGenerator::footprint_t& footprint,
+    BOOST_FOREACH (const typename patternGenerator_t::footprint_t& footprint,
 		   patternGenerator_.footprints ())
       {
 	visualization_msgs::Marker marker;
@@ -198,7 +251,7 @@ namespace walk_msgs
 	marker.pose.position.z = 0.;
 
 	btQuaternion quaternion;
-	quaternion.setEuler (footprint.position[2], 0., 0.);
+	quaternion.setEuler (0., 0., footprint.position[2]);
 	marker.pose.orientation.x = quaternion.x ();
 	marker.pose.orientation.y = quaternion.y ();
 	marker.pose.orientation.z = quaternion.z ();
@@ -221,12 +274,16 @@ namespace walk_msgs
 
 	footprints_.markers.push_back (marker);
       }
+  }
 
+  template <typename T, typename U>
+  void
+  AbstractNode<T, U>::writeMotionAsParameter ()
+  {
     std::stringstream ss;
-    walk::YamlWriter<HalfStepsPatternGenerator> writer (patternGenerator_);
+    walk::YamlWriter<patternGenerator_t> writer (patternGenerator_);
     writer.write (ss);
     nodeHandle_.setParam (parameterName_, ss.str ());
-    return true;
   }
 } // end of namespace walk_msgs.
 

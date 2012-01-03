@@ -115,6 +115,9 @@ namespace walk
       return this->getFinalPosture ();
     }
 
+    virtual void computeTrajectories ()
+    {}
+
   protected:
     /// \brief Load the file from the filesystem.
     void load (const boost::filesystem::path& filename);

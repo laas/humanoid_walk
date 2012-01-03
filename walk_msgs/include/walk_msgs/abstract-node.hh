@@ -41,8 +41,27 @@ namespace walk_msgs
     ///
     /// \param rosNamespace namespace used to initialize the ROS handle
     /// \param frameWorldId frame id in which the trajectories are expressed
+    /// \param enableService enable getPath service registration
     explicit AbstractNode (const std::string& rosNamespace,
-			   const std::string& frameWorldId);
+			   const std::string& frameWorldId,
+			   bool enableService = true);
+
+    /// \brief Constructor copying a given pattern generator into the node.
+    ///
+    /// This constructor is needed when a pattern generator requires arguments
+    /// during instantiation. In this case, the default constructor will not work.
+    ///
+    /// \warning the given pattern generator must be copyable.
+    ///
+    /// \param rosNamespace namespace used to initialize the ROS handle
+    /// \param frameWorldId frame id in which the trajectories are expressed
+    /// \param pg pattern generator to be copied into this object
+    /// \param enableService enable getPath service registration
+    explicit AbstractNode (const std::string& rosNamespace,
+			   const std::string& frameWorldId,
+			   const patternGenerator_t& pg,
+			   bool enableService = true);
+
     /// \brief Destructor.
     ~AbstractNode ();
 
@@ -89,6 +108,14 @@ namespace walk_msgs
     {
       return patternGenerator_;
     }
+
+    /// \brief Fill attributes with data which will be published.
+    void prepareTopicsData (walk_msgs::GetPath::Response& res,
+			    bool startWithLeftFoot);
+
+    /// \brief Write the motion as a parameter of the parameter
+    /// server.
+    void writeMotionAsParameter ();
 
   private:
     /// \brief Main node handle.
