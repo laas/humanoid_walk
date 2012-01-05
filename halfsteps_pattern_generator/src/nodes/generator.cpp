@@ -10,14 +10,13 @@
 
 #include <ros/ros.h>
 
-#include <walk_interfaces/yaml.hh>
-
 #include "halfsteps_pattern_generator.hh"
+#include "yaml.hh"
 
 #include "geometry_msgs/Pose.h"
 #include "visualization_msgs/MarkerArray.h"
-#include "walk_msgs/Footprint2d.h"
-#include "walk_msgs/GetPath.h"
+#include "halfsteps_pattern_generator/GetPath.h"
+#include "halfsteps_pattern_generator/Footprint.h"
 
 #include <walk_msgs/conversion.hh>
 
@@ -34,7 +33,8 @@ using walk_msgs::convertTrajectoryV2dToPath;
 
 class GeneratorNode :
   public walk_msgs::AbstractNode<HalfStepsPatternGenerator,
-				 walk_msgs::Footprint2d>
+				 halfsteps_pattern_generator::Footprint,
+				 halfsteps_pattern_generator::GetPath>
 {
 public:
   explicit GeneratorNode ();
@@ -45,12 +45,14 @@ public:
    const std::vector<footprintRosType_t>& src);
 
   virtual void
-  setupPatternGenerator (walk_msgs::GetPath::Request& req);
+  setupPatternGenerator (serviceRosType_t::Request& req);
 };
 
 GeneratorNode::GeneratorNode ()
   : walk_msgs::AbstractNode<HalfStepsPatternGenerator,
-			    walk_msgs::Footprint2d> ("", "/world")
+			    halfsteps_pattern_generator::Footprint,
+			    halfsteps_pattern_generator::GetPath>
+    ("", "/world")
 {}
 
 GeneratorNode::~GeneratorNode ()
@@ -64,28 +66,28 @@ GeneratorNode::convertFootprint (patternGenerator_t::footprints_t& dst,
   using boost::posix_time::milliseconds;
 
   dst.clear();
-  std::vector<walk_msgs::Footprint2d>::const_iterator it = src.begin();
+  std::vector<footprintRosType_t>::const_iterator it = src.begin();
   for (; it != src.end(); ++it)
     {
       HalfStepsPatternGenerator::footprint_t footprint;
-      footprint.beginTime = (it->beginTime).toBoost();
+      footprint.beginTime = (it->footprint.beginTime).toBoost();
       footprint.duration =
-	seconds(it->duration.sec) + milliseconds(it->duration.nsec * 1000);
-      footprint.position(0) = it->x;
-      footprint.position(1) = it->y;
-      footprint.position(2) = it->theta;
+	seconds(it->footprint.duration.sec)
+	+ milliseconds(it->footprint.duration.nsec * 1000);
+      footprint.position(0) = it->footprint.x;
+      footprint.position(1) = it->footprint.y;
+      footprint.position(2) = it->footprint.theta;
+      footprint.slideUp = it->slideUp;
+      footprint.slideDown = it->slideDown;
+      footprint.horizontalDistance = it->horizontalDistance;
+      footprint.stepHeight = it->stepHeight;
       dst.push_back(footprint);
     }
 }
 
 void
-GeneratorNode::setupPatternGenerator (walk_msgs::GetPath::Request& req)
+GeneratorNode::setupPatternGenerator (serviceRosType_t::Request& req)
 {
-  //FIXME: fixed sliding for now.
-  HalfStepsPatternGenerator::slides_t slides;
-  for (unsigned i = 0; i < patternGenerator ().footprints ().size (); ++i)
-    slides.push_back (std::make_pair (-0.1, -0.1));
-  patternGenerator ().setSlides (slides);
 }
 
 

@@ -3,24 +3,37 @@
 # include <utility>
 # include <walk_interfaces/pattern-generator.hh>
 
-class HalfStepsPatternGenerator : public walk::PatternGenerator2d
+template <typename T>
+struct WithHalfStepsAdditionalData : public T
+{
+  explicit WithHalfStepsAdditionalData()
+    : T(),
+      slideUp(0.),
+      slideDown(0.),
+      horizontalDistance(0.),
+      stepHeight(0.)
+  {}
+
+  double slideUp;
+  double slideDown;
+  double horizontalDistance;
+  double stepHeight;
+};
+
+typedef WithHalfStepsAdditionalData<walk::StampedFootprint2d> footprint_t;
+typedef walk::PatternGenerator<footprint_t> halfStepsPgParent_t;
+
+class HalfStepsPatternGenerator : public halfStepsPgParent_t
 {
 public:
-  typedef std::vector<std::pair<double, double> > slides_t;
-
   explicit HalfStepsPatternGenerator();
   explicit HalfStepsPatternGenerator(const HalfStepsPatternGenerator&);
   ~HalfStepsPatternGenerator();
 
   HalfStepsPatternGenerator& operator= (const HalfStepsPatternGenerator&);
 
-  void setSlides(const slides_t& slides);
-
 protected:
   virtual void computeTrajectories();
-
-private:
-  slides_t slides_;
 };
 
 #endif //! HALFSTEPS_PATTERN_GENERATOR_HH

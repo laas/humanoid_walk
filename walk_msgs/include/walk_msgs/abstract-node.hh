@@ -9,8 +9,6 @@
 # include <nav_msgs/Path.h>
 # include <visualization_msgs/MarkerArray.h>
 
-# include "walk_msgs/GetPath.h"
-
 namespace walk_msgs
 {
   /// \brief Walking trajectory abstract node.
@@ -28,7 +26,8 @@ namespace walk_msgs
   ///
   /// \tparam T pattern generator type
   /// \tparam U ROS footprint message type
-  template <typename T, typename U>
+  /// \tparam S ROS service type
+  template <typename T, typename U, typename S>
   class AbstractNode
   {
   public:
@@ -36,6 +35,9 @@ namespace walk_msgs
     typedef T patternGenerator_t;
     /// \brief ROS footprint type
     typedef U footprintRosType_t;
+
+    /// \brief ROS service type
+    typedef S serviceRosType_t;
 
     /// \brief Constructor.
     ///
@@ -78,8 +80,8 @@ namespace walk_msgs
     ///
     /// \param req service request (i.e. input)
     /// \param res service response (i.e. output)
-    bool getPath(walk_msgs::GetPath::Request& req,
-		 walk_msgs::GetPath::Response& res);
+    bool getPath(typename serviceRosType_t::Request& req,
+		 typename serviceRosType_t::Response& res);
 
     /// \brief Convert ROS footprint representation into the
     /// corresponding C++ representation.
@@ -101,7 +103,7 @@ namespace walk_msgs
     ///
     /// \param req request passed to the service callback
     virtual void
-    setupPatternGenerator (walk_msgs::GetPath::Request& req) = 0;
+    setupPatternGenerator (typename serviceRosType_t::Request& req) = 0;
 
     /// \brief Pattern generator getter.
     patternGenerator_t& patternGenerator ()
@@ -110,7 +112,7 @@ namespace walk_msgs
     }
 
     /// \brief Fill attributes with data which will be published.
-    void prepareTopicsData (walk_msgs::GetPath::Response& res,
+    void prepareTopicsData (typename serviceRosType_t::Response& res,
 			    bool startWithLeftFoot);
 
     /// \brief Write the motion as a parameter of the parameter

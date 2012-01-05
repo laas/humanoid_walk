@@ -40,7 +40,8 @@ std::string getParam (const std::string& param,
 
 class GeneratorYamlNode :
   public walk_msgs::AbstractNode<walk::YamlReader<walk::PatternGenerator2d>,
-				 walk_msgs::Footprint2d>
+				 walk_msgs::Footprint2d,
+				 walk_msgs::GetPath>
 {
 public:
   explicit GeneratorYamlNode ();
@@ -56,7 +57,8 @@ public:
 
 GeneratorYamlNode::GeneratorYamlNode ()
   : walk_msgs::AbstractNode<walk::YamlReader<walk::PatternGenerator2d>,
-			    walk_msgs::Footprint2d>
+			    walk_msgs::Footprint2d,
+			    walk_msgs::GetPath>
     ("", getParam ("~world_frame_id", "/world"),
      walk::YamlReader<walk::PatternGenerator2d> (getParam ("~yaml", "")),
      false)

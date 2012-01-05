@@ -20,14 +20,12 @@ static const double STEP = 0.005;
 
 
 HalfStepsPatternGenerator::HalfStepsPatternGenerator()
-  : walk::PatternGenerator2d(),
-    slides_()
+  : halfStepsPgParent_t()
 {}
 
 HalfStepsPatternGenerator::HalfStepsPatternGenerator
 (const HalfStepsPatternGenerator& pg)
-  : walk::PatternGenerator2d(),
-    slides_(pg.slides_)
+  : halfStepsPgParent_t()
 {}
 
 HalfStepsPatternGenerator::~HalfStepsPatternGenerator()
@@ -38,38 +36,12 @@ HalfStepsPatternGenerator::operator= (const HalfStepsPatternGenerator& pg)
 {
   if (&pg == this)
     return *this;
-
-  slides_ = pg.slides_;
-
   return *this;
-}
-
-void
-HalfStepsPatternGenerator::setSlides(const slides_t& slides)
-{
-  // Make sure that slides coefficients are valid.
-  slides_t::const_iterator iter = slides.begin();
-  for (; iter != slides.end(); ++iter)
-    {
-      if (iter->first < -1.52 || iter->first > 0.)
-	throw std::runtime_error ("invalid first slide");
-      if (iter->second < -0.76 || iter->second > 0.)
-	throw std::runtime_error ("invalid second slide");
-    }
-
-  slides_ = slides;
-  this->computeTrajectories();
 }
 
 void
 HalfStepsPatternGenerator::computeTrajectories()
 {
-  if (slides_.empty())
-    return;
-
-  if (slides_.size () != footprints().size())
-    throw std::runtime_error("slides and footprints size does not match");
-
   CnewPGstepStudy pg;
   StepFeatures stepFeatures;
 
@@ -117,10 +89,10 @@ HalfStepsPatternGenerator::computeTrajectories()
       walk_msgs::Footprint2d footprint;
       walk_msgs::convertHomogeneousMatrix3dToFootprint2d
 	(footprint, relativePosition);
-      stepData.push_back(this->slides_[i].first);
-      stepData.push_back(0.31); // hor_distance
-      stepData.push_back(0.15); // max height
-      stepData.push_back(this->slides_[i].second);
+      stepData.push_back(this->footprints()[i].slideUp);
+      stepData.push_back(this->footprints()[i].horizontalDistance);
+      stepData.push_back(this->footprints()[i].stepHeight);
+      stepData.push_back(this->footprints()[i].slideDown);
       stepData.push_back(footprint.x);
       stepData.push_back(footprint.y);
       stepData.push_back(angles::to_degrees (footprint.theta));

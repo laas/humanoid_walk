@@ -22,10 +22,10 @@ namespace walk_msgs
   using walk::HomogeneousMatrix3d;
   using walk::Posture;
 
-  template <typename T, typename U>
-  AbstractNode<T, U>::AbstractNode (const std::string& rosNamespace,
-				    const std::string& frameWorldId,
-				    bool enableService)
+  template <typename T, typename U, typename S>
+  AbstractNode<T, U, S>::AbstractNode (const std::string& rosNamespace,
+				       const std::string& frameWorldId,
+				       bool enableService)
     : nodeHandle_ (rosNamespace),
       rate_ (1),
       getPathSrv_ (),
@@ -45,7 +45,7 @@ namespace walk_msgs
       comPub_ ()
   {
     typedef boost::function<
-    bool (walk_msgs::GetPath::Request&, walk_msgs::GetPath::Response&)>
+    bool (typename serviceRosType_t::Request&, typename serviceRosType_t::Response&)>
       callback_t;
     if (enableService)
       {
@@ -62,11 +62,11 @@ namespace walk_msgs
     zmpPub_ = nodeHandle_.advertise<nav_msgs::Path> ("zmp", 5);
   }
 
-  template <typename T, typename U>
-  AbstractNode<T, U>::AbstractNode (const std::string& rosNamespace,
-				    const std::string& frameWorldId,
-				    const patternGenerator_t& pg,
-				    bool enableService)
+  template <typename T, typename U, typename S>
+  AbstractNode<T, U, S>::AbstractNode (const std::string& rosNamespace,
+				       const std::string& frameWorldId,
+				       const patternGenerator_t& pg,
+				       bool enableService)
     : nodeHandle_ (rosNamespace),
       rate_ (1),
       getPathSrv_ (),
@@ -86,7 +86,7 @@ namespace walk_msgs
       comPub_ ()
   {
     typedef boost::function<
-    bool (walk_msgs::GetPath::Request&, walk_msgs::GetPath::Response&)>
+    bool (typename serviceRosType_t::Request&, typename serviceRosType_t::Response&)>
       callback_t;
 
     if (enableService)
@@ -104,14 +104,14 @@ namespace walk_msgs
     zmpPub_ = nodeHandle_.advertise<nav_msgs::Path> ("zmp", 5);
   }
 
-  template <typename T, typename U>
-  AbstractNode<T, U>::~AbstractNode()
+  template <typename T, typename U, typename S>
+  AbstractNode<T, U, S>::~AbstractNode()
   {}
 
 
-  template <typename T, typename U>
+  template <typename T, typename U, typename S>
   void
-  AbstractNode<T, U>::spin ()
+  AbstractNode<T, U, S>::spin ()
   {
     while (ros::ok ())
       {
@@ -126,10 +126,10 @@ namespace walk_msgs
       }
   }
 
-  template <typename T, typename U>
+  template <typename T, typename U, typename S>
   bool
-  AbstractNode<T, U>::getPath (walk_msgs::GetPath::Request& req,
-			       walk_msgs::GetPath::Response& res)
+  AbstractNode<T, U, S>::getPath (typename serviceRosType_t::Request& req,
+				  typename serviceRosType_t::Response& res)
   {
     Posture initialPosture;
     Posture finalPosture;
@@ -179,10 +179,10 @@ namespace walk_msgs
     return true;
   }
 
-  template <typename T, typename U>
+  template <typename T, typename U, typename S>
   void
-  AbstractNode<T, U>::prepareTopicsData (walk_msgs::GetPath::Response& res,
-					 bool startWithLeftFoot)
+  AbstractNode<T, U, S>::prepareTopicsData (typename serviceRosType_t::Response& res,
+					    bool startWithLeftFoot)
   {
     res.path.left_foot.header.seq = 0;
     res.path.left_foot.header.stamp.sec = 0;
@@ -276,9 +276,9 @@ namespace walk_msgs
       }
   }
 
-  template <typename T, typename U>
+  template <typename T, typename U, typename S>
   void
-  AbstractNode<T, U>::writeMotionAsParameter ()
+  AbstractNode<T, U, S>::writeMotionAsParameter ()
   {
     std::stringstream ss;
     walk::YamlWriter<patternGenerator_t> writer (patternGenerator_);

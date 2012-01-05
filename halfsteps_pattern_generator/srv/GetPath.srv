@@ -1,0 +1,13 @@
+geometry_msgs/Pose initial_left_foot_position
+geometry_msgs/Pose initial_right_foot_position
+geometry_msgs/Point initial_center_of_mass_position
+
+geometry_msgs/Pose final_left_foot_position
+geometry_msgs/Pose final_right_foot_position
+geometry_msgs/Point final_center_of_mass_position
+
+bool start_with_left_foot
+
+halfsteps_pattern_generator/Footprint[] footprints
+---
+walk_msgs/WalkPath path

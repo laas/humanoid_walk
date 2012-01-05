@@ -1,0 +1,5 @@
+walk_msgs/Footprint2d footprint
+float64 slideUp
+float64 slideDown
+float64 horizontalDistance
+float64 stepHeight

@@ -6,6 +6,7 @@
 */msg/lisp/
 */msg_gen/
 */src/lisp/
+halfsteps_pattern_generator/src/halfsteps_pattern_generator
 walk_interfaces/src/walk_interfaces/
 walk_msgs/src/walk_msgs/
 */srv/lisp/

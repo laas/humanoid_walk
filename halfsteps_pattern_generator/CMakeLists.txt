@@ -12,8 +12,8 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
-#rosbuild_genmsg()
-#rosbuild_gensrv()
+rosbuild_genmsg()
+rosbuild_gensrv()
 
 find_package(Eigen REQUIRED)
 include_directories(${Eigen_INCLUDE_DIRS})
@@ -21,7 +21,9 @@ include_directories(${Eigen_INCLUDE_DIRS})
 # Main library.
 rosbuild_add_library(${PROJECT_NAME}
   src/libhalfsteps_pattern_generator/newPGstepStudy.cpp
-  src/libhalfsteps_pattern_generator/halfsteps_pattern_generator.cpp)
+  src/libhalfsteps_pattern_generator/halfsteps_pattern_generator.cpp
+  include/halfsteps_pattern_generator.hh
+  include/yaml.hh)
 
 # Node.
 rosbuild_add_executable(generator

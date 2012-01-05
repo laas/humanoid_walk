@@ -5,8 +5,8 @@ import sys
 
 import rospy
 from geometry_msgs.msg import *
-from walk_msgs.msg import *
-from walk_msgs.srv import *
+from halfsteps_pattern_generator.msg import Footprint
+from halfsteps_pattern_generator.srv import GetPath
 
 def get_path_client():
     rospy.wait_for_service('getPath')
@@ -67,58 +67,82 @@ def get_path_client():
         start_with_left_foot = True
         footprints = []
 
-        footprint = Footprint2d()
+        footprint = Footprint()
         # FIXME: add beginTime
-        footprint.duration.secs = 0.
-        footprint.duration.nsecs = 1. * 1e9
-        footprint.x = 1*0.25
-        footprint.y = -0.19
-        footprint.theta = 0.
+        footprint.footprint.duration.secs = 0.
+        footprint.footprint.duration.nsecs = 1. * 1e9
+        footprint.footprint.x = 1*0.25
+        footprint.footprint.y = -0.19
+        footprint.footprint.theta = 0.
+        footprint.slideUp = -0.1
+        footprint.slideDown = -0.1
+        footprint.horizontalDistance = 0.31
+        footprint.stepHeight = 0.15
         footprints.append(footprint)
 
-        footprint = Footprint2d()
+        footprint = Footprint()
         # FIXME: add beginTime
-        footprint.duration.secs = 0.
-        footprint.duration.nsecs = 1. * 1e9
-        footprint.x = 1*0.25
-        footprint.y = +0.19
-        footprint.theta = 0.
+        footprint.footprint.duration.secs = 0.
+        footprint.footprint.duration.nsecs = 1. * 1e9
+        footprint.footprint.x = 1*0.25
+        footprint.footprint.y = +0.19
+        footprint.footprint.theta = 0.
+        footprint.slideUp = -0.1
+        footprint.slideDown = -0.1
+        footprint.horizontalDistance = 0.31
+        footprint.stepHeight = 0.15
         footprints.append(footprint)
 
-        footprint = Footprint2d()
+        footprint = Footprint()
         # FIXME: add beginTime
-        footprint.duration.secs = 0.
-        footprint.duration.nsecs = 1. * 1e9
-        footprint.x = 2*0.25
-        footprint.y = -0.19
-        footprint.theta = 0.
+        footprint.footprint.duration.secs = 0.
+        footprint.footprint.duration.nsecs = 1. * 1e9
+        footprint.footprint.x = 2*0.25
+        footprint.footprint.y = -0.19
+        footprint.footprint.theta = 0.
+        footprint.slideUp = -0.1
+        footprint.slideDown = -0.1
+        footprint.horizontalDistance = 0.31
+        footprint.stepHeight = 0.15
         footprints.append(footprint)
 
-        footprint = Footprint2d()
+        footprint = Footprint()
         # FIXME: add beginTime
-        footprint.duration.secs = 0.
-        footprint.duration.nsecs = 1. * 1e9
-        footprint.x = 2*0.25
-        footprint.y = +0.19
-        footprint.theta = 0.
+        footprint.footprint.duration.secs = 0.
+        footprint.footprint.duration.nsecs = 1. * 1e9
+        footprint.footprint.x = 2*0.25
+        footprint.footprint.y = +0.19
+        footprint.footprint.theta = 0.
+        footprint.slideUp = -0.1
+        footprint.slideDown = -0.1
+        footprint.horizontalDistance = 0.31
+        footprint.stepHeight = 0.15
         footprints.append(footprint)
 
-        footprint = Footprint2d()
+        footprint = Footprint()
         # FIXME: add beginTime
-        footprint.duration.secs = 0.
-        footprint.duration.nsecs = 1. * 1e9
-        footprint.x = 3*0.25
-        footprint.y = -0.19
-        footprint.theta = 0.
+        footprint.footprint.duration.secs = 0.
+        footprint.footprint.duration.nsecs = 1. * 1e9
+        footprint.footprint.x = 3*0.25
+        footprint.footprint.y = -0.19
+        footprint.footprint.theta = 0.
+        footprint.slideUp = -0.1
+        footprint.slideDown = -0.1
+        footprint.horizontalDistance = 0.31
+        footprint.stepHeight = 0.15
         footprints.append(footprint)
 
-        footprint = Footprint2d()
+        footprint = Footprint()
         # FIXME: add beginTime
-        footprint.duration.secs = 0.
-        footprint.duration.nsecs = 1. * 1e9
-        footprint.x = 3*0.25
-        footprint.y = +0.19
-        footprint.theta = 0.
+        footprint.footprint.duration.secs = 0.
+        footprint.footprint.duration.nsecs = 1. * 1e9
+        footprint.footprint.x = 3*0.25
+        footprint.footprint.y = +0.19
+        footprint.footprint.theta = 0.
+        footprint.slideUp = -0.1
+        footprint.slideDown = -0.1
+        footprint.horizontalDistance = 0.31
+        footprint.stepHeight = 0.15
         footprints.append(footprint)
 
 
