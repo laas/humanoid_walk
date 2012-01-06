@@ -31,6 +31,15 @@ using walk_msgs::convertTrajectoryToPath;
 using walk_msgs::convertTrajectoryV3dToPath;
 using walk_msgs::convertTrajectoryV2dToPath;
 
+template <typename T>
+T getParam (const std::string& param,
+	    const T& defaultValue)
+{
+  T result;
+  ros::param::param(param, result, defaultValue);
+  return result;
+}
+
 class GeneratorNode :
   public walk_msgs::AbstractNode<HalfStepsPatternGenerator,
 				 halfsteps_pattern_generator::Footprint,
@@ -52,7 +61,12 @@ GeneratorNode::GeneratorNode ()
   : walk_msgs::AbstractNode<HalfStepsPatternGenerator,
 			    halfsteps_pattern_generator::Footprint,
 			    halfsteps_pattern_generator::GetPath>
-    ("", "/world")
+    ("", getParam<std::string> ("~world_frame_id", "/world"),
+     HalfStepsPatternGenerator
+     (getParam ("~time_before_zmp_shift", 0.95),
+      getParam ("~time_after_zmp_shift", 1.05),
+      getParam ("~step", 0.005)
+      ))
 {}
 
 GeneratorNode::~GeneratorNode ()
@@ -69,6 +83,13 @@ GeneratorNode::convertFootprint (patternGenerator_t::footprints_t& dst,
   std::vector<footprintRosType_t>::const_iterator it = src.begin();
   for (; it != src.end(); ++it)
     {
+      // Check that footprint is valid.
+      if (it->slideUp < -1.52 || it->slideUp > 0.)
+	throw std::runtime_error ("invalid up slide");
+      if (it->slideDown < -0.76 || it->slideDown > 0.)
+	throw std::runtime_error ("invalid down slide");
+
+      // Add it to the pattern generator.
       HalfStepsPatternGenerator::footprint_t footprint;
       footprint.beginTime = (it->footprint.beginTime).toBoost();
       footprint.duration =

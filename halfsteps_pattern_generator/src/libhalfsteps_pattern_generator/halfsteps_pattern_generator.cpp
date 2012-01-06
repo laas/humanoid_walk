@@ -13,19 +13,23 @@
 #include <walk_msgs/Footprint2d.h>
 
 static const double g = 9.81;
-static const double timeBeforeZmpShift = 0.95;
-static const double timeAfterZmpShift = 1.05;
-static const double halfStepLength = 2.;
-static const double STEP = 0.005;
 
-
-HalfStepsPatternGenerator::HalfStepsPatternGenerator()
-  : halfStepsPgParent_t()
+HalfStepsPatternGenerator::HalfStepsPatternGenerator
+(const double& timeBeforeZmpShift,
+ const double& timeAfterZmpShift,
+ const double& step)
+  : halfStepsPgParent_t(),
+    timeBeforeZmpShift_(timeBeforeZmpShift),
+    timeAfterZmpShift_(timeAfterZmpShift),
+    step_(step)
 {}
 
 HalfStepsPatternGenerator::HalfStepsPatternGenerator
 (const HalfStepsPatternGenerator& pg)
-  : halfStepsPgParent_t()
+  : halfStepsPgParent_t(),
+    timeBeforeZmpShift_(pg.timeBeforeZmpShift_),
+    timeAfterZmpShift_(pg.timeAfterZmpShift_),
+    step_(pg.step_)
 {}
 
 HalfStepsPatternGenerator::~HalfStepsPatternGenerator()
@@ -101,8 +105,9 @@ HalfStepsPatternGenerator::computeTrajectories()
     }
 
   pg.produceSeqSlidedHalfStepFeatures
-    (stepFeatures, STEP, comZ, g,
-     timeBeforeZmpShift, timeAfterZmpShift, halfStepLength, stepData,
+    (stepFeatures, step_, comZ, g,
+     timeBeforeZmpShift_, timeAfterZmpShift_,
+     timeBeforeZmpShift_ + timeAfterZmpShift_, stepData,
      startWithLeftFoot() ? 'L' : 'R');
 
   getLeftFootTrajectory().data().resize(stepFeatures.size);
@@ -116,7 +121,7 @@ HalfStepsPatternGenerator::computeTrajectories()
   for (unsigned i = 0; i < stepFeatures.size; ++i)
     {
       // Left foot.
-      getLeftFootTrajectory().data()[i].duration = milliseconds(STEP * 1e3);
+      getLeftFootTrajectory().data()[i].duration = milliseconds(step_ * 1e3);
       getLeftFootTrajectory().data()[i].position.setIdentity();
       getLeftFootTrajectory().data()[i].position (0,3) =
 	stepFeatures.leftfootXtraj[i];
@@ -132,7 +137,7 @@ HalfStepsPatternGenerator::computeTrajectories()
       getLeftFootTrajectory().data()[i].position (1,1) = std::cos(theta);
 
       // Right foot.
-      getRightFootTrajectory().data()[i].duration = milliseconds(STEP * 1e3);
+      getRightFootTrajectory().data()[i].duration = milliseconds(step_ * 1e3);
       getRightFootTrajectory().data()[i].position.setIdentity();
       getRightFootTrajectory().data()[i].position (0,3) =
 	stepFeatures.rightfootXtraj[i];
@@ -148,7 +153,7 @@ HalfStepsPatternGenerator::computeTrajectories()
       getRightFootTrajectory().data()[i].position (1,1) = std::cos(theta);
 
       // Center of mass
-      getCenterOfMassTrajectory().data()[i].duration = milliseconds(STEP * 1e3);
+      getCenterOfMassTrajectory().data()[i].duration = milliseconds(step_ * 1e3);
       getCenterOfMassTrajectory().data()[i].position[0] =
 	stepFeatures.comTrajX[i];
       getCenterOfMassTrajectory().data()[i].position[1] =
@@ -156,7 +161,7 @@ HalfStepsPatternGenerator::computeTrajectories()
       getCenterOfMassTrajectory().data()[i].position[2] = comZ;
 
       // ZMP
-      getZmpTrajectory().data()[i].duration = milliseconds(STEP * 1e3);
+      getZmpTrajectory().data()[i].duration = milliseconds(step_ * 1e3);
       getZmpTrajectory().data()[i].position.setIdentity();
       getZmpTrajectory().data()[i].position[0] = stepFeatures.zmpTrajX[i];
       getZmpTrajectory().data()[i].position[1] = stepFeatures.zmpTrajY[i];

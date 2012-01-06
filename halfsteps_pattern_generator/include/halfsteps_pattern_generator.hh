@@ -26,7 +26,10 @@ typedef walk::PatternGenerator<footprint_t> halfStepsPgParent_t;
 class HalfStepsPatternGenerator : public halfStepsPgParent_t
 {
 public:
-  explicit HalfStepsPatternGenerator();
+  explicit HalfStepsPatternGenerator
+  (const double& timeBeforeZmpShift,
+   const double& timeAfterZmpShift,
+   const double& step);
   explicit HalfStepsPatternGenerator(const HalfStepsPatternGenerator&);
   ~HalfStepsPatternGenerator();
 
@@ -34,6 +37,11 @@ public:
 
 protected:
   virtual void computeTrajectories();
+
+private:
+  double timeBeforeZmpShift_;
+  double timeAfterZmpShift_;
+  double step_;
 };
 
 #endif //! HALFSTEPS_PATTERN_GENERATOR_HH

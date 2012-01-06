@@ -74,9 +74,9 @@ def get_path_client():
         footprint.footprint.x = 1*0.25
         footprint.footprint.y = -0.19
         footprint.footprint.theta = 0.
-        footprint.slideUp = -0.1
-        footprint.slideDown = -0.1
-        footprint.horizontalDistance = 0.31
+        footprint.slideUp = -0.5
+        footprint.slideDown = -0.5
+        footprint.horizontalDistance = 0.38
         footprint.stepHeight = 0.15
         footprints.append(footprint)
 
@@ -87,9 +87,9 @@ def get_path_client():
         footprint.footprint.x = 1*0.25
         footprint.footprint.y = +0.19
         footprint.footprint.theta = 0.
-        footprint.slideUp = -0.1
-        footprint.slideDown = -0.1
-        footprint.horizontalDistance = 0.31
+        footprint.slideUp = -0.5
+        footprint.slideDown = -0.5
+        footprint.horizontalDistance = 0.38
         footprint.stepHeight = 0.15
         footprints.append(footprint)
 
@@ -100,9 +100,9 @@ def get_path_client():
         footprint.footprint.x = 2*0.25
         footprint.footprint.y = -0.19
         footprint.footprint.theta = 0.
-        footprint.slideUp = -0.1
-        footprint.slideDown = -0.1
-        footprint.horizontalDistance = 0.31
+        footprint.slideUp = -0.5
+        footprint.slideDown = -0.5
+        footprint.horizontalDistance = 0.38
         footprint.stepHeight = 0.15
         footprints.append(footprint)
 
@@ -113,9 +113,9 @@ def get_path_client():
         footprint.footprint.x = 2*0.25
         footprint.footprint.y = +0.19
         footprint.footprint.theta = 0.
-        footprint.slideUp = -0.1
-        footprint.slideDown = -0.1
-        footprint.horizontalDistance = 0.31
+        footprint.slideUp = -0.5
+        footprint.slideDown = -0.5
+        footprint.horizontalDistance = 0.38
         footprint.stepHeight = 0.15
         footprints.append(footprint)
 
@@ -126,9 +126,9 @@ def get_path_client():
         footprint.footprint.x = 3*0.25
         footprint.footprint.y = -0.19
         footprint.footprint.theta = 0.
-        footprint.slideUp = -0.1
-        footprint.slideDown = -0.1
-        footprint.horizontalDistance = 0.31
+        footprint.slideUp = -0.5
+        footprint.slideDown = -0.5
+        footprint.horizontalDistance = 0.38
         footprint.stepHeight = 0.15
         footprints.append(footprint)
 
@@ -139,9 +139,9 @@ def get_path_client():
         footprint.footprint.x = 3*0.25
         footprint.footprint.y = +0.19
         footprint.footprint.theta = 0.
-        footprint.slideUp = -0.1
-        footprint.slideDown = -0.1
-        footprint.horizontalDistance = 0.31
+        footprint.slideUp = -0.5
+        footprint.slideDown = -0.5
+        footprint.horizontalDistance = 0.38
         footprint.stepHeight = 0.15
         footprints.append(footprint)
 
