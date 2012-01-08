@@ -1,3 +1,4 @@
+*.pyc
 */bin/
 */build/
 */cfg/cpp/
@@ -6,9 +7,13 @@
 */msg/lisp/
 */msg_gen/
 */src/lisp/
-halfsteps_pattern_generator/src/halfsteps_pattern_generator
-walk_interfaces/src/walk_interfaces/
-walk_msgs/src/walk_msgs/
+halfsteps_pattern_generator/src/halfsteps_pattern_generator/__init__.*
+halfsteps_pattern_generator/src/halfsteps_pattern_generator/msg/
+halfsteps_pattern_generator/src/halfsteps_pattern_generator/srv/
+walk_interfaces/src/walk_interfaces
+walk_msgs/src/walk_msgs/__init__.*
+walk_msgs/src/walk_msgs/msg/
+walk_msgs/src/walk_msgs/srv/
 */srv/lisp/
 */srv_gen/
 stack.xml.bak

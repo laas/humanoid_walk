@@ -14,6 +14,7 @@
   <url>http://ros.org/wiki/halfsteps_pattern_generator</url>
 
   <depend package="common_rosdeps" />
+  <depend package="rospy" />
   <rosdep name="eigen" />
 
   <depend package="bullet"/>
