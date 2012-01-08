@@ -8,6 +8,10 @@ import halfsteps_pattern_generator.msg
 import halfsteps_pattern_generator.srv
 
 class HalfStepPatternGeneratorClient(Client):
+    """
+    GetPath client for the half-step pattern generator client.
+    """
+
     def __init__(self):
         Client.__init__(
             self,
