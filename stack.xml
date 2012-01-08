@@ -6,14 +6,15 @@
     It provides both C++ interfaces through walk_interfaces, ROS
     interfaces through walk_msgs and pattern generators algorithms.
   </description>
-  <author>Maintained by Thomas Moulard</author>
+  <author>Maintained by Thomas Moulard/thomas.moulard@gmail.com</author>
   <license>BSD</license>  
   <review status="experimental" notes=""/>
   <url>http://ros.org/wiki/humanoid_walk</url>
-  <depend stack="common_rosdeps" />
   <depend stack="bullet" /> <!-- bullet -->
   <depend stack="common_msgs" /> <!-- nav_msgs, geometry_msgs, visualization_msgs -->
-  <depend stack="eigen" /> <!-- eigen -->
+  <depend stack="common_rosdeps" /> <!-- common_rosdeps -->
+  <depend stack="geometry" /> <!-- angles -->
   <depend stack="ros" />
-  <depend stack="ros_comm" />
+  <depend stack="ros_comm" /> <!-- rospy -->
+
 </stack>
