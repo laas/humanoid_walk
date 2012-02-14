@@ -25,11 +25,12 @@
   <url>http://ros.org/wiki/walk_interfaces</url>
 
   <export>
-    <cpp cflags="-I${prefix}/include"
+    <cpp cflags="-I${prefix}/include -DBOOST_FILESYSTEM_VERSION=2"
 	 lflags="-lboost_filesystem -lboost_date_time -lyaml-cpp" />
   </export>
 
   <depend package="common_rosdeps" />
+  <rosdep name="boost" />
   <rosdep name="eigen" />
   <rosdep name="yaml-cpp" />
 

@@ -15,6 +15,7 @@
 
   <depend package="common_rosdeps" />
   <depend package="rospy" />
+  <rosdep name="boost" />
   <rosdep name="eigen" />
 
   <depend package="bullet"/>

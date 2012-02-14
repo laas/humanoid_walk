@@ -19,12 +19,18 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(Eigen REQUIRED)
 include_directories(${EIGEN_INCLUDE_DIR})
 
+rosbuild_add_boost_directories()
+
+# Make sure Boost.Filesystem v2 is used.
+add_definitions(-DBOOST_FILESYSTEM_VERSION=2)
+
 # Main library.
 rosbuild_add_library(${PROJECT_NAME}
   src/libhalfsteps_pattern_generator/newPGstepStudy.cpp
   src/libhalfsteps_pattern_generator/halfsteps_pattern_generator.cpp
   include/halfsteps_pattern_generator.hh
   include/yaml.hh)
+rosbuild_link_boost(${PROJECT_NAME} filesystem date_time)
 
 # Node.
 rosbuild_add_executable(generator

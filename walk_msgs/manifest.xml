@@ -28,5 +28,6 @@
   <depend package="visualization_msgs"/>
   <depend package="angles"/>
 
+  <rosdep name="boost" />
   <rosdep name="eigen" />
 </package>
