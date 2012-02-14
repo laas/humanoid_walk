@@ -42,10 +42,17 @@ namespace walk_msgs
       footprintsPub_ (),
       leftFootPub_ (),
       rightFootPub_ (),
-      comPub_ ()
+      comPub_ (),
+
+      footPrintWidth_ (0.),
+      footPrintHeight_ (0.)
   {
+    ros::param::param<double> ("~footprint_width", footPrintWidth_, 0.2172);
+    ros::param::param<double> ("~footprint_height", footPrintHeight_, 0.138);
+
     typedef boost::function<
-    bool (typename serviceRosType_t::Request&, typename serviceRosType_t::Response&)>
+    bool (typename serviceRosType_t::Request&,
+	  typename serviceRosType_t::Response&)>
       callback_t;
     if (enableService)
       {
@@ -83,10 +90,17 @@ namespace walk_msgs
       footprintsPub_ (),
       leftFootPub_ (),
       rightFootPub_ (),
-      comPub_ ()
+      comPub_ (),
+
+      footPrintWidth_ (0.),
+      footPrintHeight_ (0.)
   {
+    ros::param::param<double> ("~footprint_width", footPrintWidth_, 0.2172);
+    ros::param::param<double> ("~footprint_height", footPrintHeight_, 0.138);
+
     typedef boost::function<
-    bool (typename serviceRosType_t::Request&, typename serviceRosType_t::Response&)>
+    bool (typename serviceRosType_t::Request&,
+	  typename serviceRosType_t::Response&)>
       callback_t;
 
     if (enableService)
@@ -181,8 +195,8 @@ namespace walk_msgs
 
   template <typename T, typename U, typename S>
   void
-  AbstractNode<T, U, S>::prepareTopicsData (typename serviceRosType_t::Response& res,
-					    bool startWithLeftFoot)
+  AbstractNode<T, U, S>::prepareTopicsData
+  (typename serviceRosType_t::Response& res, bool startWithLeftFoot)
   {
     res.path.left_foot.header.seq = 0;
     res.path.left_foot.header.stamp.sec = 0;
@@ -258,8 +272,8 @@ namespace walk_msgs
 	marker.pose.orientation.w = quaternion.w ();
 
 	// Set the scale of the marker
-	marker.scale.x = 0.2172;
-	marker.scale.y = 0.138;
+	marker.scale.x = footPrintWidth_;
+	marker.scale.y = footPrintHeight_;
 	marker.scale.z = 0.001;
 
 	// Set the color

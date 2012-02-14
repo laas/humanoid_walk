@@ -164,6 +164,11 @@ namespace walk_msgs
     ros::Publisher comPub_;
     /// \brief Zero Momentum Point path publisher.
     ros::Publisher zmpPub_;
+
+    /// \brief Footprint width in MarkerArray (/footprints) message.
+    double footPrintWidth_;
+    /// \brief Footprint height in MarkerArray (/footprints) message.
+    double footPrintHeight_;
   };
 
 } // end of namespace walk_msgs
