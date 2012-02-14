@@ -15,6 +15,7 @@ rosbuild_add_boost_directories()
 # Make sure Boost.Filesystem v2 is used.
 add_definitions(-DBOOST_FILESYSTEM_VERSION=2)
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(Eigen REQUIRED)
 include_directories(${Eigen_INCLUDE_DIRS})
 
