@@ -62,11 +62,35 @@ namespace walk_msgs
 
     footprintsPub_ =
       nodeHandle_.advertise<visualization_msgs::MarkerArray>
-      ("footprints", 5);
-    leftFootPub_ = nodeHandle_.advertise<nav_msgs::Path> ("left_foot", 5);
-    rightFootPub_ = nodeHandle_.advertise<nav_msgs::Path> ("right_foot", 5);
-    comPub_ = nodeHandle_.advertise<nav_msgs::Path> ("com", 5);
-    zmpPub_ = nodeHandle_.advertise<nav_msgs::Path> ("zmp", 5);
+      ("footprints", 1,
+       ros::SubscriberStatusCallback (),
+       ros::SubscriberStatusCallback (),
+       ros::VoidConstPtr (),
+       true);
+    leftFootPub_ = nodeHandle_.advertise<nav_msgs::Path>
+      ("left_foot", 1,
+       ros::SubscriberStatusCallback (),
+       ros::SubscriberStatusCallback (),
+       ros::VoidConstPtr (),
+       true);
+    rightFootPub_ = nodeHandle_.advertise<nav_msgs::Path>
+      ("right_foot", 1,
+       ros::SubscriberStatusCallback (),
+       ros::SubscriberStatusCallback (),
+       ros::VoidConstPtr (),
+       true);
+    comPub_ = nodeHandle_.advertise<nav_msgs::Path>
+      ("com", 1,
+       ros::SubscriberStatusCallback (),
+       ros::SubscriberStatusCallback (),
+       ros::VoidConstPtr (),
+       true);
+    zmpPub_ = nodeHandle_.advertise<nav_msgs::Path>
+      ("zmp", 1,
+       ros::SubscriberStatusCallback (),
+       ros::SubscriberStatusCallback (),
+       ros::VoidConstPtr (),
+       true);
   }
 
   template <typename T, typename U, typename S>
@@ -111,11 +135,35 @@ namespace walk_msgs
 
     footprintsPub_ =
       nodeHandle_.advertise<visualization_msgs::MarkerArray>
-      ("footprints", 5);
-    leftFootPub_ = nodeHandle_.advertise<nav_msgs::Path> ("left_foot", 5);
-    rightFootPub_ = nodeHandle_.advertise<nav_msgs::Path> ("right_foot", 5);
-    comPub_ = nodeHandle_.advertise<nav_msgs::Path> ("com", 5);
-    zmpPub_ = nodeHandle_.advertise<nav_msgs::Path> ("zmp", 5);
+      ("footprints", 1,
+       ros::SubscriberStatusCallback (),
+       ros::SubscriberStatusCallback (),
+       ros::VoidConstPtr (),
+       true);
+    leftFootPub_ = nodeHandle_.advertise<nav_msgs::Path>
+      ("left_foot", 1,
+       ros::SubscriberStatusCallback (),
+       ros::SubscriberStatusCallback (),
+       ros::VoidConstPtr (),
+       true);
+    rightFootPub_ = nodeHandle_.advertise<nav_msgs::Path>
+      ("right_foot", 1,
+       ros::SubscriberStatusCallback (),
+       ros::SubscriberStatusCallback (),
+       ros::VoidConstPtr (),
+       true);
+    comPub_ = nodeHandle_.advertise<nav_msgs::Path>
+      ("com", 1,
+       ros::SubscriberStatusCallback (),
+       ros::SubscriberStatusCallback (),
+       ros::VoidConstPtr (),
+       true);
+    zmpPub_ = nodeHandle_.advertise<nav_msgs::Path>
+      ("zmp", 1,
+       ros::SubscriberStatusCallback (),
+       ros::SubscriberStatusCallback (),
+       ros::VoidConstPtr (),
+       true);
   }
 
   template <typename T, typename U, typename S>
@@ -127,14 +175,15 @@ namespace walk_msgs
   void
   AbstractNode<T, U, S>::spin ()
   {
+    // We only need to publish once as this is latched topics.
+    footprintsPub_.publish (footprints_);
+    leftFootPub_.publish (leftFootPath_);
+    rightFootPub_.publish (rightFootPath_);
+    comPub_.publish (comPath_);
+    zmpPub_.publish (zmpPath_);
+
     while (ros::ok ())
       {
-	footprintsPub_.publish (footprints_);
-	leftFootPub_.publish (leftFootPath_);
-	rightFootPub_.publish (rightFootPath_);
-	comPub_.publish (comPath_);
-	zmpPub_.publish (zmpPath_);
-
 	ros::spinOnce();
 	rate_.sleep ();
       }
