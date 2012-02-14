@@ -17,7 +17,7 @@ add_definitions(-DBOOST_FILESYSTEM_VERSION=2)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(Eigen REQUIRED)
-include_directories(${Eigen_INCLUDE_DIRS})
+include_directories(${EIGEN_INCLUDE_DIR})
 
 # Tests.
 rosbuild_add_gtest(stamped-position test/stamped-position.cpp)

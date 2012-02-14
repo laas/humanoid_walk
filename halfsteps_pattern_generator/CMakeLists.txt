@@ -17,7 +17,7 @@ rosbuild_gensrv()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(Eigen REQUIRED)
-include_directories(${Eigen_INCLUDE_DIRS})
+include_directories(${EIGEN_INCLUDE_DIR})
 
 # Main library.
 rosbuild_add_library(${PROJECT_NAME}
