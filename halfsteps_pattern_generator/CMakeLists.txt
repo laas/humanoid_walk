@@ -30,7 +30,7 @@ rosbuild_add_library(${PROJECT_NAME}
   src/libhalfsteps_pattern_generator/halfsteps_pattern_generator.cpp
   include/halfsteps_pattern_generator.hh
   include/yaml.hh)
-rosbuild_link_boost(${PROJECT_NAME} filesystem date_time)
+rosbuild_link_boost(${PROJECT_NAME} filesystem date_time system)
 
 # Node.
 rosbuild_add_executable(generator

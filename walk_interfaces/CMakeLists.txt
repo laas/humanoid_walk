@@ -22,12 +22,12 @@ include_directories(${EIGEN_INCLUDE_DIR})
 # Tests.
 rosbuild_add_gtest(stamped-position test/stamped-position.cpp)
 target_link_libraries(stamped-position yaml-cpp)
-rosbuild_link_boost(stamped-position filesystem date_time)
+rosbuild_link_boost(stamped-position filesystem date_time system)
 
 rosbuild_add_gtest(trajectory-3d test/trajectory-3d.cpp)
 target_link_libraries(trajectory-3d yaml-cpp)
-rosbuild_link_boost(trajectory-3d filesystem date_time)
+rosbuild_link_boost(trajectory-3d filesystem date_time system)
 
 rosbuild_add_gtest(dummy-pattern-generator test/dummy-pattern-generator.cpp)
 target_link_libraries(dummy-pattern-generator yaml-cpp)
-rosbuild_link_boost(dummy-pattern-generator filesystem date_time)
+rosbuild_link_boost(dummy-pattern-generator filesystem date_time system)

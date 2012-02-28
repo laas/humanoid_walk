@@ -31,4 +31,4 @@ rosbuild_add_library(${PROJECT_NAME}
 rosbuild_add_executable(generator
   src/nodes/generator.cpp)
 target_link_libraries(generator ${PROJECT_NAME})
-rosbuild_link_boost(generator filesystem date_time)
+rosbuild_link_boost(generator filesystem date_time system)
