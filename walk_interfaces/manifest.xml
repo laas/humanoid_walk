@@ -25,8 +25,8 @@
   <url>http://ros.org/wiki/walk_interfaces</url>
 
   <export>
-    <cpp cflags="-I${prefix}/include -DBOOST_FILESYSTEM_VERSION=2"
-	 lflags="-lboost_filesystem -lboost_date_time -lyaml-cpp" />
+    <cpp cflags="`pkg-config --cflags eigen3` `rosboost-cfg --cflags` -DBOOST_FILESYSTEM_VERSION=2 -I${prefix}/include"
+	 lflags="`rosboost-cfg --lflags filesystem` `rosboost-cfg --lflags date_time` -lyaml-cpp" />
   </export>
 
   <depend package="common_rosdeps" />
