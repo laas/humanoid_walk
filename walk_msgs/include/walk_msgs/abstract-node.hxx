@@ -292,8 +292,11 @@ namespace walk_msgs
 	visualization_msgs::Marker marker;
 	// Set the frame ID and timestamp.  See the TF tutorials for
 	// information on these.
+	// The timestamp *must* be 0 so that rviz always render
+	// the element independently from the current time associated
+	// with the tf transform.
 	marker.header.frame_id = frameName_;
-	marker.header.stamp = ros::Time::now ();
+	marker.header.stamp = ros::Time (0);
 
 	// Set the namespace and id for this marker.  This serves to
 	// create a unique ID Any marker sent with the same namespace
