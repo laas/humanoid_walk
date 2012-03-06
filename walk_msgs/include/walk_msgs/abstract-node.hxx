@@ -239,6 +239,14 @@ namespace walk_msgs
 
     prepareTopicsData (res, startWithLeftFoot);
     writeMotionAsParameter ();
+
+    // We only need to publish once as this is latched topics.
+    footprintsPub_.publish (footprints_);
+    leftFootPub_.publish (leftFootPath_);
+    rightFootPub_.publish (rightFootPath_);
+    comPub_.publish (comPath_);
+    zmpPub_.publish (zmpPath_);
+
     return true;
   }
 
