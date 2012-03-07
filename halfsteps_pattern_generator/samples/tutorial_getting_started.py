@@ -20,6 +20,7 @@ if __name__ == "__main__":
 
         client.final_left_foot_position.position.x = 3 * 0.25
         client.final_right_foot_position.position.x = 3 * 0.25
+        client.final_center_of_mass_position.x = 3 * 0.25
 
         def makeFootprint(x, y):
             footprint = halfsteps_pattern_generator.msg.Footprint()
@@ -30,9 +31,9 @@ if __name__ == "__main__":
             footprint.footprint.x = x
             footprint.footprint.y = y
             footprint.footprint.theta = 0.
-            footprint.slideUp = -0.1
-            footprint.slideDown = -0.1
-            footprint.horizontalDistance = 0.38
+            footprint.slideUp = -0.5
+            footprint.slideDown = -0.5
+            footprint.horizontalDistance = 0.3
             footprint.stepHeight = 0.15
 
             print("{0} {1}".format(footprint.footprint.x,
