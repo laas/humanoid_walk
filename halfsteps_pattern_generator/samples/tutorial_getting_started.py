@@ -9,11 +9,11 @@ if __name__ == "__main__":
     print "Calling getPath service..."
     try:
         client = HalfStepPatternGeneratorClient()
-        client.initial_left_foot_position.position.y = -0.19
-        client.initial_right_foot_position.position.y = +0.19
+        client.initial_left_foot_position.position.y = +0.19
+        client.initial_right_foot_position.position.y = -0.19
         client.initial_center_of_mass_position.z = 0.8
-        client.final_left_foot_position.position.y = -0.19
-        client.final_right_foot_position.position.y = +0.19
+        client.final_left_foot_position.position.y = +0.19
+        client.final_right_foot_position.position.y = -0.19
         client.final_center_of_mass_position.z = 0.8
         client.start_with_left_foot = True
         client.footprints = []
@@ -40,14 +40,14 @@ if __name__ == "__main__":
             return footprint
 
 
-        client.footprints.append(makeFootprint(1 * 0.25, -0.19))
         client.footprints.append(makeFootprint(1 * 0.25, +0.19))
+        client.footprints.append(makeFootprint(1 * 0.25, -0.19))
 
-        client.footprints.append(makeFootprint(2 * 0.25, -0.19))
         client.footprints.append(makeFootprint(2 * 0.25, +0.19))
+        client.footprints.append(makeFootprint(2 * 0.25, -0.19))
 
-        client.footprints.append(makeFootprint(3 * 0.25, -0.19))
         client.footprints.append(makeFootprint(3 * 0.25, +0.19))
+        client.footprints.append(makeFootprint(3 * 0.25, -0.19))
 
         if not not client():
             print("Service call succeed")

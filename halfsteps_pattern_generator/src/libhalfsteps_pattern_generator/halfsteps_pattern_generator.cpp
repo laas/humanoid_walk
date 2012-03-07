@@ -52,10 +52,14 @@ HalfStepsPatternGenerator::computeTrajectories()
   double comZ = initialCenterOfMassPosition()[2];
 
   Eigen::Matrix<double, 6, 1> initialStep;
+
+  double sign = (startWithLeftFoot() ? -1. : 1.);
+
   initialStep(0) =
-    std::fabs(initialLeftFootPosition() (0, 3)
-	      - initialRightFootPosition() (0, 3)) / 2.;
+    (std::fabs(initialLeftFootPosition() (0, 3)
+	       - initialRightFootPosition() (0, 3)) / 2.);
   initialStep(1) =
+    sign *
     std::fabs(initialLeftFootPosition() (1, 3)
 	      - initialRightFootPosition() (1, 3)) / 2.;
   initialStep(2) = 0.;
@@ -71,37 +75,41 @@ HalfStepsPatternGenerator::computeTrajectories()
 
   // Footprints
   // Convert footprints into relative positions.
-  walk::HomogeneousMatrix3d previousPosition;
+  walk::HomogeneousMatrix3d world_M_footprint;
   if (startWithLeftFoot ())
-    previousPosition = initialRightFootPosition ();
+    world_M_footprint = initialRightFootPosition ();
   else
-    previousPosition = initialLeftFootPosition ();
+    world_M_footprint = initialLeftFootPosition ();
 
-  walk::HomogeneousMatrix3d newPosition;
-  walk::HomogeneousMatrix3d relativePosition;
+  walk::HomogeneousMatrix3d world_M_newfootprint;
+  walk::HomogeneousMatrix3d footprint_M_newfootprint;
 
   for (unsigned i = 0; i < this->footprints().size (); ++i)
     {
       walk::trans2dToTrans3d
-	(newPosition,
+	(world_M_newfootprint,
 	 this->footprints()[i].position[0],
 	 this->footprints()[i].position[1],
 	 this->footprints()[i].position[2]);
 
-      relativePosition = newPosition * previousPosition.inverse ();
+      footprint_M_newfootprint =
+	world_M_footprint.inverse () * world_M_newfootprint;
+
+      ROS_DEBUG_STREAM
+	("add relative footstep:\n" << footprint_M_newfootprint);
 
       walk_msgs::Footprint2d footprint;
       walk_msgs::convertHomogeneousMatrix3dToFootprint2d
-	(footprint, relativePosition);
+	(footprint, footprint_M_newfootprint);
       stepData.push_back(this->footprints()[i].slideUp);
-      stepData.push_back(this->footprints()[i].horizontalDistance);
+      stepData.push_back(-this->footprints()[i].horizontalDistance);
       stepData.push_back(this->footprints()[i].stepHeight);
       stepData.push_back(this->footprints()[i].slideDown);
       stepData.push_back(footprint.x);
       stepData.push_back(footprint.y);
       stepData.push_back(angles::to_degrees (footprint.theta));
 
-      previousPosition = newPosition;
+      world_M_footprint = world_M_newfootprint;
     }
 
   pg.produceSeqSlidedHalfStepFeatures
