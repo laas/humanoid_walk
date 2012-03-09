@@ -1,0 +1,16 @@
+<package>
+  <description brief="Walk tools">
+
+     Gathers tools providing useful computations when dealing with
+     walking trajectory generation.
+
+  </description>
+  <author>Thomas Moulard</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/walk_tools</url>
+
+  <depend package="rospy" />
+  <depend package="geometry_msgs" />
+  <depend package="message_filters" />
+</package>
