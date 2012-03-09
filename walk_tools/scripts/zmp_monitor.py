@@ -99,6 +99,8 @@ class ZmpEstimator(object):
     synchronizerPrecision = 1e-3
     queueSize = 10
 
+    timer = None
+
     zmpPublisher = None
 
     contactThreshold = 10
@@ -107,13 +109,16 @@ class ZmpEstimator(object):
     rightAnklePosition = [0., 0., 0.105]
     referenceFrame = None
 
+    startTime = rospy.Time(0)
+    lastData = rospy.Time(0)
+
     def __init__(self):
         rospy.init_node('zmp_estimator')
 
         self.leftFootForceSensorTopic = \
             rospy.get_param('~left_foot_wrench', 'left_foot')
         self.rightFootForceSensorTopic = \
-            rospy.get_param('~left_foot_wrench', 'right_foot')
+            rospy.get_param('~right_foot_wrench', 'right_foot')
         self.contactThreshold = \
             rospy.get_param('~contact_threshold',
                             ZmpEstimator.contactThreshold)
@@ -152,9 +157,18 @@ class ZmpEstimator(object):
                                     self.queueSize)
         self.synchronizer.registerCallback(lambda l, r: self.callback (l, r))
 
+        self.timer = rospy.Timer(rospy.Duration(1.),
+                                 lambda x: self.callbackTimer(x))
+
         self.zmpPublisher = rospy.Publisher('zmp_estimated', Vector3Stamped)
+        self.startTime = rospy.Time.now()
 
     def callback(self, leftFootForce, rightFootForce):
+        if self.lastData == rospy.Time(0):
+            rospy.loginfo(
+                'synchronized forces received, starting.')
+        self.lastData = leftFootForce.header.stamp
+
         rospy.logdebug('computing ZMP')
         zmp = Vector3Stamped()
 
@@ -229,8 +243,28 @@ class ZmpEstimator(object):
         # In all cases, publish ZMP
         self.zmpPublisher.publish(zmp)
 
+    def callbackTimer(self, x):
+        if self.lastData == rospy.Time(0) and \
+                rospy.Time.now() - self.startTime > rospy.Duration(2.):
+            rospy.logwarn(
+                'The node is not receiving any data.\n'
+                + 'Please double check that your topics '
+                + 'are sending synchronized data.')
+            return
+        if self.lastData == rospy.Time(0):
+            return
+        if rospy.Time.now() - self.lastData > rospy.Duration(1.):
+            return
+
+        rospy.logwarn(
+            "last data reception was {0} second(s) ago".format(
+                rospy.Time.now() - self.lastData))
+
 
     def spin(self):
+        rospy.loginfo("waiting for {0} and {1} topics...".format(
+                self.leftFootForceSensorTopic,
+                self.rightFootForceSensorTopic))
         rospy.spin()
 
 if __name__ == "__main__":
