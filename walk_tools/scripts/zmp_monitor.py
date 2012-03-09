@@ -105,8 +105,8 @@ class ZmpEstimator(object):
 
     contactThreshold = 10
 
-    leftAnklePosition = [0., 0., 0.105]
-    rightAnklePosition = [0., 0., 0.105]
+    leftFootPosition = [0., 0., 0.105]
+    rightFootPosition = [0., 0., 0.105]
     referenceFrame = None
 
     startTime = rospy.Time(0)
@@ -130,18 +130,18 @@ class ZmpEstimator(object):
 
         self.referenceFrame = \
             rospy.get_param('~reference_frame', '/world')
-        self.leftAnklePosition[0] = \
-            rospy.get_param('~left_ankle_x', ZmpEstimator.leftAnklePosition[0])
-        self.leftAnklePosition[1] = \
-            rospy.get_param('~left_ankle_y', ZmpEstimator.leftAnklePosition[1])
-        self.leftAnklePosition[2] = \
-            rospy.get_param('~left_ankle_z', ZmpEstimator.leftAnklePosition[2])
-        self.rightAnklePosition[0] = \
-            rospy.get_param('~right_ankle_x', ZmpEstimator.rightAnklePosition[0])
-        self.rightAnklePosition[1] = \
-            rospy.get_param('~right_ankle_y', ZmpEstimator.rightAnklePosition[1])
-        self.rightAnklePosition[2] = \
-            rospy.get_param('~right_ankle_z', ZmpEstimator.rightAnklePosition[2])
+        self.leftFootPosition[0] = \
+            rospy.get_param('~left_foot_x', ZmpEstimator.leftFootPosition[0])
+        self.leftFootPosition[1] = \
+            rospy.get_param('~left_foot_y', ZmpEstimator.leftFootPosition[1])
+        self.leftFootPosition[2] = \
+            rospy.get_param('~left_foot_z', ZmpEstimator.leftFootPosition[2])
+        self.rightFootPosition[0] = \
+            rospy.get_param('~right_foot_x', ZmpEstimator.rightFootPosition[0])
+        self.rightFootPosition[1] = \
+            rospy.get_param('~right_foot_y', ZmpEstimator.rightFootPosition[1])
+        self.rightFootPosition[2] = \
+            rospy.get_param('~right_foot_z', ZmpEstimator.rightFootPosition[2])
 
         self.leftFootForceSensorSubscriber = \
             message_filters.Subscriber(
@@ -222,9 +222,9 @@ class ZmpEstimator(object):
                                          rightFootForce.wrench.torque.z])
 
             Mo = momentRightFoot \
-                + np.cross(self.rightAnklePosition, forceRightFoot) \
+                + np.cross(self.rightFootPosition, forceRightFoot) \
                 + momentLeftFoot \
-                + np.cross(self.leftAnklePosition, forceLeftFoot)
+                + np.cross(self.leftFootPosition, forceLeftFoot)
             forces = forceLeftFoot + forceRightFoot
 
             zmp.vector.x = -Mo[0,1] / forces[0,2]
