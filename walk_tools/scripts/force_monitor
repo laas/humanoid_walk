@@ -1,0 +1,83 @@
+#!/usr/bin/env python
+#
+# When walking, it is important to ensure that the forces applied
+# on the robot contact surfaces are not too high.
+#
+# This script monitors force sensors to make sure this is the case.
+#
+
+import roslib; roslib.load_manifest('walk_tools')
+
+import rospy
+
+import sys
+
+from geometry_msgs.msg import WrenchStamped
+from diagnostic_msgs.msg import DiagnosticArray, DiagnosticStatus, KeyValue
+
+rospy.init_node("force_monitor")
+
+forces_warning_threshold = rospy.get_param('~force_warning_threshold', 800)
+forces_error_threshold = rospy.get_param('~force_error_threshold', 1000)
+
+forces_topics = [rospy.get_param('~left_foot_wrench', 'left_foot'),
+                 rospy.get_param('~right_foot_wrench', 'right_foot')]
+forces = {}
+
+def forceCb(data, topic):
+    global forces
+    forces[topic] = data
+
+def force_monitor():
+    pub = rospy.Publisher("/diagnostics", DiagnosticArray)
+
+    for t in forces_topics:
+        rospy.Subscriber(t, WrenchStamped, forceCb, t)
+
+    stat_force = DiagnosticStatus()
+    stat_force.level = 0
+    stat_force.name = "Forces monitor"
+    stat_force.message = "OK"
+    stat_force.hardware_id = "none"
+    stat_force.values = []
+
+    rospy.loginfo("start monitoring...")
+    rate = rospy.Rate(5)
+    while not rospy.is_shutdown():
+        # Check forces
+        stat_force.level = DiagnosticStatus.OK
+        stat_force.message = "OK"
+        stat_force.values = []
+        for topic in forces_topics:
+            key = "Force sensor {0} ground reaction force (Z)".format(topic)
+            if topic in forces:
+                stat_force.values.append(KeyValue(key,
+		 str(forces[topic].wrench.force.z)))
+                if stat_force.level == DiagnosticStatus.OK and \
+                        forces[topic].wrench.force.z > forces_warning_threshold:
+                    stat_force.level = DiagnosticStatus.WARN
+                    stat_force.message = "High force on {0} (> {1})".format(
+                        topic, forces_warning_threshold)
+
+                if stat_force.level != DiagnosticStatus.ERROR and \
+                        forces[topic].wrench.force.z > forces_error_threshold:
+                    stat_force.level = DiagnosticStatus.ERROR
+                    stat_force.message = "Force too high on {0} (> {1})".format(
+                        topic, forces_error_threshold)
+            else:
+                stat_force.values.append(KeyValue(key, "n/a"))
+
+        msg = DiagnosticArray()
+        msg.header.stamp = rospy.get_rostime()
+        msg.status = [stat_force]
+        pub.publish(msg)
+        rate.sleep()
+
+if __name__ == "__main__":
+    try:
+        force_monitor()
+    except KeyboardInterrupt: pass
+    except SystemExit: pass
+    except:
+        import traceback
+        traceback.print_exc()
