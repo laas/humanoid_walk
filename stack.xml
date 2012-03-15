@@ -11,10 +11,12 @@
   <review status="experimental" notes=""/>
   <url>http://ros.org/wiki/humanoid_walk</url>
   <depend stack="bullet" /> <!-- bullet -->
-  <depend stack="common_msgs" /> <!-- nav_msgs, geometry_msgs, visualization_msgs -->
+  <depend stack="common_msgs" /> <!-- nav_msgs, sensor_msgs, geometry_msgs, visualization_msgs -->
   <depend stack="common_rosdeps" /> <!-- common_rosdeps -->
+  <depend stack="diagnostics" /> <!-- diagnostic_updater, diagnostic_aggregator -->
   <depend stack="geometry" /> <!-- angles -->
   <depend stack="ros" />
-  <depend stack="ros_comm" /> <!-- rospy -->
+  <depend stack="ros_comm" /> <!-- rospy, message_filters -->
+  <depend stack="urdfpy" /> <!-- urdfpy -->
 
 </stack>
