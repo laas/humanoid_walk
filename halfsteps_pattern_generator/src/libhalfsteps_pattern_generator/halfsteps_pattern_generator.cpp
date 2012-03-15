@@ -101,6 +101,12 @@ HalfStepsPatternGenerator::computeTrajectories()
       walk_msgs::Footprint2d footprint;
       walk_msgs::convertHomogeneousMatrix3dToFootprint2d
 	(footprint, footprint_M_newfootprint);
+
+      if (footprint.x != footprint.x
+	  || footprint.y != footprint.y
+	  || footprint.theta != footprint.theta)
+	throw std::runtime_error("Nan detected in footprints");
+
       stepData.push_back(this->footprints()[i].slideUp);
       stepData.push_back(-this->footprints()[i].horizontalDistance);
       stepData.push_back(this->footprints()[i].stepHeight);

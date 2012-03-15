@@ -38,3 +38,8 @@ rosbuild_add_executable(generator
 target_link_libraries(generator ${PROJECT_NAME})
 
 rosbuild_add_boost_directories()
+
+# Tests.
+rosbuild_add_gtest(pattern-generator test/pattern-generator.cpp)
+target_link_libraries(pattern-generator ${PROJECT_NAME})
+rosbuild_link_boost(pattern-generator filesystem date_time system)

@@ -9,8 +9,15 @@ namespace walk
   inline YAML::Emitter&
   operator<< (YAML::Emitter& out, const footprint_t& footprint)
   {
-    out << (const walk::Footprint2d&) (footprint)
-	<< YAML::BeginMap
+    out << YAML::BeginMap
+	<< YAML::Key << "beginTime"
+	<< YAML::Value
+	<< to_iso_string (footprint.beginTime)
+	<< YAML::Key << "duration"
+	<< YAML::Value
+	<< (0. + footprint.duration.total_nanoseconds () / 1e9)
+	<< YAML::Key << "position"
+	<< YAML::Value << footprint.position
 	<< YAML::Key << "slide-up"
 	<< YAML::Value
 	<< footprint.slideUp
@@ -43,7 +50,17 @@ namespace walk
   {
     checkYamlType (node, YAML::NodeType::Map, "footprint");
 
-    node >> (walk::Footprint2d&) (footprint);
+    using namespace boost::posix_time;
+    using namespace boost::gregorian;
+
+    std::string beginTimeStr;
+    node["beginTime"] >> beginTimeStr;
+    footprint.beginTime = walk::Time (from_iso_string (beginTimeStr));
+    double d = 0;
+    node["duration"] >> d;
+    footprint.duration = milliseconds (d * 1e3);
+    node["position"] >> footprint.position;
+
     node["slide-up"] >> footprint.slideUp;
     node["slide-down"] >> footprint.slideDown;
     node["horizontal-distance"] >> footprint.horizontalDistance;
