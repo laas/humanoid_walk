@@ -167,7 +167,8 @@ HalfStepsPatternGenerator::computeTrajectories()
       getRightFootTrajectory().data()[i].position (1,1) = std::cos(theta);
 
       // Center of mass
-      getCenterOfMassTrajectory().data()[i].duration = milliseconds(step_ * 1e3);
+      getCenterOfMassTrajectory().data()[i].duration =
+	milliseconds(step_ * 1e3);
       getCenterOfMassTrajectory().data()[i].position[0] =
 	stepFeatures.comTrajX[i];
       getCenterOfMassTrajectory().data()[i].position[1] =
@@ -182,5 +183,9 @@ HalfStepsPatternGenerator::computeTrajectories()
 
       //Posture
       //FIXME:
+      getPostureTrajectory().data()[i].duration = milliseconds(step_ * 1e3);
+      getPostureTrajectory().data()[i].position.resize(1, 36);
+      getPostureTrajectory().data()[i].position[0] =
+	stepFeatures.waistOrient[i] * M_PI / 180.;
     }
 }
