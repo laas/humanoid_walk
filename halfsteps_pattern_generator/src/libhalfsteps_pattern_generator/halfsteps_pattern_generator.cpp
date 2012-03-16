@@ -73,6 +73,10 @@ HalfStepsPatternGenerator::computeTrajectories()
   for (unsigned i = 0; i < 6; ++i)
     stepData.push_back(initialStep (i));
 
+  for (unsigned i = 0; i < 6; ++i)
+    ROS_DEBUG_STREAM
+      ("initial parameter " << i << ": " << initialStep (i));
+
   // Footprints
   // Convert footprints into relative positions.
   walk::HomogeneousMatrix3d world_M_footprint;
@@ -108,12 +112,31 @@ HalfStepsPatternGenerator::computeTrajectories()
 	throw std::runtime_error("Nan detected in footprints");
 
       stepData.push_back(this->footprints()[i].slideUp);
-      stepData.push_back(-this->footprints()[i].horizontalDistance);
+      stepData.push_back(this->footprints()[i].horizontalDistance);
       stepData.push_back(this->footprints()[i].stepHeight);
       stepData.push_back(this->footprints()[i].slideDown);
       stepData.push_back(footprint.x);
       stepData.push_back(footprint.y);
       stepData.push_back(angles::to_degrees (footprint.theta));
+
+      ROS_DEBUG_STREAM
+	("footstep " << i << ": slide up: " << this->footprints()[i].slideUp);
+      ROS_DEBUG_STREAM
+	("footstep " << i
+	 << ": horizontal distance: "
+	 << this->footprints()[i].horizontalDistance);
+      ROS_DEBUG_STREAM
+	("footstep " << i
+	 << ": step height: " << this->footprints()[i].stepHeight);
+      ROS_DEBUG_STREAM
+	("footstep " << i
+	 << ": slide down: " << this->footprints()[i].slideDown);
+      ROS_DEBUG_STREAM
+	("footstep " << i << ": X: " << footprint.x);
+      ROS_DEBUG_STREAM
+	("footstep " << i << ": Y: " << footprint.y);
+      ROS_DEBUG_STREAM
+	("footstep " << i << ": Theta: " << footprint.theta);
 
       world_M_footprint = world_M_newfootprint;
     }
@@ -122,7 +145,8 @@ HalfStepsPatternGenerator::computeTrajectories()
     (stepFeatures, step_, comZ, g,
      timeBeforeZmpShift_, timeAfterZmpShift_,
      timeBeforeZmpShift_ + timeAfterZmpShift_, stepData,
-     startWithLeftFoot() ? 'L' : 'R');
+     // first support foot
+     startWithLeftFoot() ? 'R' : 'L');
 
   getLeftFootTrajectory().data().resize(stepFeatures.size);
   getRightFootTrajectory().data().resize(stepFeatures.size);
@@ -144,7 +168,7 @@ HalfStepsPatternGenerator::computeTrajectories()
       getLeftFootTrajectory().data()[i].position (2,3) =
 	stepFeatures.leftfootHeight[i];
 
-      double theta = stepFeatures.leftfootOrient[i] * M_PI / 180.;
+      double theta = angles::from_degrees (stepFeatures.leftfootOrient[i]);
       getLeftFootTrajectory().data()[i].position (0,0) = std::cos(theta);
       getLeftFootTrajectory().data()[i].position (0,1) = -std::sin(theta);
       getLeftFootTrajectory().data()[i].position (1,0) = std::sin(theta);
@@ -160,7 +184,7 @@ HalfStepsPatternGenerator::computeTrajectories()
       getRightFootTrajectory().data()[i].position (2,3) =
 	stepFeatures.rightfootHeight[i];
 
-      theta = stepFeatures.rightfootOrient[i] * M_PI / 180.;
+      theta = angles::from_degrees (stepFeatures.rightfootOrient[i]);
       getRightFootTrajectory().data()[i].position (0,0) = std::cos(theta);
       getRightFootTrajectory().data()[i].position (0,1) = -std::sin(theta);
       getRightFootTrajectory().data()[i].position (1,0) = std::sin(theta);
@@ -186,6 +210,6 @@ HalfStepsPatternGenerator::computeTrajectories()
       getPostureTrajectory().data()[i].duration = milliseconds(step_ * 1e3);
       getPostureTrajectory().data()[i].position.resize(1, 36);
       getPostureTrajectory().data()[i].position[0] =
-	stepFeatures.waistOrient[i] * M_PI / 180.;
+	angles::from_degrees (stepFeatures.waistOrient[i]);
     }
 }

@@ -30,7 +30,7 @@ TEST(TestStampedPosition, empty)
   walk::YamlWriter<HalfStepsPatternGenerator> writer (pg);
   writer.write("/tmp/test.yaml");
 
-  // walk::YamlReader<halfStepsPgParent_t> reader ("/tmp/test.yaml");
+  //walk::YamlReader<halfStepsPgParent_t> reader ("/tmp/test.yaml");
 
   // walk::YamlWriter<walk::YamlReader<halfStepsPgParent_t> > writer2 (reader);
   // writer2.write("/tmp/test2.yaml");
