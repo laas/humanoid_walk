@@ -18,3 +18,6 @@ walk_msgs/src/walk_msgs/srv/
 */srv_gen/
 stack.xml.bak
 build/
+AccelerationCoM.dat
+Accelerations.dat
+CoMs.dat
