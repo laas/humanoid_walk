@@ -2,8 +2,10 @@
 # define WALK_INTERFACE_WALK_HH
 # include <vector>
 
+# include <boost/static_assert.hpp>
+
 # include <walk_interfaces/types.hh>
-# include <walk_interfaces/trajectory.hh>
+# include <walk_interfaces/discretized-trajectory.hh>
 # include <walk_interfaces/stamped-footprint.hh>
 
 namespace walk
@@ -11,8 +13,11 @@ namespace walk
   template <typename T>
   class PatternGenerator;
 
-  /// \brief Pattern generator expecting 2d footprints as input.
-  typedef PatternGenerator<StampedFootprint2d> PatternGenerator2d;
+  template <typename T>
+  struct PatternGeneratorTraits
+  {
+    BOOST_STATIC_ASSERT(sizeof(T) == 0);
+  };
 
   /// \brief A pattern generator computes walking reference
   /// trajectories.
@@ -41,13 +46,33 @@ namespace walk
   ///   algorithm specific. Please see the pattern generator
   ///   documentation for more details.
   ///
-  /// \tparam T Footprint type.
+  /// \tparam T Pattern generator concrete type.
   template <typename T>
   class PatternGenerator
   {
   public:
+    typedef T concreteType_t;
+
     /// \brief Footprint type.
-    typedef T footprint_t;
+    typedef typename PatternGeneratorTraits<concreteType_t>::Footprint
+    footprint_t;
+
+    /// \brief DiscretizedTrajectory in \f$SO(3)\f$.
+    typedef typename PatternGeneratorTraits<concreteType_t>::Trajectory3d
+    Trajectory3d;
+    /// \brief DiscretizedTrajectory in \f$SO(3)\f$.
+    typedef typename PatternGeneratorTraits<concreteType_t>::Trajectory2d
+    Trajectory2d;
+    /// \brief DiscretizedTrajectory in \f$R^2\f$.
+    typedef typename PatternGeneratorTraits<concreteType_t>::TrajectoryV2d
+    TrajectoryV2d;
+    /// \brief DiscretizedTrajectory in \f$R^3\f$.
+    typedef typename PatternGeneratorTraits<concreteType_t>::TrajectoryV3d
+    TrajectoryV3d;
+    /// \brief DiscretizedTrajectory in \f$R^n\f$.
+    typedef typename PatternGeneratorTraits<concreteType_t>::TrajectoryNd
+    TrajectoryNd;
+
     /// \brief Vector of footprints.
     typedef WALK_INTERFACES_EIGEN_STL_VECTOR(footprint_t) footprints_t;
 
@@ -228,6 +253,31 @@ namespace walk
   template <typename T>
   std::ostream& operator<<(std::ostream& stream,
 			   const PatternGenerator<T>& pg);
+
+
+  class DiscretizedPatternGenerator2d;
+  template <>
+  struct PatternGeneratorTraits<DiscretizedPatternGenerator2d>
+  {
+    /// \brief Footprint definition.
+    typedef StampedFootprint2d Footprint;
+
+    /// \brief Trajectory in \f$SO(3)\f$.
+    typedef DiscretizedTrajectory<StampedPosition3d> Trajectory3d;
+    /// \brief Trajectory in \f$SO(2)\f$.
+    typedef DiscretizedTrajectory<StampedPosition2d> Trajectory2d;
+    /// \brief Trajectory in \f$R^2\f$.
+    typedef DiscretizedTrajectory<StampedVector2d> TrajectoryV2d;
+    /// \brief Trajectory in \f$R^3\f$.
+    typedef DiscretizedTrajectory<StampedVector3d> TrajectoryV3d;
+    /// \brief Trajectory in \f$R^n\f$.
+    typedef DiscretizedTrajectory<StampedVectorNd> TrajectoryNd;
+  };
+
+  
+  class DiscretizedPatternGenerator2d
+    : public PatternGenerator<DiscretizedPatternGenerator2d>
+  {};
 
 } // end of namespace walk.
 

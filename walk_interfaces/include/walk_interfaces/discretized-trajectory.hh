@@ -1,5 +1,5 @@
-#ifndef WALK_INTERFACE_STAMPED_TRAJECTORY_HH
-# define WALK_INTERFACE_STAMPED_TRAJECTORY_HH
+#ifndef WALK_INTERFACE_DISCRETIZED_TRAJECTORY_HH
+# define WALK_INTERFACE_DISCRETIZED_TRAJECTORY_HH
 # include <iosfwd>
 # include <vector>
 
@@ -20,7 +20,7 @@ namespace walk
   ///
   /// \tparam T Trajectory output type.
   template <typename T>
-  class Trajectory
+  class DiscretizedTrajectory
   {
   public:
     /// \brief Trajectory element.
@@ -32,16 +32,16 @@ namespace walk
     /// \{
 
     /// \brief Default constructor.
-    explicit Trajectory();
+    explicit DiscretizedTrajectory();
     /// \brief Copy constructor.
-    explicit Trajectory(const Trajectory<T>&);
+    explicit DiscretizedTrajectory(const DiscretizedTrajectory<T>&);
     /// \brief Destructor.
-    ~Trajectory();
+    ~DiscretizedTrajectory();
 
     /// \}
 
     /// \brief Assignment operator.
-    Trajectory<T>& operator=(const Trajectory<T>&);
+    DiscretizedTrajectory<T>& operator=(const DiscretizedTrajectory<T>&);
 
     /// \brief Trajectory data getter.
     data_t& data();
@@ -62,16 +62,16 @@ namespace walk
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
   };
 
-  /// \brief Trajectory in \f$SO(3)\f$.
-  typedef Trajectory<StampedPosition3d> Trajectory3d;
-  /// \brief Trajectory in \f$SO(2)\f$.
-  typedef Trajectory<StampedPosition2d> Trajectory2d;
-  /// \brief Trajectory in \f$R^2\f$.
-  typedef Trajectory<StampedVector2d> TrajectoryV2d;
-  /// \brief Trajectory in \f$R^3\f$.
-  typedef Trajectory<StampedVector3d> TrajectoryV3d;
-  /// \brief Trajectory in \f$R^n\f$.
-  typedef Trajectory<StampedVectorNd> TrajectoryNd;
+  /// \brief DiscretizedTrajectory in \f$SO(3)\f$.
+  typedef DiscretizedTrajectory<StampedPosition3d> DiscretizedTrajectory3d;
+  /// \brief DiscretizedTrajectory in \f$SO(2)\f$.
+  typedef DiscretizedTrajectory<StampedPosition2d> DiscretizedTrajectory2d;
+  /// \brief DiscretizedTrajectory in \f$R^2\f$.
+  typedef DiscretizedTrajectory<StampedVector2d> DiscretizedTrajectoryV2d;
+  /// \brief DiscretizedTrajectory in \f$R^3\f$.
+  typedef DiscretizedTrajectory<StampedVector3d> DiscretizedTrajectoryV3d;
+  /// \brief DiscretizedTrajectory in \f$R^n\f$.
+  typedef DiscretizedTrajectory<StampedVectorNd> DiscretizedTrajectoryNd;
 
   /// \brief Display a trajectory.
   ///
@@ -79,9 +79,9 @@ namespace walk
   /// \param trajectory Displayed trajectory
   template <typename T>
   std::ostream& operator<<(std::ostream& stream,
-			   const Trajectory<T>& trajectory);
+			   const DiscretizedTrajectory<T>& trajectory);
 
 } // end of namespace walk.
 
-# include <walk_interfaces/trajectory.hxx>
-#endif //! WALK_INTERFACE_STAMPED_TRAJECTORY_HH
+# include <walk_interfaces/discretized-trajectory.hxx>
+#endif //! WALK_INTERFACE_DISCRETIZED_TRAJECTORY_HH

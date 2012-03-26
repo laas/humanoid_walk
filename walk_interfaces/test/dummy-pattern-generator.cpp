@@ -5,11 +5,11 @@
 #include "walk_interfaces/pattern-generator.hh"
 #include "walk_interfaces/yaml.hh"
 
-class MyPatternGenerator : public walk::PatternGenerator2d
+class MyPatternGenerator : public walk::DiscretizedPatternGenerator2d
 {
 public:
   MyPatternGenerator()
-    : walk::PatternGenerator2d()
+    : walk::DiscretizedPatternGenerator2d()
   {}
 
   void computeTrajectories()
@@ -17,10 +17,10 @@ public:
     walk::TimeDuration l =
       walk::computeFootprintSequenceLength(footprints());
 
-    walk::Trajectory3d& lf = getLeftFootTrajectory();
-    walk::Trajectory3d& rf = getRightFootTrajectory();
-    walk::TrajectoryV3d& com = getCenterOfMassTrajectory();
-    walk::TrajectoryV2d& zmp = getZmpTrajectory();
+    Trajectory3d& lf = getLeftFootTrajectory();
+    Trajectory3d& rf = getRightFootTrajectory();
+    TrajectoryV3d& com = getCenterOfMassTrajectory();
+    TrajectoryV2d& zmp = getZmpTrajectory();
 
     lf.data().resize(1);
     rf.data().resize(1);
@@ -35,7 +35,6 @@ public:
     lf.data()[0].position = initialLeftFootPosition();
     rf.data()[0].position = initialRightFootPosition();
     com.data()[0].position = initialCenterOfMassPosition();
-
     walk::Vector2d initialZmp;
     initialZmp[0] = initialZmp[1] = 0.;
     zmp.data()[0].position = initialZmp;
@@ -58,7 +57,7 @@ TEST(TestStampedPosition, empty)
 
   pg.setFootprints(footprints, true);
 
-  const walk::Trajectory3d& lf = pg.leftFootTrajectory();
+  const MyPatternGenerator::Trajectory3d& lf = pg.leftFootTrajectory();
 
   walk::TimeDuration lengthLf = lf.computeLength();
 

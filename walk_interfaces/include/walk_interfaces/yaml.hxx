@@ -127,7 +127,7 @@ namespace walk
   template <typename T>
   void
   operator>> (const YAML::Node& node,
-	      Trajectory<T>& trajectory)
+	      DiscretizedTrajectory<T>& trajectory)
   {
     checkYamlType (node, YAML::NodeType::Sequence, "trajectory");
 
@@ -135,7 +135,7 @@ namespace walk
     for (unsigned i = 0; i < node.size (); ++i)
       {
 	checkYamlType (node[i], YAML::NodeType::Map, "trajectory element");
-	typename Trajectory<T>::element_t stampedPosition;
+	typename DiscretizedTrajectory<T>::element_t stampedPosition;
 	node[i] >> stampedPosition;
 	trajectory.data ().push_back (stampedPosition);
       }
@@ -301,10 +301,10 @@ namespace walk
 
     template <typename T>
     YAML::Emitter&
-    operator<< (YAML::Emitter& out, const Trajectory<T>& trajectory)
+    operator<< (YAML::Emitter& out, const DiscretizedTrajectory<T>& trajectory)
     {
       out << YAML::BeginSeq;
-      BOOST_FOREACH (const typename Trajectory<T>::element_t& data,
+      BOOST_FOREACH (const typename DiscretizedTrajectory<T>::element_t& data,
 		     trajectory.data ())
 	out << data;
       out << YAML::EndSeq;

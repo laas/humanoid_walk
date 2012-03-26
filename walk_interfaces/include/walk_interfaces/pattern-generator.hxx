@@ -36,7 +36,8 @@ namespace walk
   }
 
   template <typename T>
-  PatternGenerator<T>::PatternGenerator(const PatternGenerator<T>& pg)
+  PatternGenerator<T>::PatternGenerator
+  (const PatternGenerator<T>& pg)
     : footprints_ (pg.footprints_),
       startWithLeftFoot_ (pg.startWithLeftFoot_),
       leftFootTrajectory_(pg.leftFootTrajectory_),
@@ -48,7 +49,8 @@ namespace walk
 
   template <typename T>
   PatternGenerator<T>&
-  PatternGenerator<T>::operator=(const PatternGenerator<T>& pg)
+  PatternGenerator<T>::operator=
+  (const PatternGenerator<T>& pg)
   {
     if (&pg == this)
       return *this;
@@ -100,7 +102,8 @@ namespace walk
 
   template <typename T>
   void
-  PatternGenerator<T>::setFootprints(const footprints_t& footprints, bool startWithLeftFoot)
+  PatternGenerator<T>::setFootprints
+  (const footprints_t& footprints, bool startWithLeftFoot)
   {
     footprints_ = footprints;
     startWithLeftFoot_ = startWithLeftFoot;
@@ -119,70 +122,70 @@ namespace walk
   {}
 
   template <typename T>
-  const Trajectory3d&
+  const typename PatternGenerator<T>::Trajectory3d&
   PatternGenerator<T>::leftFootTrajectory() const
   {
     return leftFootTrajectory_;
   }
 
   template <typename T>
-  const Trajectory3d&
+  const typename PatternGenerator<T>::Trajectory3d&
   PatternGenerator<T>::rightFootTrajectory() const
   {
     return rightFootTrajectory_;
   }
 
   template <typename T>
-  const TrajectoryV2d&
+  const typename PatternGenerator<T>::TrajectoryV2d&
   PatternGenerator<T>::zmpTrajectory() const
   {
     return zmpTrajectory_;
   }
 
   template <typename T>
-  const TrajectoryV3d&
+  const typename PatternGenerator<T>::TrajectoryV3d&
   PatternGenerator<T>::centerOfMassTrajectory() const
   {
     return centerOfMassTrajectory_;
   }
 
   template <typename T>
-  const TrajectoryNd&
+  const typename PatternGenerator<T>::TrajectoryNd&
   PatternGenerator<T>::postureTrajectory() const
   {
     return postureTrajectory_;
   }
 
   template <typename T>
-  Trajectory3d&
+  typename PatternGenerator<T>::Trajectory3d&
   PatternGenerator<T>::getLeftFootTrajectory()
   {
     return leftFootTrajectory_;
   }
 
   template <typename T>
-  Trajectory3d&
+  typename PatternGenerator<T>::Trajectory3d&
   PatternGenerator<T>::getRightFootTrajectory()
   {
     return rightFootTrajectory_;
   }
 
   template <typename T>
-  TrajectoryV2d&
+  typename PatternGenerator<T>::TrajectoryV2d&
   PatternGenerator<T>::getZmpTrajectory()
   {
     return zmpTrajectory_;
   }
 
   template <typename T>
-  TrajectoryV3d&
+  typename PatternGenerator<T>::TrajectoryV3d&
   PatternGenerator<T>::getCenterOfMassTrajectory()
   {
     return centerOfMassTrajectory_;
   }
 
   template <typename T>
-  TrajectoryNd&
+  typename PatternGenerator<T>::TrajectoryNd&
   PatternGenerator<T>::getPostureTrajectory()
   {
     return postureTrajectory_;
@@ -229,7 +232,7 @@ namespace walk
   {
     return finalRightFootPosition_;
   }
-  
+
   template <typename T>
   Vector3d&
   PatternGenerator<T>::getFinalCenterOfMassPosition()

@@ -4,10 +4,13 @@
 # include <walk_interfaces/pattern-generator.hh>
 # include <walk_interfaces/yaml.hh>
 
+# include <halfsteps_pattern_generator.hh>
+
 namespace walk
 {
   inline YAML::Emitter&
-  operator<< (YAML::Emitter& out, const footprint_t& footprint)
+  operator<< (YAML::Emitter& out,
+	      const HalfStepsPatternGenerator::footprint_t& footprint)
   {
     out << YAML::BeginMap
 	<< YAML::Key << "beginTime"
@@ -36,17 +39,20 @@ namespace walk
 
   inline YAML::Emitter&
   operator<< (YAML::Emitter& out,
-	      const WALK_INTERFACES_EIGEN_STL_VECTOR(footprint_t)& footprints)
+	      const WALK_INTERFACES_EIGEN_STL_VECTOR
+	      (HalfStepsPatternGenerator::footprint_t)& footprints)
   {
     out << YAML::BeginSeq;
-    BOOST_FOREACH (const footprint_t& footprint, footprints)
+    typedef HalfStepsPatternGenerator::footprint_t a_t;
+    BOOST_FOREACH (const a_t& footprint, footprints)
       out << footprint;
     out << YAML::EndSeq;
     return out;
   }
 
   inline void
-  operator>> (const YAML::Node& node, footprint_t& footprint)
+  operator>> (const YAML::Node& node,
+	      HalfStepsPatternGenerator::footprint_t& footprint)
   {
     checkYamlType (node, YAML::NodeType::Map, "footprint");
 

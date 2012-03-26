@@ -1,26 +1,27 @@
-#ifndef WALK_INTERFACE_STAMPED_TRAJECTORY_HXX
-# define WALK_INTERFACE_STAMPED_TRAJECTORY_HXX
+#ifndef WALK_INTERFACE_DISCRETIZED_TRAJECTORY_HXX
+# define WALK_INTERFACE_DISCRETIZED_TRAJECTORY_HXX
 # include <iostream>
 
 namespace walk
 {
   template <typename T>
-  Trajectory<T>::Trajectory()
+  DiscretizedTrajectory<T>::DiscretizedTrajectory()
     : data_()
   {}
 
   template <typename T>
-  Trajectory<T>::Trajectory(const Trajectory<T>& gamma)
+  DiscretizedTrajectory<T>::DiscretizedTrajectory
+  (const DiscretizedTrajectory<T>& gamma)
     : data_(gamma.data_)
   {}
 
   template <typename T>
-  Trajectory<T>::~Trajectory()
+  DiscretizedTrajectory<T>::~DiscretizedTrajectory()
   {}
 
   template <typename T>
-  Trajectory<T>&
-  Trajectory<T>::operator=(const Trajectory<T>& gamma)
+  DiscretizedTrajectory<T>&
+  DiscretizedTrajectory<T>::operator=(const DiscretizedTrajectory<T>& gamma)
   {
     if (&gamma == this)
       return *this;
@@ -29,22 +30,22 @@ namespace walk
   }
 
   template <typename T>
-  typename Trajectory<T>::data_t&
-  Trajectory<T>::data()
+  typename DiscretizedTrajectory<T>::data_t&
+  DiscretizedTrajectory<T>::data()
   {
     return data_;
   }
 
   template <typename T>
-  const typename Trajectory<T>::data_t&
-  Trajectory<T>::data() const
+  const typename DiscretizedTrajectory<T>::data_t&
+  DiscretizedTrajectory<T>::data() const
   {
     return data_;
   }
 
   template <typename T>
   TimeDuration
-  Trajectory<T>::computeLength() const
+  DiscretizedTrajectory<T>::computeLength() const
   {
     TimeDuration length;
     typename data_t::const_iterator iter = data_.begin ();
@@ -55,9 +56,9 @@ namespace walk
 
   template <typename T>
   std::ostream&
-  operator<<(std::ostream& os, const Trajectory<T>& gamma)
+  operator<<(std::ostream& os, const DiscretizedTrajectory<T>& gamma)
   {
-    typename Trajectory<T>::data_t::const_iterator iter =
+    typename DiscretizedTrajectory<T>::data_t::const_iterator iter =
       gamma.data().begin ();
     for (; iter != gamma.data().end(); ++iter)
       os << (*iter) << std::endl;
@@ -65,4 +66,4 @@ namespace walk
   }
 } // end of namespace walk.
 
-#endif //! WALK_INTERFACE_STAMPED_TRAJECTORY_HXX
+#endif //! WALK_INTERFACE_DISCRETIZED_TRAJECTORY_HXX

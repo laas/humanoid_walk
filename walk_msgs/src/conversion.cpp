@@ -60,7 +60,7 @@ namespace walk_msgs
   }
 
   void convertTrajectoryToPath(nav_msgs::Path& dst,
-			       const walk::Trajectory3d& src,
+			       const walk::DiscretizedTrajectory3d& src,
 			       const std::string& frameName)
   {
     std::size_t size = src.data().size();
@@ -98,7 +98,7 @@ namespace walk_msgs
   }
 
   void convertTrajectoryV2dToPath(walk_msgs::PathPoint2d& dst,
-				  const walk::TrajectoryV2d& src,
+				  const walk::DiscretizedTrajectoryV2d& src,
 				  const std::string& frameName)
   {
     std::size_t size = src.data().size();
@@ -135,7 +135,7 @@ namespace walk_msgs
   }
 
   void convertTrajectoryV3dToPath(walk_msgs::PathPoint3d& dst,
-				  const walk::TrajectoryV3d& src,
+				  const walk::DiscretizedTrajectoryV3d& src,
 				  const std::string& frameName)
   {
     std::size_t size = src.data().size();
@@ -173,7 +173,7 @@ namespace walk_msgs
   }
 
   void convertTrajectoryV2dToPath(nav_msgs::Path& dst,
-				  const walk::TrajectoryV2d& src,
+				  const walk::DiscretizedTrajectoryV2d& src,
 				  const std::string& frameName)
   {
     std::size_t size = src.data().size();
@@ -216,7 +216,7 @@ namespace walk_msgs
   }
 
   void convertTrajectoryV3dToPath(nav_msgs::Path& dst,
-				  const walk::TrajectoryV3d& src,
+				  const walk::DiscretizedTrajectoryV3d& src,
 				  const std::string& frameName)
   {
     std::size_t size = src.data().size();

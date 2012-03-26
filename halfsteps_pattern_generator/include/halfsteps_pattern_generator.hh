@@ -20,10 +20,31 @@ struct WithHalfStepsAdditionalData : public T
   double stepHeight;
 };
 
-typedef WithHalfStepsAdditionalData<walk::StampedFootprint2d> footprint_t;
-typedef walk::PatternGenerator<footprint_t> halfStepsPgParent_t;
+class HalfStepsPatternGenerator;
 
-class HalfStepsPatternGenerator : public halfStepsPgParent_t
+namespace walk
+{
+  template <>
+  struct PatternGeneratorTraits<HalfStepsPatternGenerator>
+  {
+    /// \brief Footprint definition.
+    typedef WithHalfStepsAdditionalData<walk::StampedFootprint2d> Footprint;
+    
+    /// \brief Trajectory in \f$SO(3)\f$.
+    typedef DiscretizedTrajectory<StampedPosition3d> Trajectory3d;
+    /// \brief Trajectory in \f$SO(2)\f$.
+    typedef DiscretizedTrajectory<StampedPosition2d> Trajectory2d;
+    /// \brief Trajectory in \f$R^2\f$.
+    typedef DiscretizedTrajectory<StampedVector2d> TrajectoryV2d;
+    /// \brief Trajectory in \f$R^3\f$.
+    typedef DiscretizedTrajectory<StampedVector3d> TrajectoryV3d;
+    /// \brief Trajectory in \f$R^n\f$.
+    typedef DiscretizedTrajectory<StampedVectorNd> TrajectoryNd;
+  };
+} // end of namespace walk.
+
+class HalfStepsPatternGenerator
+  : public walk::PatternGenerator<HalfStepsPatternGenerator>
 {
 public:
   explicit HalfStepsPatternGenerator

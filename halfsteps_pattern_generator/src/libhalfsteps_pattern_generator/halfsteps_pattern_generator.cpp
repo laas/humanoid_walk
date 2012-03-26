@@ -18,7 +18,7 @@ HalfStepsPatternGenerator::HalfStepsPatternGenerator
 (const double& timeBeforeZmpShift,
  const double& timeAfterZmpShift,
  const double& step)
-  : halfStepsPgParent_t(),
+  : walk::PatternGenerator<HalfStepsPatternGenerator>(),
     timeBeforeZmpShift_(timeBeforeZmpShift),
     timeAfterZmpShift_(timeAfterZmpShift),
     step_(step)
@@ -26,7 +26,7 @@ HalfStepsPatternGenerator::HalfStepsPatternGenerator
 
 HalfStepsPatternGenerator::HalfStepsPatternGenerator
 (const HalfStepsPatternGenerator& pg)
-  : halfStepsPgParent_t(),
+  : walk::PatternGenerator<HalfStepsPatternGenerator>(),
     timeBeforeZmpShift_(pg.timeBeforeZmpShift_),
     timeAfterZmpShift_(pg.timeAfterZmpShift_),
     step_(pg.step_)

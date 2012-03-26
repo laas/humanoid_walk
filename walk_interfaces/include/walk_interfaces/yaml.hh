@@ -50,27 +50,27 @@ namespace walk
     /// \}
 
 
-    Trajectory3d& leftFootTrajectory ()
+    typename patternGenerator_t::Trajectory3d& leftFootTrajectory ()
     {
       return this->getLeftFootTrajectory ();
     }
 
-    Trajectory3d& rightFootTrajectory ()
+    typename patternGenerator_t::Trajectory3d& rightFootTrajectory ()
     {
       return this->getRightFootTrajectory ();
     }
 
-    TrajectoryV2d& zmpTrajectory ()
+    typename patternGenerator_t::TrajectoryV2d& zmpTrajectory ()
     {
       return this->getZmpTrajectory ();
     }
 
-    TrajectoryV3d& centerOfMassTrajectory ()
+    typename patternGenerator_t::TrajectoryV3d& centerOfMassTrajectory ()
     {
       return this->getCenterOfMassTrajectory ();
     }
 
-    TrajectoryNd& postureTrajectory ()
+    typename patternGenerator_t::TrajectoryNd& postureTrajectory ()
     {
       return this->getPostureTrajectory ();
     }

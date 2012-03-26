@@ -2,12 +2,12 @@
 #include <sstream>
 #include <gtest/gtest.h>
 
-#include "walk_interfaces/trajectory.hh"
+#include "walk_interfaces/discretized-trajectory.hh"
 
 TEST(TestTrajectory, empty)
 {
-  walk::Trajectory3d gamma;
-  walk::Trajectory3d::data_t data; // empty data.
+  walk::DiscretizedTrajectory3d gamma;
+  walk::DiscretizedTrajectory3d::data_t data; // empty data.
   gamma.data() = data;
 
   walk::TimeDuration zero;
@@ -18,8 +18,8 @@ TEST(TestTrajectory, simple)
 {
   using namespace boost::posix_time;
 
-  walk::Trajectory3d gamma;
-  walk::Trajectory3d::data_t data; // empty data.
+  walk::DiscretizedTrajectory3d gamma;
+  walk::DiscretizedTrajectory3d::data_t data; // empty data.
 
   data.resize(2);
 
