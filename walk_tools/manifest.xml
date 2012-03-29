@@ -18,5 +18,5 @@
   <depend package="diagnostic_aggregator"/>
   <depend package="diagnostic_updater"/>
 
-  <depend package="urdfpy" />
+  <depend package="urdf_parser_py" />
 </package>

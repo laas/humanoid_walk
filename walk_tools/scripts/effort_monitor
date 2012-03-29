@@ -17,8 +17,7 @@ import sys
 from sensor_msgs.msg import JointState
 from diagnostic_msgs.msg import DiagnosticArray, DiagnosticStatus, KeyValue
 
-import urdfpy.interface
-from urdfpy import parseFromParameterServer
+import urdf_parser_py
 
 efforts_warning_threshold = {}
 efforts_error_threshold = {}
@@ -26,8 +25,8 @@ efforts_error_threshold = {}
 rospy.init_node("effort_monitor")
 
 try:
-    robot = parseFromParameterServer()
-    for joint in robot.joints:
+    robot = urdf_parser_py.URDF.load_from_parameter_server()
+    for k, joint in robot.joints.iteritems():
         if joint.limits:
             efforts_warning_threshold[joint.name] = \
                 joint.limits.effort * .85
