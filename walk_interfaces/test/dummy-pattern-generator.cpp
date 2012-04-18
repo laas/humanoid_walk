@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 
 #include "walk_interfaces/pattern-generator.hh"
+#include "walk_interfaces/binary.hh"
 #include "walk_interfaces/yaml.hh"
 
 class MyPatternGenerator : public walk::DiscretizedPatternGenerator2d
@@ -66,7 +67,12 @@ TEST(TestStampedPosition, empty)
   walk::YamlWriter<MyPatternGenerator> writer (pg);
   writer.write("/tmp/test.yaml");
 
+  walk::BinaryWriter<MyPatternGenerator> binaryWriter (pg);
+  binaryWriter.write("/tmp/test.bin");
+
   walk::YamlReader<MyPatternGenerator> reader ("/tmp/test.yaml");
+
+  walk::BinaryReader<MyPatternGenerator> binaryReader ("/tmp/test.bin");
 
   walk::YamlWriter<walk::YamlReader<MyPatternGenerator> > writer2 (reader);
   writer2.write("/tmp/test2.yaml");
