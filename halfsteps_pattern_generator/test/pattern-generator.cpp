@@ -5,6 +5,7 @@
 #include "halfsteps_pattern_generator.hh"
 #include "halfsteps_pattern_generator/Footprint.h"
 #include "yaml.hh"
+#include "binary.hh"
 
 
 TEST(TestStampedPosition, empty)
@@ -23,12 +24,15 @@ TEST(TestStampedPosition, empty)
 
   pg.setFootprints(footprints, true);
 
-  const walk::Trajectory3d& lf = pg.leftFootTrajectory();
+  const HalfStepsPatternGenerator::Trajectory3d& lf = pg.leftFootTrajectory();
 
   walk::TimeDuration lengthLf = lf.computeLength();
 
   walk::YamlWriter<HalfStepsPatternGenerator> writer (pg);
   writer.write("/tmp/test.yaml");
+
+  walk::BinaryWriter<HalfStepsPatternGenerator> binaryWriter (pg);
+  binaryWriter.write("/tmp/test.bin");
 
   //walk::YamlReader<halfStepsPgParent_t> reader ("/tmp/test.yaml");
 
