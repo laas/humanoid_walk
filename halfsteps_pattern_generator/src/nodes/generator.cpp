@@ -11,6 +11,7 @@
 #include <ros/ros.h>
 
 #include "halfsteps_pattern_generator.hh"
+#include "binary.hh"
 #include "yaml.hh"
 
 #include "geometry_msgs/Pose.h"

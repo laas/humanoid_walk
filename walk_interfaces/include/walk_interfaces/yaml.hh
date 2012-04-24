@@ -44,6 +44,22 @@ namespace walk
     /// \param stream Input stream.
     explicit YamlReader (std::istream& stream);
 
+    template <typename A>
+    explicit YamlReader (const boost::filesystem::path& filename, A a);
+    template <typename A, typename B>
+    explicit YamlReader (const boost::filesystem::path& filename, A a, B b);
+    template <typename A, typename B, typename C>
+    explicit YamlReader (const boost::filesystem::path& filename, A a, B b, C c);
+
+    template <typename A>
+    explicit YamlReader (std::istream& stream, A a);
+    template <typename A, typename B>
+    explicit YamlReader (std::istream& stream, A a, B b);
+    template <typename A, typename B, typename C>
+    explicit YamlReader (std::istream& stream, A a, B b, C c);
+
+
+
     /// \brief Destructor.
     ~YamlReader ();
 

@@ -52,11 +52,64 @@ namespace walk
   }
 
   template <typename T>
+  template <typename A>
+  YamlReader<T>::YamlReader (const boost::filesystem::path& path, A a)
+    : T (a)
+  {
+    boost::filesystem::ifstream stream (path);
+    load (stream);
+  }
+
+  template <typename T>
+  template <typename A, typename B>
+  YamlReader<T>::YamlReader (const boost::filesystem::path& path, A a, B b)
+    : T (a, b)
+  {
+    boost::filesystem::ifstream stream (path);
+    load (stream);
+  }
+
+  template <typename T>
+  template <typename A, typename B, typename C>
+  YamlReader<T>::YamlReader (const boost::filesystem::path& path, A a, B b, C c)
+    : T (a, b, c)
+  {
+    boost::filesystem::ifstream stream (path);
+    load (stream);
+  }
+
+  template <typename T>
   YamlReader<T>::YamlReader (std::istream& stream)
     : T ()
   {
     load (stream);
   }
+
+  template <typename T>
+  template <typename A>
+  YamlReader<T>::YamlReader (std::istream& stream, A a)
+    : T (a)
+  {
+    load (stream);
+  }
+
+  template <typename T>
+  template <typename A, typename B>
+  YamlReader<T>::YamlReader (std::istream& stream, A a, B b)
+    : T (a, b)
+  {
+    load (stream);
+  }
+
+  template <typename T>
+  template <typename A, typename B, typename C>
+  YamlReader<T>::YamlReader (std::istream& stream, A a, B b, C c)
+    : T (a, b, c)
+  {
+    load (stream);
+  }
+
+
 
   template <typename T, int I, int J>
   void

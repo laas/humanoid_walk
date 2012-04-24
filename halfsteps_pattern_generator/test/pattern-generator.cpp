@@ -28,18 +28,32 @@ TEST(TestStampedPosition, empty)
 
   walk::TimeDuration lengthLf = lf.computeLength();
 
+  std::cout << "--- original pattern generator" << std::endl
+	    << pg << std::endl;
+
   walk::YamlWriter<HalfStepsPatternGenerator> writer (pg);
   writer.write("/tmp/test.yaml");
 
   walk::BinaryWriter<HalfStepsPatternGenerator> binaryWriter (pg);
   binaryWriter.write("/tmp/test.bin");
 
-  //walk::YamlReader<halfStepsPgParent_t> reader ("/tmp/test.yaml");
+  walk::BinaryReader<HalfStepsPatternGenerator> binaryReader ("/tmp/test.bin",
+							      0.95, 1.05, 0.005);
 
-  // walk::YamlWriter<walk::YamlReader<halfStepsPgParent_t> > writer2 (reader);
+  std::cout << "--- pattern generator after binary reading" << std::endl
+	    << pg << std::endl;
+
+  walk::BinaryWriter<HalfStepsPatternGenerator> binaryWriter2 (binaryReader);
+  binaryWriter2.write("/tmp/test2.bin");
+
+  // walk::YamlReader<HalfStepsPatternGenerator> reader ("/tmp/test.yaml",
+  // 						      0.95, 1.05, 0.005);
+
+  // walk::YamlWriter<walk::YamlReader<HalfStepsPatternGenerator> > writer2 (reader);
   // writer2.write("/tmp/test2.yaml");
 
-  // walk::YamlReader<halfStepsPgParent_t> reader2 ("/tmp/test.yaml");
+  // walk::YamlReader<HalfStepsPatternGenerator> reader2 ("/tmp/test.yaml",
+  // 						       0.95, 1.05, 0.005);
 }
 
 int main(int argc, char **argv)

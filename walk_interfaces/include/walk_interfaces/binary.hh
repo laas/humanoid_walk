@@ -12,6 +12,14 @@ namespace walk
     typedef T patternGenerator_t;
 
     explicit BinaryReader (const boost::filesystem::path& filename);
+
+    template <typename A>
+    explicit BinaryReader (const boost::filesystem::path& filename, A a);
+    template <typename A, typename B>
+    explicit BinaryReader (const boost::filesystem::path& filename, A a, B b);
+    template <typename A, typename B, typename C>
+    explicit BinaryReader (const boost::filesystem::path& filename, A a, B b, C c);
+
     explicit BinaryReader (std::istream& filename);
     ~BinaryReader ();
 

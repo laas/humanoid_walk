@@ -8,6 +8,7 @@
 
 # include <ros/ros.h>
 
+# include <walk_interfaces/binary.hh>
 # include <walk_interfaces/yaml.hh>
 
 # include "geometry_msgs/Pose.h"
@@ -354,6 +355,9 @@ namespace walk_msgs
   void
   AbstractNode<T, U, S>::writeMotionAsParameter ()
   {
+    walk::BinaryWriter<patternGenerator_t> writerBin (patternGenerator_);
+    writerBin.write ("/tmp/trajectory.bin");
+
     std::stringstream ss;
     walk::YamlWriter<patternGenerator_t> writer (patternGenerator_);
     writer.write (ss);

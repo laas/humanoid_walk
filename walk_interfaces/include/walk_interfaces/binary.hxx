@@ -14,14 +14,19 @@ namespace walk
   static const char binaryFormatMagicNumber[] = "HWBF";
   static const char binaryFormatVersion[] = "1.0.0";
 
-  template <typename T>
+  template <typename T, int I, int J>
   BinaryReaderHelper&
-  operator>> (BinaryReaderHelper& helper, Eigen::PlainObjectBase<T>& matrix)
+  operator>> (BinaryReaderHelper& helper, Eigen::Matrix<T, I, J>& matrix)
   {
+    if (!helper.stream || !helper.stream.good())
+      throw std::runtime_error ("failed to read");
+
     double rows = 0;
     double cols = 0;
     helper.stream.read(reinterpret_cast<char*>(&cols), sizeof (double));
     helper.stream.read(reinterpret_cast<char*>(&rows), sizeof (double));
+
+    matrix.resize (rows, cols);
 
     for (unsigned i = 0; i < rows; ++i)
       for (unsigned j = 0; j < cols; ++j)
@@ -38,6 +43,9 @@ namespace walk
   BinaryReaderHelper&
   operator>> (BinaryReaderHelper& helper, StampedFootprint<T>& footprint)
   {
+    if (!helper.stream || !helper.stream.good())
+      throw std::runtime_error ("failed to read");
+
     using namespace boost::posix_time;
     using namespace boost::gregorian;
 
@@ -64,6 +72,9 @@ namespace walk
   operator>> (BinaryReaderHelper& helper,
 	      WALK_INTERFACES_EIGEN_STL_VECTOR(StampedFootprint<T>)& footprints)
   {
+    if (!helper.stream || !helper.stream.good())
+      throw std::runtime_error ("failed to read");
+
     typename WALK_INTERFACES_EIGEN_STL_VECTOR(StampedFootprint<T>)::size_type
       countFootprints = 0.;
 
@@ -86,6 +97,9 @@ namespace walk
   BinaryReaderHelper&
   operator>> (BinaryReaderHelper& helper, StampedPosition<T>& stampedPosition)
   {
+    if (!helper.stream || !helper.stream.good())
+      throw std::runtime_error ("failed to read");
+
     using namespace boost::posix_time;
     using namespace boost::gregorian;
 
@@ -100,6 +114,9 @@ namespace walk
   BinaryReaderHelper&
   operator>> (BinaryReaderHelper& helper, DiscretizedTrajectory<T>& trajectory)
   {
+    if (!helper.stream || !helper.stream.good())
+      throw std::runtime_error ("failed to read");
+
     typename DiscretizedTrajectory<T>::data_t::size_type trajectorySize = 0;
     helper.stream.read
       (reinterpret_cast<char*>(&trajectorySize),
@@ -120,6 +137,9 @@ namespace walk
   BinaryReaderHelper&
   operator>> (BinaryReaderHelper& helper, BinaryReader<T>& pg)
   {
+    if (!helper.stream || !helper.stream.good())
+      throw std::runtime_error ("failed to read");
+
     char magicNumber[sizeof(binaryFormatMagicNumber)];
     char version[sizeof(binaryFormatVersion)];
 
@@ -138,20 +158,20 @@ namespace walk
     helper.stream.read(reinterpret_cast<char*>(&startWithLeftFoot),
 		       sizeof(bool));
 
-    helper >> pg.initialLeftFootPosition ()
-	   >> pg.initialRightFootPosition ()
-	   >> pg.initialCenterOfMassPosition ()
-	   >> pg.initialPosture ()
-	   >> pg.finalLeftFootPosition ()
-	   >> pg.finalRightFootPosition ()
-	   >> pg.finalCenterOfMassPosition ()
-	   >> pg.finalPosture ()
-	   >> footprints
-	   >> pg.leftFootTrajectory ()
-	   >> pg.rightFootTrajectory ()
-	   >> pg.centerOfMassTrajectory ()
-	   >> pg.zmpTrajectory ()
-	   >> pg.postureTrajectory ();
+    helper >> pg.initialLeftFootPosition ();
+    helper >> pg.initialRightFootPosition ();
+    helper >> pg.initialCenterOfMassPosition ();
+    helper >> pg.initialPosture ();
+    helper >> pg.finalLeftFootPosition ();
+    helper >> pg.finalRightFootPosition ();
+    helper >> pg.finalCenterOfMassPosition ();
+    helper >> pg.finalPosture ();
+    helper >> footprints;
+    helper >> pg.leftFootTrajectory ();
+    helper >> pg.rightFootTrajectory ();
+    helper >> pg.centerOfMassTrajectory ();
+    helper >> pg.zmpTrajectory ();
+    helper >> pg.postureTrajectory ();
 
     pg.setFootprints(footprints, startWithLeftFoot);
     return helper;
@@ -160,6 +180,44 @@ namespace walk
   template <typename T>
   BinaryReader<T>::BinaryReader (const boost::filesystem::path& filename)
     : T ()
+  {
+    boost::filesystem::ifstream stream
+      (filename,
+       boost::filesystem::ifstream::in
+       | boost::filesystem::ifstream::binary);
+    load (stream);
+  }
+
+  template <typename T>
+  template <typename A>
+  BinaryReader<T>::BinaryReader (const boost::filesystem::path& filename, A a)
+    : T (a)
+  {
+    boost::filesystem::ifstream stream
+      (filename,
+       boost::filesystem::ifstream::in
+       | boost::filesystem::ifstream::binary);
+    load (stream);
+  }
+
+  template <typename T>
+  template <typename A, typename B>
+  BinaryReader<T>::BinaryReader (const boost::filesystem::path& filename,
+				 A a, B b)
+    : T (a, b)
+  {
+    boost::filesystem::ifstream stream
+      (filename,
+       boost::filesystem::ifstream::in
+       | boost::filesystem::ifstream::binary);
+    load (stream);
+  }
+
+  template <typename T>
+  template <typename A, typename B, typename C>
+  BinaryReader<T>::BinaryReader (const boost::filesystem::path& filename,
+				 A a, B b, C c)
+    : T (a, b, c)
   {
     boost::filesystem::ifstream stream
       (filename,
@@ -234,16 +292,24 @@ namespace walk
     helper << patternGenerator_;
   }
 
-  template <typename T>
+  template <typename T, int I, int J>
   BinaryWriterHelper&
-  operator<< (BinaryWriterHelper& helper, const Eigen::PlainObjectBase<T>& matrix)
+  operator<< (BinaryWriterHelper& helper, const Eigen::Matrix<T, I, J>& matrix)
   {
+    if (!helper.stream || !helper.stream.good())
+      throw std::runtime_error ("failed to write");
+
     double cols = matrix.cols ();
     double rows = matrix.rows ();
     helper.stream.write(reinterpret_cast<const char*>(&cols), sizeof (double));
     helper.stream.write(reinterpret_cast<const char*>(&rows), sizeof (double));
-    helper.stream.write(reinterpret_cast<const char*>(matrix.data()),
-			cols * rows * sizeof (double));
+    for (unsigned i = 0; i < rows; ++i)
+      for (unsigned j = 0; j < cols; ++j)
+	{
+	  double tmp = matrix (i, j);
+	  helper.stream.write(reinterpret_cast<char*>(&tmp), sizeof (double));
+	}
+
     return helper;
   }
 
@@ -252,6 +318,9 @@ namespace walk
     operator<< (BinaryWriterHelper& helper,
 		const StampedFootprint<T>& footprint)
   {
+    if (!helper.stream || !helper.stream.good())
+      throw std::runtime_error ("failed to write");
+
     using namespace boost::gregorian;
 
     std::string beginTimeStr = to_iso_string (footprint.beginTime);
@@ -271,6 +340,9 @@ namespace walk
   operator<< (BinaryWriterHelper& helper,
 	      const WALK_INTERFACES_EIGEN_STL_VECTOR(StampedFootprint<T>)& footprints)
   {
+    if (!helper.stream || !helper.stream.good())
+      throw std::runtime_error ("failed to write");
+
     typename WALK_INTERFACES_EIGEN_STL_VECTOR(StampedFootprint<T>)::size_type
       countFootprints = footprints.size ();
 
@@ -289,6 +361,9 @@ namespace walk
   operator<< (BinaryWriterHelper& helper,
 	      const StampedPosition<T>& stampedPosition)
   {
+    if (!helper.stream || !helper.stream.good())
+      throw std::runtime_error ("failed to write");
+
     double t = 0. + stampedPosition.duration.total_nanoseconds () / 1e9;
     helper.stream.write(reinterpret_cast<const char*>(&t), sizeof (double));
     helper << stampedPosition.position;
@@ -300,6 +375,9 @@ namespace walk
   operator<< (BinaryWriterHelper& helper,
 	      const DiscretizedTrajectory<T>& trajectory)
   {
+    if (!helper.stream || !helper.stream.good())
+      throw std::runtime_error ("failed to write");
+
     typename DiscretizedTrajectory<T>::data_t::size_type trajectorySize =
       trajectory.data ().size ();
     helper.stream.write
@@ -316,6 +394,9 @@ namespace walk
   BinaryWriterHelper&
   operator<< (BinaryWriterHelper& helper, const PatternGenerator<T>& pg)
   {
+    if (!helper.stream || !helper.stream.good())
+      throw std::runtime_error ("failed to write");
+
     helper.stream.write(binaryFormatMagicNumber, sizeof (binaryFormatMagicNumber));
     helper.stream.write(binaryFormatVersion, sizeof (binaryFormatVersion));
 
@@ -323,20 +404,20 @@ namespace walk
     helper.stream.write(reinterpret_cast<const char*>(&startWithLeftFoot),
 			sizeof(bool));
 
-    helper << pg.initialLeftFootPosition ()
-	   << pg.initialRightFootPosition ()
-	   << pg.initialCenterOfMassPosition ()
-	   << pg.initialPosture ()
-	   << pg.finalLeftFootPosition ()
-	   << pg.finalRightFootPosition ()
-	   << pg.finalCenterOfMassPosition ()
-	   << pg.finalPosture ()
-	   << pg.footprints ()
-	   << pg.leftFootTrajectory ()
-	   << pg.rightFootTrajectory ()
-	   << pg.centerOfMassTrajectory ()
-	   << pg.zmpTrajectory ()
-	   << pg.postureTrajectory ();
+    helper << pg.initialLeftFootPosition ();
+    helper << pg.initialRightFootPosition ();
+    helper << pg.initialCenterOfMassPosition ();
+    helper << pg.initialPosture ();
+    helper << pg.finalLeftFootPosition ();
+    helper << pg.finalRightFootPosition ();
+    helper << pg.finalCenterOfMassPosition ();
+    helper << pg.finalPosture ();
+    helper << pg.footprints ();
+    helper << pg.leftFootTrajectory ();
+    helper << pg.rightFootTrajectory ();
+    helper << pg.centerOfMassTrajectory ();
+    helper << pg.zmpTrajectory ();
+    helper << pg.postureTrajectory ();
     return helper;
   }
 
