@@ -13,6 +13,8 @@ namespace walk
       centerOfMassTrajectory_(),
       zmpTrajectory_(),
       postureTrajectory_(),
+      leftHandTrajectory_(),
+      rightHandTrajectory_(),
 
       initialLeftFootPosition_(),
       initialRightFootPosition_(),
@@ -28,11 +30,15 @@ namespace walk
     initialRightFootPosition_.setIdentity();
     initialCenterOfMassPosition_.setZero();
     initialPosture_.setZero();
+    initialLeftHandPosition_.setIdentity();
+    initialRightHandPosition_.setIdentity();
 
     finalLeftFootPosition_.setIdentity();
     finalRightFootPosition_.setIdentity();
     finalCenterOfMassPosition_.setZero();
     finalPosture_.setZero();
+    finalLeftHandPosition_.setIdentity();
+    finalRightHandPosition_.setIdentity();
   }
 
   template <typename T>
@@ -44,7 +50,9 @@ namespace walk
       rightFootTrajectory_(pg.rightFootTrajectory_),
       centerOfMassTrajectory_(pg.centerOfMassTrajectory_),
       zmpTrajectory_(pg.zmpTrajectory_),
-      postureTrajectory_(pg.postureTrajectory_)
+      postureTrajectory_(pg.postureTrajectory_),
+      leftHandTrajectory_(pg.leftHandTrajectory_),
+      rightHandTrajectory_(pg.rightHandTrajectory_)
   {}
 
   template <typename T>
@@ -61,6 +69,8 @@ namespace walk
     this->centerOfMassTrajectory_ = pg.centerOfMassTrajectory_;
     this->zmpTrajectory_ = pg.zmpTrajectory_;
     this->postureTrajectory_ = pg.postureTrajectory_;
+    this->leftHandTrajectory_ = pg.leftHandTrajectory_;
+    this->rightHandTrajectory_ = pg.rightHandTrajectory_;
     return *this;
   }
 
@@ -80,6 +90,25 @@ namespace walk
 
   template <typename T>
   void
+  PatternGenerator<T>::setInitialRobotPosition
+  (const HomogeneousMatrix3d& leftFoot,
+   const HomogeneousMatrix3d& rightFoot,
+   const Vector3d& centerOfMass,
+   const Posture& posture,
+   const HomogeneousMatrix3d& leftHand,
+   const HomogeneousMatrix3d& rightHand)
+  {
+    initialLeftFootPosition_ = leftFoot;
+    initialRightFootPosition_ = rightFoot;
+    initialCenterOfMassPosition_ = centerOfMass;
+    initialPosture_ = posture;
+    initialLeftHandPosition_ = leftHand;
+    initialRightHandPosition_ = rightHand;
+  }
+
+
+  template <typename T>
+  void
   PatternGenerator<T>::setFinalRobotPosition
   (const HomogeneousMatrix3d& leftFoot,
    const HomogeneousMatrix3d& rightFoot,
@@ -91,6 +120,25 @@ namespace walk
     finalCenterOfMassPosition_ = centerOfMass;
     finalPosture_ = posture;
   }
+
+  template <typename T>
+  void
+  PatternGenerator<T>::setFinalRobotPosition
+  (const HomogeneousMatrix3d& leftFoot,
+   const HomogeneousMatrix3d& rightFoot,
+   const Vector3d& centerOfMass,
+   const Posture& posture,
+   const HomogeneousMatrix3d& leftHand,
+   const HomogeneousMatrix3d& rightHand)
+  {
+    finalLeftFootPosition_ = leftFoot;
+    finalRightFootPosition_ = rightFoot;
+    finalCenterOfMassPosition_ = centerOfMass;
+    finalPosture_ = posture;
+    finalLeftHandPosition_ = leftHand;
+    finalRightHandPosition_ = rightHand;
+  }
+
 
 
   template <typename T>
@@ -157,6 +205,20 @@ namespace walk
   }
 
   template <typename T>
+  const typename PatternGenerator<T>::Trajectory3d&
+  PatternGenerator<T>::leftHandTrajectory() const
+  {
+    return leftHandTrajectory_;
+  }
+
+  template <typename T>
+  const typename PatternGenerator<T>::Trajectory3d&
+  PatternGenerator<T>::rightHandTrajectory() const
+  {
+    return rightHandTrajectory_;
+  }
+
+  template <typename T>
   typename PatternGenerator<T>::Trajectory3d&
   PatternGenerator<T>::getLeftFootTrajectory()
   {
@@ -192,6 +254,20 @@ namespace walk
   }
 
   template <typename T>
+  typename PatternGenerator<T>::Trajectory3d&
+  PatternGenerator<T>::getLeftHandTrajectory()
+  {
+    return leftHandTrajectory_;
+  }
+
+  template <typename T>
+  typename PatternGenerator<T>::Trajectory3d&
+  PatternGenerator<T>::getRightHandTrajectory()
+  {
+    return rightHandTrajectory_;
+  }
+
+  template <typename T>
   HomogeneousMatrix3d&
   PatternGenerator<T>::getInitialLeftFootPosition()
   {
@@ -221,6 +297,21 @@ namespace walk
 
   template <typename T>
   HomogeneousMatrix3d&
+  PatternGenerator<T>::getInitialLeftHandPosition()
+  {
+    return initialLeftHandPosition_;
+  }
+
+  template <typename T>
+  HomogeneousMatrix3d&
+  PatternGenerator<T>::getInitialRightHandPosition()
+  {
+    return initialRightHandPosition_;
+  }
+
+
+  template <typename T>
+  HomogeneousMatrix3d&
   PatternGenerator<T>::getFinalLeftFootPosition()
   {
     return finalLeftFootPosition_;
@@ -247,6 +338,21 @@ namespace walk
     return finalPosture_;
   }
 
+  template <typename T>
+  HomogeneousMatrix3d&
+  PatternGenerator<T>::getFinalLeftHandPosition()
+  {
+    return finalLeftHandPosition_;
+  }
+
+  template <typename T>
+  HomogeneousMatrix3d&
+  PatternGenerator<T>::getFinalRightHandPosition()
+  {
+    return finalRightHandPosition_;
+  }
+
+
 
 
   template <typename T>
@@ -262,6 +368,21 @@ namespace walk
   {
     return initialRightFootPosition_;
   }
+
+  template <typename T>
+  const HomogeneousMatrix3d&
+  PatternGenerator<T>::initialLeftHandPosition() const
+  {
+    return initialLeftHandPosition_;
+  }
+
+  template <typename T>
+  const HomogeneousMatrix3d&
+  PatternGenerator<T>::initialRightHandPosition() const
+  {
+    return initialRightHandPosition_;
+  }
+
 
   template <typename T>
   const Vector3d&
@@ -306,6 +427,21 @@ namespace walk
   }
 
   template <typename T>
+  const HomogeneousMatrix3d&
+  PatternGenerator<T>::finalLeftHandPosition() const
+  {
+    return finalLeftHandPosition_;
+  }
+
+  template <typename T>
+  const HomogeneousMatrix3d&
+  PatternGenerator<T>::finalRightHandPosition() const
+  {
+    return finalRightHandPosition_;
+  }
+
+
+  template <typename T>
   std::ostream&
   operator<<(std::ostream& os, const PatternGenerator<T>& pg)
   {
@@ -335,7 +471,11 @@ namespace walk
       << "zmp trajectory:\n"
       << pg.zmpTrajectory()
       << "center of mass trajectory:\n"
-      << pg.centerOfMassTrajectory();
+      << pg.centerOfMassTrajectory()
+      << "left hand trajectory:\n"
+      << pg.leftHandTrajectory()
+      << "right hand trajectory:\n"
+      << pg.rightHandTrajectory();
     return os;
   }
 } // end of namespace walk.

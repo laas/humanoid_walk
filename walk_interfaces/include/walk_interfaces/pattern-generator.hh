@@ -102,6 +102,22 @@ namespace walk
 				 const Vector3d& centerOfMass,
 				 const Posture& posture);
 
+    /// \brief Define the initial robot state.
+    ///
+    /// \param leftFoot left foot initial position.
+    /// \param rightFoot right foot initial position.
+    /// \param centerOfMass center of mass initial position.
+    /// \param posture initial posture.
+    /// \param leftHand left hand initial position.
+    /// \param rightHand right hand initial position.
+    void setInitialRobotPosition(const HomogeneousMatrix3d& leftFoot,
+				 const HomogeneousMatrix3d& rightFoot,
+				 const Vector3d& centerOfMass,
+				 const Posture& posture,
+				 const HomogeneousMatrix3d& leftHand,
+				 const HomogeneousMatrix3d& rightHand);
+
+
     /// \brief Define the final robot state.
     ///
     /// \param leftFoot left foot final position.
@@ -112,6 +128,22 @@ namespace walk
 			       const HomogeneousMatrix3d& rightFoot,
 			       const Vector3d& centerOfMass,
 			       const Posture& posture);
+
+    /// \brief Define the final robot state.
+    ///
+    /// \param leftFoot left foot final position.
+    /// \param rightFoot right foot final position.
+    /// \param centerOfMass center of mass final position.
+    /// \param posture final posture.
+    /// \param leftHand left hand final position.
+    /// \param rightHand right hand final position.
+    void setFinalRobotPosition(const HomogeneousMatrix3d& leftFoot,
+			       const HomogeneousMatrix3d& rightFoot,
+			       const Vector3d& centerOfMass,
+			       const Posture& posture,
+			       const HomogeneousMatrix3d& leftHand,
+			       const HomogeneousMatrix3d& rightHand);
+
 
     /// \brief Set the footprint sequence for the pattern generator.
     ///
@@ -140,6 +172,11 @@ namespace walk
     /// \brief Posture trajectory getter.
     const TrajectoryNd& postureTrajectory() const;
 
+    /// \brief Left hand trajectory getter.
+    const Trajectory3d& leftHandTrajectory() const;
+    /// \brief Right hand trajectory getter.
+    const Trajectory3d& rightHandTrajectory() const;
+
     /// \}
 
     /// \name Initial configuration.
@@ -153,6 +190,10 @@ namespace walk
     const Vector3d& initialCenterOfMassPosition() const;
     /// \brief Initial posture getter.
     const Posture& initialPosture() const;
+    /// \brief Initial left hand position getter.
+    const HomogeneousMatrix3d& initialLeftHandPosition() const;
+    /// \brief Initial right hand position getter.
+    const HomogeneousMatrix3d& initialRightHandPosition() const;
 
     /// \}
 
@@ -168,6 +209,10 @@ namespace walk
     const Vector3d& finalCenterOfMassPosition() const;
     /// \brief Final posture getter.
     const Posture& finalPosture() const;
+    /// \brief Final left hand position getter.
+    const HomogeneousMatrix3d& finalLeftHandPosition() const;
+    /// \brief Final right hand position getter.
+    const HomogeneousMatrix3d& finalRightHandPosition() const;
 
     /// \}
 
@@ -182,6 +227,10 @@ namespace walk
     TrajectoryV3d& getCenterOfMassTrajectory();
     /// \brief Posture trajectory setter.
     TrajectoryNd& getPostureTrajectory();
+    /// \brief Left hand trajectory setter.
+    Trajectory3d& getLeftHandTrajectory();
+    /// \brief Right hand trajectory setter.
+    Trajectory3d& getRightHandTrajectory();
 
     /// \brief Initial left foot position setter.
     HomogeneousMatrix3d& getInitialLeftFootPosition();
@@ -191,6 +240,10 @@ namespace walk
     Vector3d& getInitialCenterOfMassPosition();
     /// \brief Initial posture setter.
     Posture& getInitialPosture();
+    /// \brief Initial left hand position setter.
+    HomogeneousMatrix3d& getInitialLeftHandPosition();
+    /// \brief Initial right hand position setter.
+    HomogeneousMatrix3d& getInitialRightHandPosition();
 
     /// \brief Final left foot position setter.
     HomogeneousMatrix3d& getFinalLeftFootPosition();
@@ -200,6 +253,11 @@ namespace walk
     Vector3d& getFinalCenterOfMassPosition();
     /// \brief Final posture setter.
     Posture& getFinalPosture();
+    /// \brief Final left hand position setter.
+    HomogeneousMatrix3d& getFinalLeftHandPosition();
+    /// \brief Final right hand position setter.
+    HomogeneousMatrix3d& getFinalRightHandPosition();
+
 
     /// \brief Compute the reference trajectories.
     ///
@@ -224,6 +282,11 @@ namespace walk
     TrajectoryV2d zmpTrajectory_;
     /// \brief Posture trajectory.
     TrajectoryNd postureTrajectory_;
+    /// \brief Left hand trajectory.
+    Trajectory3d leftHandTrajectory_;
+    /// \brief Right hand trajectory.
+    Trajectory3d rightHandTrajectory_;
+
 
     /// \brief Initial left foot position.
     HomogeneousMatrix3d initialLeftFootPosition_;
@@ -233,6 +296,10 @@ namespace walk
     Vector3d initialCenterOfMassPosition_;
     /// \brief Initial posture.
     Posture initialPosture_;
+    /// \brief Initial left hand position.
+    HomogeneousMatrix3d initialLeftHandPosition_;
+    /// \brief Initial right hand position.
+    HomogeneousMatrix3d initialRightHandPosition_;
 
     /// \brief Final left foot position.
     HomogeneousMatrix3d finalLeftFootPosition_;
@@ -242,6 +309,10 @@ namespace walk
     Vector3d finalCenterOfMassPosition_;
     /// \brief Final posture.
     Posture finalPosture_;
+    /// \brief Final left hand position.
+    HomogeneousMatrix3d finalLeftHandPosition_;
+    /// \brief Final right hand position.
+    HomogeneousMatrix3d finalRightHandPosition_;
   public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
   };
@@ -274,7 +345,7 @@ namespace walk
     typedef DiscretizedTrajectory<StampedVectorNd> TrajectoryNd;
   };
 
-  
+
   class DiscretizedPatternGenerator2d
     : public PatternGenerator<DiscretizedPatternGenerator2d>
   {};
