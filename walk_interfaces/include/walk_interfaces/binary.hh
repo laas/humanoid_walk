@@ -48,6 +48,17 @@ namespace walk
       return this->getPostureTrajectory ();
     }
 
+    typename patternGenerator_t::Trajectory3d& leftHandTrajectory ()
+    {
+      return this->getLeftHandTrajectory ();
+    }
+
+    typename patternGenerator_t::Trajectory3d& rightHandTrajectory ()
+    {
+      return this->getRightHandTrajectory ();
+    }
+
+
     HomogeneousMatrix3d& initialLeftFootPosition ()
     {
       return this->getInitialLeftFootPosition ();
@@ -68,6 +79,17 @@ namespace walk
       return this->getInitialPosture ();
     }
 
+    HomogeneousMatrix3d& initialLeftHandPosition ()
+    {
+      return this->getInitialLeftHandPosition ();
+    }
+
+    HomogeneousMatrix3d& initialRightHandPosition ()
+    {
+      return this->getInitialRightHandPosition ();
+    }
+
+
     HomogeneousMatrix3d& finalLeftFootPosition ()
     {
       return this->getFinalLeftFootPosition ();
@@ -87,6 +109,17 @@ namespace walk
     {
       return this->getFinalPosture ();
     }
+
+    HomogeneousMatrix3d& finalLeftHandPosition ()
+    {
+      return this->getFinalLeftHandPosition ();
+    }
+
+    HomogeneousMatrix3d& finalRightHandPosition ()
+    {
+      return this->getFinalRightHandPosition ();
+    }
+
 
     virtual void computeTrajectories ()
     {}

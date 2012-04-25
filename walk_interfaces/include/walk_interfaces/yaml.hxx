@@ -211,17 +211,23 @@ namespace walk
     node["initial-position"]["right-foot"] >> pg.initialRightFootPosition ();
     node["initial-position"]["center-of-mass"] >> pg.initialCenterOfMassPosition ();
     node["initial-position"]["posture"] >> pg.initialPosture ();
+    node["initial-position"]["left-hand"] >> pg.initialLeftHandPosition ();
+    node["initial-position"]["right-hand"] >> pg.initialRightHandPosition ();
 
     node["final-position"]["left-foot"] >> pg.finalLeftFootPosition ();
     node["final-position"]["right-foot"] >> pg.finalRightFootPosition ();
     node["final-position"]["center-of-mass"] >> pg.finalCenterOfMassPosition ();
     node["final-position"]["posture"] >> pg.finalPosture ();
+    node["final-position"]["left-hand"] >> pg.finalLeftHandPosition ();
+    node["final-position"]["right-hand"] >> pg.finalRightHandPosition ();
 
     node["trajectories"]["left-foot"] >> pg.leftFootTrajectory ();
     node["trajectories"]["right-foot"] >> pg.rightFootTrajectory ();
     node["trajectories"]["center-of-mass"] >> pg.centerOfMassTrajectory ();
     node["trajectories"]["zmp"] >> pg.zmpTrajectory ();
     node["trajectories"]["posture"] >> pg.postureTrajectory ();
+    node["trajectories"]["left-hand"] >> pg.leftHandTrajectory ();
+    node["trajectories"]["right-hand"] >> pg.rightHandTrajectory ();
   }
 
 
@@ -390,6 +396,10 @@ namespace walk
 	  << YAML::Value << pg.initialCenterOfMassPosition ()
 	  << YAML::Key << "posture"
 	  << YAML::Value << pg.initialPosture ()
+	  << YAML::Key << "left-hand"
+	  << YAML::Value << pg.initialLeftHandPosition ()
+	  << YAML::Key << "right-hand"
+	  << YAML::Value << pg.initialRightHandPosition ()
 	  << YAML::EndMap
 
 	  << YAML::Key << "final-position"
@@ -403,6 +413,10 @@ namespace walk
 	  << YAML::Value << pg.finalCenterOfMassPosition ()
 	  << YAML::Key << "posture"
 	  << YAML::Value << pg.finalPosture ()
+	  << YAML::Key << "left-hand"
+	  << YAML::Value << pg.finalLeftHandPosition ()
+	  << YAML::Key << "right-hand"
+	  << YAML::Value << pg.finalRightHandPosition ()
 	  << YAML::EndMap
 
 	  << YAML::Key << "footprints"
@@ -421,6 +435,10 @@ namespace walk
 	  << YAML::Value << pg.zmpTrajectory ()
 	  << YAML::Key << "posture"
 	  << YAML::Value << pg.postureTrajectory ()
+	  << YAML::Key << "left-hand"
+	  << YAML::Value << pg.leftHandTrajectory ()
+	  << YAML::Key << "right-hand"
+	  << YAML::Value << pg.rightHandTrajectory ()
 	  << YAML::EndMap
 
 	  << YAML::EndMap

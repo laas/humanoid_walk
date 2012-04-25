@@ -162,16 +162,22 @@ namespace walk
     helper >> pg.initialRightFootPosition ();
     helper >> pg.initialCenterOfMassPosition ();
     helper >> pg.initialPosture ();
+    helper >> pg.initialLeftHandPosition ();
+    helper >> pg.initialRightHandPosition ();
     helper >> pg.finalLeftFootPosition ();
     helper >> pg.finalRightFootPosition ();
     helper >> pg.finalCenterOfMassPosition ();
     helper >> pg.finalPosture ();
+    helper >> pg.finalLeftHandPosition ();
+    helper >> pg.finalRightHandPosition ();
     helper >> footprints;
     helper >> pg.leftFootTrajectory ();
     helper >> pg.rightFootTrajectory ();
     helper >> pg.centerOfMassTrajectory ();
     helper >> pg.zmpTrajectory ();
     helper >> pg.postureTrajectory ();
+    helper >> pg.leftHandTrajectory ();
+    helper >> pg.rightHandTrajectory ();
 
     pg.setFootprints(footprints, startWithLeftFoot);
     return helper;
@@ -408,16 +414,22 @@ namespace walk
     helper << pg.initialRightFootPosition ();
     helper << pg.initialCenterOfMassPosition ();
     helper << pg.initialPosture ();
+    helper << pg.initialLeftHandPosition ();
+    helper << pg.initialRightHandPosition ();
     helper << pg.finalLeftFootPosition ();
     helper << pg.finalRightFootPosition ();
     helper << pg.finalCenterOfMassPosition ();
     helper << pg.finalPosture ();
+    helper << pg.finalLeftHandPosition ();
+    helper << pg.finalRightHandPosition ();
     helper << pg.footprints ();
     helper << pg.leftFootTrajectory ();
     helper << pg.rightFootTrajectory ();
     helper << pg.centerOfMassTrajectory ();
     helper << pg.zmpTrajectory ();
     helper << pg.postureTrajectory ();
+    helper << pg.leftHandTrajectory ();
+    helper << pg.rightHandTrajectory ();
     return helper;
   }
 
