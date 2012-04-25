@@ -100,60 +100,6 @@ namespace walk
     return helper;
   }
 
-
-
-  // inline BINARY::Emitter&
-  // operator<< (BINARY::Emitter& out,
-  // 	      const HalfStepsPatternGenerator::footprint_t& footprint)
-  // {
-  //   out << BINARY::BeginMap
-  // 	<< BINARY::Key << "beginTime"
-  // 	<< BINARY::Value
-  // 	<< to_iso_string (footprint.beginTime)
-  // 	<< BINARY::Key << "duration"
-  // 	<< BINARY::Value
-  // 	<< (0. + footprint.duration.total_nanoseconds () / 1e9)
-  // 	<< BINARY::Key << "position"
-  // 	<< BINARY::Value << footprint.position
-  // 	<< BINARY::Key << "slide-up"
-  // 	<< BINARY::Value
-  // 	<< footprint.slideUp
-  // 	<< BINARY::Key << "slide-down"
-  // 	<< BINARY::Value
-  // 	<< footprint.slideDown
-  // 	<< BINARY::Key << "horizontal-distance"
-  // 	<< BINARY::Value
-  // 	<< footprint.horizontalDistance
-  // 	<< BINARY::Key << "step-height"
-  // 	<< BINARY::Value
-  // 	<< footprint.stepHeight
-  // 	<< BINARY::EndMap;
-  //   return out;
-  // }
-
-  // inline void
-  // operator>> (const BINARY::Node& node,
-  // 	      HalfStepsPatternGenerator::footprint_t& footprint)
-  // {
-  //   checkYamlType (node, BINARY::NodeType::Map, "footprint");
-
-  //   using namespace boost::posix_time;
-  //   using namespace boost::gregorian;
-
-  //   std::string beginTimeStr;
-  //   node["beginTime"] >> beginTimeStr;
-  //   footprint.beginTime = walk::Time (from_iso_string (beginTimeStr));
-  //   double d = 0;
-  //   node["duration"] >> d;
-  //   footprint.duration = milliseconds (d * 1e3);
-  //   node["position"] >> footprint.position;
-
-  //   node["slide-up"] >> footprint.slideUp;
-  //   node["slide-down"] >> footprint.slideDown;
-  //   node["horizontal-distance"] >> footprint.horizontalDistance;
-  //   node["step-height"] >> footprint.stepHeight;
-  // }
-
 } // end of namespace walk.
 
 #endif //! HALFSTEPS_PATTERN_BINARY_HH
