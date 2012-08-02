@@ -15,6 +15,7 @@
 	 lflags="-L${prefix}/lib -lwalk_msgs" />
   </export>
 
+  <depend package="roscpp" />
   <depend package="rospy" />
 
   <depend package="common_rosdeps" />
