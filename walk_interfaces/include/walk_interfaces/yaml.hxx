@@ -209,25 +209,69 @@ namespace walk
 
     node["initial-position"]["left-foot"] >> pg.initialLeftFootPosition ();
     node["initial-position"]["right-foot"] >> pg.initialRightFootPosition ();
-    node["initial-position"]["center-of-mass"] >> pg.initialCenterOfMassPosition ();
+    node["initial-position"]["center-of-mass"]
+      >> pg.initialCenterOfMassPosition ();
+
     node["initial-position"]["posture"] >> pg.initialPosture ();
-    node["initial-position"]["left-hand"] >> pg.initialLeftHandPosition ();
-    node["initial-position"]["right-hand"] >> pg.initialRightHandPosition ();
+
+    try
+      {
+	node["initial-position"]["left-hand"] >> pg.initialLeftHandPosition ();
+      }
+    catch (YAML::Exception&)
+      {
+	pg.initialLeftHandPosition ().setIdentity ();
+      }
+    try
+      {
+	node["initial-position"]["right-hand"]
+	  >> pg.initialRightHandPosition ();
+      }
+    catch (YAML::Exception&)
+      {
+	pg.initialRightHandPosition ().setIdentity ();
+      }
 
     node["final-position"]["left-foot"] >> pg.finalLeftFootPosition ();
     node["final-position"]["right-foot"] >> pg.finalRightFootPosition ();
-    node["final-position"]["center-of-mass"] >> pg.finalCenterOfMassPosition ();
+    node["final-position"]["center-of-mass"]
+      >> pg.finalCenterOfMassPosition ();
     node["final-position"]["posture"] >> pg.finalPosture ();
-    node["final-position"]["left-hand"] >> pg.finalLeftHandPosition ();
-    node["final-position"]["right-hand"] >> pg.finalRightHandPosition ();
+    try
+      {
+	node["final-position"]["left-hand"] >> pg.finalLeftHandPosition ();
+      }
+    catch (YAML::Exception&)
+      {
+	pg.finalLeftHandPosition ().setIdentity ();
+      }
+    try
+      {
+	node["final-position"]["right-hand"]
+	  >> pg.finalRightHandPosition ();
+      }
+    catch (YAML::Exception&)
+      {
+	pg.finalRightHandPosition ().setIdentity ();
+      }
 
     node["trajectories"]["left-foot"] >> pg.leftFootTrajectory ();
     node["trajectories"]["right-foot"] >> pg.rightFootTrajectory ();
     node["trajectories"]["center-of-mass"] >> pg.centerOfMassTrajectory ();
     node["trajectories"]["zmp"] >> pg.zmpTrajectory ();
     node["trajectories"]["posture"] >> pg.postureTrajectory ();
-    node["trajectories"]["left-hand"] >> pg.leftHandTrajectory ();
-    node["trajectories"]["right-hand"] >> pg.rightHandTrajectory ();
+    try
+      {
+	node["trajectories"]["left-hand"] >> pg.leftHandTrajectory ();
+      }
+    catch (YAML::Exception&)
+      {}
+    try
+      {
+	node["trajectories"]["right-hand"] >> pg.rightHandTrajectory ();
+      }
+    catch (YAML::Exception&)
+      {}
   }
 
 
